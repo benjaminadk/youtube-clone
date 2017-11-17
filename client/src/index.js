@@ -10,9 +10,11 @@ import { MuiThemeProvider } from 'material-ui/styles'
 import theme from './theme'
 import 'typeface-roboto'
 
+const link = new HttpLink({ uri: 'https://youtube-clone-benjaminadk.c9users.io:8081/graphql' })
+const cache = new InMemoryCache()
 const client = new ApolloClient({
-  link: new HttpLink({ uri: 'https://youtube-clone-benjaminadk.c9users.io:8081/graphql' }),
-  cache: new InMemoryCache()
+  link,
+  cache 
 })
 
 const root = document.getElementById('root')

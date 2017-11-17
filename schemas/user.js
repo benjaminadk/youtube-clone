@@ -6,7 +6,7 @@ export default `
         email: String!
         googleId: String
         imageUrl: String
-        createOn: String
+        createdOn: String
         videos: [String]
     }
     

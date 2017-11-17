@@ -2,8 +2,8 @@ export default {
     
     Query: {
         
-        getUser: (root, { userId }, { models }) => models.User.findById(userId),
+        getUser: async(root, { userId }, { models }) => await models.User.findById(userId),
         
-        allUsers: (root, args, { models }) => models.User.find({})
+        allUsers: async(root, args, { models }) => await models.User.find({})
     }
 }

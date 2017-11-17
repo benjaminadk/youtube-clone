@@ -17,7 +17,7 @@ const schema = makeExecutableSchema({
 
 const server = express()
 const PORT = 8081
-
+server.use('*', cors({ origin: 'https://youtube-clone-benjaminadk.c9users.io' }))
 passport.use(googleOauth)
 server.use(passport.initialize())
 server.get('/auth/google', googleScope)

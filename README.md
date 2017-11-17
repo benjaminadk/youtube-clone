@@ -41,6 +41,8 @@
 #### Video 13 - Apollo Frontend Test
 - first apollo react component
 
+#### Video 14 - Bug Fixes
+- cors, typos, npm packages
 
 
 #### Important Links

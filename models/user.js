@@ -25,7 +25,7 @@ const userSchema = new Schema({
     
     videos: [String],
     
-    createOn: {
+    createdOn: {
         type: Date,
         default: Date.now()
     }
