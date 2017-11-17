@@ -32,9 +32,15 @@
 - align with mongoose values
 - install concurrently and create react app
 
+#### Video 11 - Material UI
+- install latest material ui and apollo 
+
+
 
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)
 ##### [Express](https://expressjs.com/)
 ##### [Babel](https://babeljs.io/)
 ##### [Passport](http://www.passportjs.org/)
+##### [Create React App](https://github.com/facebookincubator/create-react-app)
+##### [Material UI](https://material-ui-next.com/)

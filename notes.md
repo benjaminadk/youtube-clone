@@ -1,11 +1,4 @@
-user model
-id 
-username
-email
-password
-createdON
-videos
-image
+import 'typeface-roboto'
 
 video model 
 url
