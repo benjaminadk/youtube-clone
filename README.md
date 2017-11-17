@@ -28,6 +28,11 @@
 #### Video 9 - Saving a User
 - mongoose basics
 
+#### Video 10 - Refactor Schema
+- align with mongoose values
+- install concurrently and create react app
+
+
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)
 ##### [Express](https://expressjs.com/)

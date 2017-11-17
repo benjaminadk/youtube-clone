@@ -4,7 +4,9 @@
   "description": ",-----.,--.                  ,--. ,---.   ,--.,------.  ,------.     '  .--./|  | ,---. ,--.,--. ,-|  || o   \\  |  ||  .-.  \\ |  .---'     |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \\  :|  `--,      '  '--'\\|  |' '-' ''  ''  '\\ `-' | .'  /   |  ||  '--'  /|  `---.      `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'     -----------------------------------------------------------------",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon ./server.js --exec babel-node -e js"
+    "server": "nodemon ./server.js --exec babel-node -e js",
+    "client": "npm run start --prefix client",
+    "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -12,6 +14,7 @@
   "dependencies": {
     "apollo-server-express": "^1.2.0",
     "body-parser": "^1.18.2",
+    "concurrently": "^3.5.0",
     "express": "^4.16.2",
     "graphql": "^0.11.7",
     "graphql-tools": "^2.7.2",
