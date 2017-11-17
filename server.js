@@ -7,6 +7,7 @@ import { makeExecutableSchema } from 'graphql-tools'
 import typeDefs from './schemas/user'
 import resolvers from './resolvers/user'
 import models from './models'
+import cors from 'cors'
 require('./models/connect')
 
 const schema = makeExecutableSchema({

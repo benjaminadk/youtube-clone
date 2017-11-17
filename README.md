@@ -35,6 +35,12 @@
 #### Video 11 - Material UI
 - install latest material ui and apollo 
 
+#### Video 12 - React Router
+- basic setup 
+
+#### Video 13 - Apollo Frontend Test
+- first apollo react component
+
 
 
 #### Important Links

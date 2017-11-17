@@ -1,4 +1,4 @@
-import 'typeface-roboto'
+
 
 video model 
 url
