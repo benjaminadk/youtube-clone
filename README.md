@@ -10,6 +10,15 @@
 #### Video 3 - Graphiql
 - setup graphiql GUI
 
+#### Video 4 - Mlab
+- setup mlab and mongoose
+
+#### Video 5 - User model
+- basic user model
+
+#### Passport - intro
+- finish models install passport
+
 #### Important Links
 [Apollo 2.0](https://www.apollographql.com/)
 [Express](https://expressjs.com/)
