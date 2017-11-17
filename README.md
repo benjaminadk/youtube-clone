@@ -19,13 +19,14 @@
 #### Video 6 - Passport 
 - finish models install passport
 
-#### Video 7 Passport 2
+#### Video 7 - Passport 2
 - create a google app
 
-#### Video 8 Passport 3
+#### Video 8 - Passport 3
 - test it out and summary of google oauth20
 
-
+#### Video 9 - Saving a User
+- mongoose basics
 
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)

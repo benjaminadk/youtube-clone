@@ -1,6 +1,8 @@
 import passport from 'passport'
 import GoogleStrategy from 'passport-google-oauth20'
 import keys from '../config/keys'
+import mongoose from 'mongoose'
+import User from '../models/user'
 
 export const googleOauth = new GoogleStrategy(
     {
@@ -10,7 +12,19 @@ export const googleOauth = new GoogleStrategy(
         passRequestToCallback: true
     }, 
         async (request, accessToken, refreshToken, profile, done) => {
-            console.log(profile)
+            const googleId = profile.id
+            const user = await User.findOne({ googleId })
+            
+            if(!user) {
+                const newUser = new User({
+                    googleId,
+                    username: profile.displayName,
+                    email: profile.emails[0].value,
+                    imageUrl: profile.photos[0].value
+                })
+                await newUser.save()
+            } 
+            
             done(null, {})
         }
 )
