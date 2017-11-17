@@ -1,11 +1,12 @@
 import passport from 'passport'
 import GoogleStrategy from 'passport-google-oauth20'
+import keys from '../config/keys'
 
 export const googleOauth = new GoogleStrategy(
     {
-        clientID: '',
-        clientSecret: '',
-        callbackURL: '',
+        clientID: keys.googleClientId,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: 'https://youtube-clone-benjaminadk.c9users.io:8081/auth/google/callback',
         passRequestToCallback: true
     }, 
         async (request, accessToken, refreshToken, profile, done) => {
@@ -18,11 +19,11 @@ export const googleScope = passport.authenticate('google', { scope: [ 'https://w
   	  'https://www.googleapis.com/auth/plus.profile.emails.read' ]})
   	  
 export const googleCallback = passport.authenticate('google', { 
-    failureRedirect: '', 
+    failureRedirect: 'https://youtube-clone-benjaminadk.c9users.io', 
     session: false 
 })
 
 export const googleRedirect = (req, res) => {
-  res.redirect(``);
+  res.redirect(`https://youtube-clone-benjaminadk.c9users.io`);
   }
   
