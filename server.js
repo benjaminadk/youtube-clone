@@ -5,6 +5,8 @@ import { makeExecutableSchema } from 'graphql-tools'
 import typeDefs from './schemas/user'
 import resolvers from './resolvers/user'
 
+require('./models')
+
 const schema = makeExecutableSchema({
     typeDefs,
     resolvers
