@@ -16,10 +16,14 @@
 #### Video 5 - User model
 - basic user model
 
-#### Passport - intro
+#### Video 6 - Passport 
 - finish models install passport
 
+#### Video 7 Passport 2
+- create a google app
+
 #### Important Links
-[Apollo 2.0](https://www.apollographql.com/)
-[Express](https://expressjs.com/)
-[Babel](https://babeljs.io/)
+##### [Apollo 2.0](https://www.apollographql.com/)
+##### [Express](https://expressjs.com/)
+##### [Babel](https://babeljs.io/)
+##### [Passport](http://www.passportjs.org/)
