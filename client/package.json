@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.1.1",
-    "react-apollo": "^2.0.1",
-    "react-dom": "^16.1.1",
-    "react-scripts": "1.0.17",
     "apollo-cache-inmemory": "^1.1.1",
     "apollo-client": "^2.0.3",
     "apollo-link-http": "^1.2.0",
@@ -14,6 +10,12 @@
     "graphql-tag": "^2.5.0",
     "material-ui": "^1.0.0-beta.21",
     "material-ui-icons": "^1.0.0-beta.17",
+    "react": "^16.1.1",
+    "react-apollo": "^2.0.1",
+    "react-dom": "^16.1.1",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.17",
+    "typeface-roboto": "0.0.45"
   },
   "scripts": {
     "start": "react-scripts start",
