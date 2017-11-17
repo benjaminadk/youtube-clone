@@ -7,6 +7,8 @@
 #### Video 2 - Graphql Basics
 - endpoints, graphql, graphiql, schema, resolvers
 
+#### Video 3 - Graphiql
+- setup graphiql GUI
 
 #### Important Links
 [Apollo 2.0](https://www.apollographql.com/)

@@ -5,8 +5,9 @@ export default `
         username: String!
     }
     
-    Query {
+    type Query {
         getUser(userId: Int!): User
+        allUsers: [User!]!
     }
 
 `
