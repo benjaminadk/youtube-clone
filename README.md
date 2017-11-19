@@ -80,9 +80,16 @@
 - transfer jwt to backend
 - add user to context
 
-#### Video 23 AWS SDK
+#### Video 23 Video Upload
 - bucket config
+- aws sdk
 
+#### Video 24 Video Upload 2
+- send the video to aws
+- axios
+
+#### Video 25 Save Video
+- video details and save to database
 
 #### Resources
 ***Upload Background***

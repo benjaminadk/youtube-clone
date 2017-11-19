@@ -1,7 +1,6 @@
-explain aws-sdk
-iam user
-credentials
-cors policy
-bucket bullshit
-schema
-resolvers
+add fd column to container in upload
+add alignItems center
+change jc to space around
+add button
+
+axios

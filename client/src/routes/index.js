@@ -217,7 +217,7 @@ class PersistentDrawer extends Component {
             >
               <Switch>
                 <Route exact path='/' component={Home}/>
-                <PrivateRoute path='/upload' component={Upload}/>
+                <Route path='/upload' component={Upload}/>
                 <Route path='/user/:userId' component={UserLanding}/>
               </Switch>
             </main>
