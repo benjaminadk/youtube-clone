@@ -21,6 +21,8 @@ const userSchema = new Schema({
     
     password: String,
     
+    jwt: String,
+    
     imageUrl: String,
     
     videos: [Schema.Types.ObjectId],

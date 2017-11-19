@@ -8,6 +8,7 @@ export default `
         imageUrl: String
         createdOn: String
         videos: [Video]
+        jwt: String
     }
     
     type Query {

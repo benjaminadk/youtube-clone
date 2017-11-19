@@ -17,6 +17,7 @@ import HomeIcon from 'material-ui-icons/Home'
 import Avatar from 'material-ui/Avatar'
 import Home from './Home'
 import Upload from './Upload'
+import Menu, { MenuItem } from 'material-ui/Menu'
 
 const drawerWidth = 240
 
@@ -110,7 +111,8 @@ const styles = theme => ({
     width: '20vw'
   },
   link: {
-    textDecoration: 'none'
+    textDecoration: 'none',
+    color: theme.palette.shades.light.text.primary
   },
   linkIcon: {
     color: '#FFFFFF'
@@ -119,20 +121,21 @@ const styles = theme => ({
 
 class PersistentDrawer extends Component {
   state = {
-    open: false
+    open: false,
+    menuOpen: false
   }
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  }
-
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  }
+  handleDrawerOpen = () => this.setState({ open: true })
+  
+  handleDrawerClose = () => this.setState({ open: false })
+  
+  handleMenuOpen = () => this.setState({ menuOpen: true })
+  
+  handleMenuClose = () => this.setState({ menuOpen: false })
 
   render() {
     const { classes } = this.props
-    const { open } = this.state
+    const { open, menuOpen } = this.state
 
     const drawer = (
       <Drawer
@@ -185,7 +188,20 @@ class PersistentDrawer extends Component {
                     <Link to='/upload' className={classes.linkIcon}><FileUploadIcon/></Link>
                     <AppsIcon/>
                     <AddAlertIcon/>
-                    <Avatar src='http://via.placeholder.com/50x50' />
+                    <Avatar 
+                      id='avatar' 
+                      src='http://via.placeholder.com/50x50'
+                      onClick={this.handleMenuOpen}
+                    />
+                    <Menu
+                      open={menuOpen}
+                      anchorEl={document.getElementById('avatar')}
+                      onRequestClose={this.handleMenuClose}
+                    >
+                      <MenuItem>
+                        <a href='/auth/google' className={classes.link}>Sign In with Google</a>
+                      </MenuItem>
+                    </Menu>
                   </div>
               </Toolbar>
             </AppBar>

@@ -2,6 +2,11 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/auth/*": {
+      "target": "http://localhost:8081"
+    }
+  },
   "dependencies": {
     "apollo-cache-inmemory": "^1.1.1",
     "apollo-client": "^2.0.3",

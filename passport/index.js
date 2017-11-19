@@ -1,7 +1,10 @@
 import passport from 'passport'
 import GoogleStrategy from 'passport-google-oauth20'
+import jwt from 'jsonwebtoken'
 import keys from '../config/keys'
 import User from '../models/user'
+
+var userId;
 
 export const googleOauth = new GoogleStrategy(
     {
@@ -21,8 +24,24 @@ export const googleOauth = new GoogleStrategy(
                     email: profile.emails[0].value,
                     imageUrl: profile.photos[0].value
                 })
-                await newUser.save()
-            } 
+                const savedUser = await newUser.save()
+                
+                userId = savedUser._id
+                
+                const token = jwt.sign({
+                    id: savedUser._id
+                }, keys.jwtSecret, { expiresIn: '7d' })
+                savedUser.jwt = token
+                await savedUser.save()
+                done(null, {})
+            }
+            
+            userId = user._id
+            const newToken = jwt.sign({
+                id: user._id
+            }, keys.jwtSecret, { expiresIn: '7d' })
+            user.jwt = newToken
+            await user.save()
             
             done(null, {})
         }
@@ -37,6 +56,6 @@ export const googleCallback = passport.authenticate('google', {
 })
 
 export const googleRedirect = (req, res) => {
-  res.redirect(`https://youtube-clone-benjaminadk.c9users.io`);
+  res.redirect(`https://youtube-clone-benjaminadk.c9users.io/user/${userId}`);
   }
   

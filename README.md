@@ -67,9 +67,8 @@
 #### Video 18 Video Model
 - create video model on backend
 
-#### Video 19 AWS SDK
-- install and setup
-- documentation link below
+#### Video 19 Json Web Token
+- create a json web token on login
 
 
 #### Resources
