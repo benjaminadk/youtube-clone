@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
-
+import { Auth } from '../utils'
 class UserLanding extends Component {
     
     render(){
         const { data: { loading, getUserById } } = this.props
-        console.log(getUserById)
         if(loading) return null
+        const { username, imageUrl, jwt } = getUserById
+        if(username) Auth.authenticate()
+        window.localStorage.setItem('TOKEN', jwt)
+        window.localStorage.setItem('AVATAR', imageUrl)
         return(
-            <div>{getUserById.username}</div>
+            <div>
+                <h1>Hey {username}. Welcome to You Tube Clone</h1>
+            </div>
             )
     }
 }

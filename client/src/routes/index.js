@@ -16,6 +16,7 @@ import FileUploadIcon from 'material-ui-icons/FileUpload'
 import AddAlertIcon from 'material-ui-icons/AddAlert'
 import HomeIcon from 'material-ui-icons/Home'
 import Avatar from 'material-ui/Avatar'
+import { PrivateRoute } from '../utils'
 import Home from './Home'
 import Upload from './Upload'
 import UserLanding from './UserLanding'
@@ -138,7 +139,7 @@ class PersistentDrawer extends Component {
   render() {
     const { classes } = this.props
     const { open, menuOpen } = this.state
-
+    const avatarUrl = window.localStorage.getItem('AVATAR') || 'http://via.placeholder.com/50x50'
     const drawer = (
       <Drawer
         type="persistent"
@@ -192,7 +193,7 @@ class PersistentDrawer extends Component {
                     <AddAlertIcon/>
                     <Avatar 
                       id='avatar' 
-                      src='http://via.placeholder.com/50x50'
+                      src={avatarUrl}
                       onClick={this.handleMenuOpen}
                     />
                     <Menu
@@ -216,7 +217,7 @@ class PersistentDrawer extends Component {
             >
               <Switch>
                 <Route exact path='/' component={Home}/>
-                <Route path='/upload' component={Upload}/>
+                <PrivateRoute path='/upload' component={Upload}/>
                 <Route path='/user/:userId' component={UserLanding}/>
               </Switch>
             </main>
