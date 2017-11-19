@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
-import Home from './Home'
 import { withStyles } from 'material-ui/styles'
 import classNames from 'classnames'
 import Drawer from 'material-ui/Drawer'
@@ -16,13 +15,15 @@ import FileUploadIcon from 'material-ui-icons/FileUpload'
 import AddAlertIcon from 'material-ui-icons/AddAlert'
 import HomeIcon from 'material-ui-icons/Home'
 import Avatar from 'material-ui/Avatar'
+import Home from './Home'
+import Upload from './Upload'
 
 const drawerWidth = 240
 
 const styles = theme => ({
   root: {
     width: '100%',
-    height: 430,
+    height: '97vh',
     zIndex: 1,
     overflow: 'hidden',
   },
@@ -72,7 +73,6 @@ const styles = theme => ({
     width: '100%',
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -197,7 +197,8 @@ class PersistentDrawer extends Component {
               })}
             >
               <Switch>
-                <Route path='/' component={Home}/>
+                <Route exact path='/' component={Home}/>
+                <Route path='/upload' component={Upload}/>
               </Switch>
             </main>
           </div>

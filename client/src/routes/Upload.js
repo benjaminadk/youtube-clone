@@ -1,17 +1,6 @@
-video model 
-url
-size
-title
-desciption
-createdOn
-
-install react-dropzone
-root height 97vh
-remove padding from content
-
 import React, { Component } from 'react'
-import Dropzone from 'react-dropzone'
 import Typography from 'material-ui/Typography'
+import Dropzone from 'react-dropzone'
 
 const styles = {
     CONTAINER: {
@@ -44,12 +33,12 @@ class Upload extends Component {
         return(
             <div style={styles.CONTAINER}>
                 <Dropzone
+                    style={styles.DROPZONE}
                     accept='video/webm'
                     multiple={false}
-                    style={styles.DROPZONE}
                 >
                     <img 
-                        src='https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg' 
+                        src='https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg'
                         alt='upload'
                         style={styles.IMAGE}
                     />

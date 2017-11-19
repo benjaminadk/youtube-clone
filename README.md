@@ -61,6 +61,11 @@
 - link to upload, classes
 
 
+#### Resources
+***Upload Background***
+    - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg
+
+
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)
 ##### [Express](https://expressjs.com/)
