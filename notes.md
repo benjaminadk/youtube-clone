@@ -1,6 +1,7 @@
-video model 
-url
-size
-title
-desciption
-createdOn
+explain aws-sdk
+iam user
+credentials
+cors policy
+bucket bullshit
+schema
+resolvers

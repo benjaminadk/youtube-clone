@@ -80,10 +80,60 @@
 - transfer jwt to backend
 - add user to context
 
+#### Video 23 AWS SDK
+- bucket config
+
+
 #### Resources
 ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg
-
+***Sample Bucket Policy***
+```
+{
+    "Version": "2012-10-17",
+    "Id": "S3-Console-Auto-Gen-Policy-1501076877929",
+    "Statement": [
+        {
+            "Sid": "S3PolicyStmt-DO-NOT-MODIFY-1501076877929",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "s3.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::<your bucket name>/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceAccount": "056188042019",
+                    "s3:x-amz-acl": "bucket-owner-full-control"
+                },
+                "ArnLike": {
+                    "aws:SourceArn": "arn:aws:s3:::<your bucket name>"
+                }
+            }
+        }
+    ]
+}
+```
+***Sample Bucket CORS Policy***
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin><your website url></AllowedOrigin>
+    <AllowedMethod>POST</AllowedMethod>
+    <AllowedMethod>PUT</AllowedMethod>
+    <AllowedMethod>DELETE</AllowedMethod>
+    <MaxAgeSeconds>10000</MaxAgeSeconds>
+    <AllowedHeader>*</AllowedHeader>
+</CORSRule>
+<CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <MaxAgeSeconds>3000</MaxAgeSeconds>
+    <AllowedHeader>Authorization</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+```
 
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)
@@ -92,4 +142,5 @@
 ##### [Passport](http://www.passportjs.org/)
 ##### [Create React App](https://github.com/facebookincubator/create-react-app)
 ##### [Material UI](https://material-ui-next.com/)
+##### [AWS Credentials Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 ##### [AWS Javascript SDK Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/welcome.html)

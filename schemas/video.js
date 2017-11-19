@@ -12,7 +12,8 @@ export default `
     input VideoInput {
         title: String
         description: String
-        poster: String
+        poster: String,
+        url: String
     }
     
     type S3Payload {
