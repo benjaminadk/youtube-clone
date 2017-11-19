@@ -73,6 +73,13 @@
 #### Video 20 Json Web Token 2
 - fetching jwt on frontend
 
+#### Video 21 Json Web Token 3
+- finalize jwt fetching
+
+#### Video 22 Json Web Token 4
+- transfer jwt to backend
+- add user to context
+
 #### Resources
 ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg

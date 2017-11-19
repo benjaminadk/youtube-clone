@@ -5,9 +5,10 @@ import passport from 'passport'
 import { googleOauth, googleCallback, googleRedirect, googleScope } from './passport'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeResolvers, mergeTypes } from 'merge-graphql-schemas'
-import models from './models'
 import cors from 'cors'
 import path from 'path'
+import models from './models'
+import { checkAuthHeaders } from './middleware'
 require('./models/connect')
 
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schemas')))
@@ -26,12 +27,15 @@ server.use(passport.initialize())
 server.get('/auth/google', googleScope)
 server.get('/auth/google/callback', googleCallback, googleRedirect)
 
-server.use('/graphql', bodyParser.json(), graphqlExpress({ 
+server.use(checkAuthHeaders)
+
+server.use('/graphql', bodyParser.json(), graphqlExpress(req => ({ 
     schema,
     context: {
-        models
+        models,
+        user: req.user
     }
-}))
+})))
 
 server.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
