@@ -6,6 +6,7 @@ import Drawer from 'material-ui/Drawer'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
+import Menu, { MenuItem } from 'material-ui/Menu'
 import Divider from 'material-ui/Divider'
 import IconButton from 'material-ui/IconButton'
 import MenuIcon from 'material-ui-icons/Menu'
@@ -17,7 +18,8 @@ import HomeIcon from 'material-ui-icons/Home'
 import Avatar from 'material-ui/Avatar'
 import Home from './Home'
 import Upload from './Upload'
-import Menu, { MenuItem } from 'material-ui/Menu'
+import UserLanding from './UserLanding'
+
 
 const drawerWidth = 240
 
@@ -215,6 +217,7 @@ class PersistentDrawer extends Component {
               <Switch>
                 <Route exact path='/' component={Home}/>
                 <Route path='/upload' component={Upload}/>
+                <Route path='/user/:userId' component={UserLanding}/>
               </Switch>
             </main>
           </div>

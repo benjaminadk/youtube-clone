@@ -70,6 +70,8 @@
 #### Video 19 Json Web Token
 - create a json web token on login
 
+#### Video 20 Json Web Token 2
+- fetching jwt on frontend
 
 #### Resources
 ***Upload Background***

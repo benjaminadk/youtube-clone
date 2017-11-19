@@ -42,7 +42,6 @@ export const googleOauth = new GoogleStrategy(
             }, keys.jwtSecret, { expiresIn: '7d' })
             user.jwt = newToken
             await user.save()
-            
             done(null, {})
         }
 )
