@@ -7,7 +7,7 @@ export default `
         googleId: String
         imageUrl: String
         createdOn: String
-        videos: [String]
+        videos: [Video]
     }
     
     type Query {

@@ -4,11 +4,14 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import passport from 'passport'
 import { googleOauth, googleCallback, googleRedirect, googleScope } from './passport'
 import { makeExecutableSchema } from 'graphql-tools'
-import typeDefs from './schemas/user'
-import resolvers from './resolvers/user'
+import { fileLoader, mergeResolvers, mergeTypes } from 'merge-graphql-schemas'
 import models from './models'
 import cors from 'cors'
+import path from 'path'
 require('./models/connect')
+
+const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schemas')))
+const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')))
 
 const schema = makeExecutableSchema({
     typeDefs,

@@ -60,6 +60,17 @@
 #### Video 16 - Navigation Icons
 - link to upload, classes
 
+#### Video 17 - Upload Component
+- component style and layout
+- use resource upload background
+
+#### Video 18 Video Model
+- create video model on backend
+
+#### Video 19 AWS SDK
+- install and setup
+- documentation link below
+
 
 #### Resources
 ***Upload Background***
@@ -73,3 +84,4 @@
 ##### [Passport](http://www.passportjs.org/)
 ##### [Create React App](https://github.com/facebookincubator/create-react-app)
 ##### [Material UI](https://material-ui-next.com/)
+##### [AWS Javascript SDK Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/welcome.html)

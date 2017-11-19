@@ -23,7 +23,7 @@ const userSchema = new Schema({
     
     imageUrl: String,
     
-    videos: [String],
+    videos: [Schema.Types.ObjectId],
     
     createdOn: {
         type: Date,
