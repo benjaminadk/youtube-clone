@@ -1,4 +1,14 @@
 ## You Tube Clone 
+
+### Instructions
+- `git clone https://github.com/benjaminadk/youtube-clone.git`
+- `cd youtube-clone`
+- `npm install`
+- `cd client`
+- `npm install`
+- create `client/config/dev.js`
+- add your personal keys
+
 ### A Full Stack React App Tutorial Series
 
 #### Video 1 - Intro
@@ -44,6 +54,8 @@
 #### Video 14 - Bug Fixes
 - cors, typos, npm packages
 
+#### Video 15 - Navigation
+- material ui appbar and drawer
 
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)
