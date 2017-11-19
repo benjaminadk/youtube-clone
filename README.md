@@ -57,6 +57,10 @@
 #### Video 15 - Navigation
 - material ui appbar and drawer
 
+#### Video 16 - Navigation Icons
+- link to upload, classes
+
+
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)
 ##### [Express](https://expressjs.com/)

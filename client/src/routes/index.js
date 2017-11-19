@@ -1,18 +1,23 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
 import Home from './Home'
-import { withStyles } from 'material-ui/styles';
-import classNames from 'classnames';
-import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import List from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
-import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import { withStyles } from 'material-ui/styles'
+import classNames from 'classnames'
+import Drawer from 'material-ui/Drawer'
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
+import Divider from 'material-ui/Divider'
+import IconButton from 'material-ui/IconButton'
+import MenuIcon from 'material-ui-icons/Menu'
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
+import AppsIcon from 'material-ui-icons/Apps'
+import FileUploadIcon from 'material-ui-icons/FileUpload'
+import AddAlertIcon from 'material-ui-icons/AddAlert'
+import HomeIcon from 'material-ui-icons/Home'
+import Avatar from 'material-ui/Avatar'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const styles = theme => ({
   root: {
@@ -92,32 +97,47 @@ const styles = theme => ({
   },
   'contentShift-left': {
     marginLeft: 0,
+  },
+  toolbar: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  toolbarRight: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingRight: '20px',
+    width: '20vw'
+  },
+  link: {
+    textDecoration: 'none'
+  },
+  linkIcon: {
+    color: '#FFFFFF'
   }
-});
+})
 
 class PersistentDrawer extends Component {
   state = {
     open: false
-  };
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
-  };
+  }
 
   handleDrawerClose = () => {
     this.setState({ open: false });
-  };
+  }
 
   render() {
-    const { classes } = this.props;
-    const { open } = this.state;
+    const { classes } = this.props
+    const { open } = this.state
 
     const drawer = (
       <Drawer
         type="persistent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
+        classes={{ paper: classes.drawerPaper }}
         anchor='left'
         open={open}
       >
@@ -128,12 +148,19 @@ class PersistentDrawer extends Component {
             </IconButton>
           </div>
           <Divider />
-          <List className={classes.list}></List>
+          <List className={classes.list}>
+            <Link to='/' className={classes.link}>
+              <ListItem button>
+                <ListItemIcon><HomeIcon/></ListItemIcon>
+                <ListItemText primary='Home'/>
+              </ListItem>
+            </Link>
+          </List>
           <Divider />
           <List className={classes.list}></List>
         </div>
       </Drawer>
-    );
+    )
 
     return (
       <BrowserRouter>
@@ -145,7 +172,7 @@ class PersistentDrawer extends Component {
                 [classes[`appBarShift-left`]]: open,
               })}
             >
-              <Toolbar disableGutters={!open}>
+              <Toolbar disableGutters={!open} className={classes.toolbar}>
                 <IconButton
                   color="contrast"
                   aria-label="open drawer"
@@ -154,6 +181,12 @@ class PersistentDrawer extends Component {
                 >
                   <MenuIcon />
                 </IconButton>
+                  <div className={classes.toolbarRight}>
+                    <Link to='/upload' className={classes.linkIcon}><FileUploadIcon/></Link>
+                    <AppsIcon/>
+                    <AddAlertIcon/>
+                    <Avatar src='http://via.placeholder.com/50x50' />
+                  </div>
               </Toolbar>
             </AppBar>
             {drawer}
@@ -170,8 +203,8 @@ class PersistentDrawer extends Component {
           </div>
         </div>
       </BrowserRouter>
-    );
+    )
   }
 }
 
-export default withStyles(styles, { withTheme: true })(PersistentDrawer);
+export default withStyles(styles, { withTheme: true })(PersistentDrawer)

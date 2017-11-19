@@ -1,5 +1,3 @@
-
-
 video model 
 url
 size
