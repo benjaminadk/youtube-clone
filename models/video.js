@@ -10,7 +10,7 @@ const videoSchema = new Schema({
     
     url: String,
     
-    desciption: String,
+    description: String,
     
     poster: String,
     
