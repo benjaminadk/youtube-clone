@@ -20,6 +20,7 @@ import { PrivateRoute } from '../utils'
 import Home from './Home'
 import Upload from './Upload'
 import UserLanding from './UserLanding'
+import Video from './Video'
 
 
 const drawerWidth = 240
@@ -219,6 +220,7 @@ class PersistentDrawer extends Component {
                 <Route exact path='/' component={Home}/>
                 <Route path='/upload' component={Upload}/>
                 <Route path='/user/:userId' component={UserLanding}/>
+                <Route path='/video/:videoId' component={Video}/>
               </Switch>
             </main>
           </div>

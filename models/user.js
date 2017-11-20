@@ -25,7 +25,10 @@ const userSchema = new Schema({
     
     imageUrl: String,
     
-    videos: [Schema.Types.ObjectId],
+    videos: {
+        type: [Schema.Types.ObjectId],
+        ref: 'video'
+    },
     
     createdOn: {
         type: Date,

@@ -4,9 +4,10 @@ export default `
         id: ID!
         owner: User
         title: String!
+        url: String!
         description: String!
         poster: String
-        createdOn: String
+        createdOn: String!
     }
     
     input VideoInput {
@@ -19,6 +20,10 @@ export default `
     type S3Payload {
         requestUrl: String
         videoUrl: String
+    }
+    
+    type Query {
+        getVideoById(videoId: ID!): Video
     }
     
     type Mutation {

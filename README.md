@@ -91,10 +91,13 @@
 #### Video 25 Save Video
 - video details and save to database
 
+#### Video 26 Play Video 
+- finally play a video on the frontend
+
 #### Resources
-***Upload Background***
+- ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg
-***Sample Bucket Policy***
+- ***Sample Bucket Policy***
 ```
 {
     "Version": "2012-10-17",
@@ -121,7 +124,7 @@
     ]
 }
 ```
-***Sample Bucket CORS Policy***
+- ***Sample Bucket CORS Policy***
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
@@ -148,6 +151,6 @@
 ##### [Babel](https://babeljs.io/)
 ##### [Passport](http://www.passportjs.org/)
 ##### [Create React App](https://github.com/facebookincubator/create-react-app)
-##### [Material UI](https://material-ui-next.com/)
+##### [Material UI 1.0](https://material-ui-next.com/)
 ##### [AWS Credentials Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 ##### [AWS Javascript SDK Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/welcome.html)

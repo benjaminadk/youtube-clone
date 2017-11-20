@@ -2,6 +2,15 @@ import aws from 'aws-sdk'
 
 export default {
     
+    Query: {
+    
+        getVideoById: async (root, { videoId }, { models }) => {
+            return await models.Video.findById(videoId)
+                .populate('owner')
+                .exec()
+        }
+    },
+    
     Mutation: {
         
         s3Sign: async (root, { filename, filetype }, context) => {

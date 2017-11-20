@@ -6,7 +6,10 @@ const videoSchema = new Schema({
     
     title: String,
     
-    owner: Schema.Types.ObjectId,
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
     
     url: String,
     
