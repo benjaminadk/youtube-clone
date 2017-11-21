@@ -94,6 +94,11 @@
 #### Video 26 Play Video 
 - finally play a video on the frontend
 
+#### Video 27 Video Details
+- views, likes, dislikes, user and video info added to view
+
+
+
 #### Resources
 - ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg

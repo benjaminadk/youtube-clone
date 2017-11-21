@@ -1,5 +1,25 @@
-video component and query
-create query and resolver
-add url to vid schema
-add refs to models
-add new route
+dropzone for poster
+
+new ideas for video
+
+views: {
+    type: Number,
+    default: 0
+},
+likes: {
+    type: Number,
+    default: 0
+}
+ share modal
+ 
+ title
+ divider
+ user avatar 
+    username
+    posted on
+subscribe????
+description with show more?
+comments - add comment 
+
+up next and list of related videos
+

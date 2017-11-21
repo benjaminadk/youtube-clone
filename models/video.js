@@ -17,6 +17,21 @@ const videoSchema = new Schema({
     
     poster: String,
     
+    views: {
+        type: Number,
+        default: 0
+    },
+    
+    likes: {
+        type: Number,
+        default: 0
+    },
+    
+    dislikes: {
+        type: Number,
+        default: 0
+    },
+    
     createdOn: {
         type: Date,
         default: Date.now()
