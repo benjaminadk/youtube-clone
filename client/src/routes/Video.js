@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
 import IconButton from 'material-ui/IconButton'
@@ -50,10 +50,21 @@ const styles = {
 
 class Video extends Component {
     
+    componentDidMount() {
+        this.handleAddView()
+    }
+    
+    handleAddView = async () => {
+        const response = await this.props.addView({
+            variables: { videoId: this.props.match.params.videoId }
+        })
+        console.log(response)
+    }
+    
     render(){
         const { data: { loading, getVideoById }} = this.props
         if(loading) return null
-        const { title, description, url, poster, createdOn, owner: { id, username, imageUrl }} = getVideoById
+        const { title, description, url, poster, createdOn, views, owner: { id, username, imageUrl }} = getVideoById
         return(
             <div style={styles.CONTAINER}>
                 <div>
@@ -61,7 +72,7 @@ class Video extends Component {
                     <Typography type='headline'>{title}</Typography>
                     <div style={styles.VIDEO_STATS}>
                         <div>
-                            <Typography type='subheading' style={styles.VIEWS}>123 views</Typography>
+                            <Typography type='subheading' style={styles.VIEWS}>{views} views</Typography>
                         </div>
                         <div>
                             <IconButton style={styles.SPACER}>
@@ -110,6 +121,7 @@ const VIDEO_BY_ID_QUERY = gql`
             url
             poster
             createdOn
+            views
             owner {
                 id
                 username
@@ -119,6 +131,15 @@ const VIDEO_BY_ID_QUERY = gql`
     }
 `
 
-export default graphql(VIDEO_BY_ID_QUERY, {
-    options: props => ({ variables: { videoId: props.match.params.videoId }})
-})(Video)
+const ADD_VIEW_MUTATION = gql`
+    mutation($videoId: ID!) {
+        addView(videoId: $videoId){
+            views
+        }
+    }
+`
+
+export default compose(
+    graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
+    graphql(VIDEO_BY_ID_QUERY, { options: props => ({ variables: { videoId: props.match.params.videoId }})})
+)(Video)

@@ -46,6 +46,12 @@ export default {
             const options = { upsert: true }
             await models.User.findOneAndUpdate(filter, update, options)
             return savedVideo
+        },
+        
+        addView: async (root, { videoId }, { models }) => {
+            const filter = { _id: videoId }
+            const update = { $inc: { views: 1 } }
+            return await models.Video.findOneAndUpdate(filter, update)
         }
     }
 }

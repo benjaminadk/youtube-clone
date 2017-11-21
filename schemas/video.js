@@ -8,6 +8,7 @@ export default `
         description: String!
         poster: String
         createdOn: String!
+        views: Int
     }
     
     input VideoInput {
@@ -29,5 +30,6 @@ export default `
     type Mutation {
         s3Sign(filename: String!, filetype: String!): S3Payload
         createVideo(input: VideoInput): Video
+        addView(videoId: ID!): Video
     }
 `

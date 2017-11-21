@@ -97,6 +97,8 @@
 #### Video 27 Video Details
 - views, likes, dislikes, user and video info added to view
 
+#### Video 28 Video Views
+- find and update a videos views when the video loads
 
 
 #### Resources
