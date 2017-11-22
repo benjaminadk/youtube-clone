@@ -104,6 +104,14 @@
 - thumbs up and thumbs down
 - complete implementation model, schema, resolvers, mutations, refetchQueries
 
+#### Video 30 Video Share
+- modal/dialog for sharing to social media
+- react-share package
+
+#### Video 31 Video Share 2
+- more explanations and implementation
+
+
 #### Resources
 - ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg

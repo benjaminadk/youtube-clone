@@ -1,3 +1,15 @@
+clearing db and aws
+install react-share
+new component dir
+render array in Video 
+add keys
+add methods and state for dialog
+add snackbar and methods to video array
+metatags
+
+
+
+
 dropzone for poster
 
 new ideas for video

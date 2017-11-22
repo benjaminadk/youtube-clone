@@ -10,6 +10,9 @@ import ReplyIcon from 'material-ui-icons/Reply'
 import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
 import { timeDifferenceForDate } from '../utils'
+import ShareModal from '../components/ShareModal'
+import Snackbar from 'material-ui/Snackbar'
+import CloseIcon from 'material-ui-icons/Close'
 
 const styles = {
     CONTAINER: {
@@ -49,9 +52,15 @@ const styles = {
 }
 
 class Video extends Component {
+    state = {
+        shareDialogOpen: false,
+        copySnackbarOpen: false,
+        linkToShare: ''
+    }
     
     componentDidMount() {
         this.handleAddView()
+        this.setState({ linkToShare: `https://youtube-clone-benjaminadk.c9users.io/video/${this.props.match.params.videoId}`})
     }
     
     handleAddView = async () => {
@@ -109,12 +118,28 @@ class Video extends Component {
         }
     }
     
+    handleShareModalOpen = () => this.setState({ shareDialogOpen: true })
+    
+    handleShareModalClose = () => this.setState({ shareDialogOpen: false })
+    
+    handleShareModalText = (e) => this.setState({ linkToShare: e.target.value })
+    
+    handleCopy = () => {
+        this.setState({ copySnackbarOpen: true })
+        document.getElementById('link-text').select()
+        document.execCommand("Copy")
+    }
+    
+    handleCopySnackbarOpen = () => this.setState({ copySnackbarOpen: true })
+    
+    handleCopySnackbarClose = () => this.setState({ copySnackbarOpen: false })
+    
     render(){
         const { data: { loading, getVideoById }} = this.props
         if(loading) return null
         const { title, description, url, poster, likes, dislikes, createdOn, views, owner: { id, username, imageUrl }} = getVideoById
-        return(
-            <div style={styles.CONTAINER}>
+        return([
+            <div key='video-main-page' style={styles.CONTAINER}>
                 <div>
                     <video src={url} controls style={styles.VIDEO}/>
                     <Typography type='headline'>{title}</Typography>
@@ -133,7 +158,7 @@ class Video extends Component {
                             </IconButton>
                             <IconButton style={styles.SPACER}>
                                 <ReplyIcon/>
-                                <Typography type='button'>Share</Typography>
+                                <Typography type='button' onClick={this.handleShareModalOpen}>Share</Typography>
                             </IconButton>
                         </div>
                     </div>
@@ -156,8 +181,26 @@ class Video extends Component {
                         </div>
                     <Divider/>
                 </div>
-            </div>
-            )
+            </div>,
+            <ShareModal     
+                key='video-share-modal'
+                open={this.state.shareDialogOpen}
+                handleShareModalClose={this.handleShareModalClose}
+                linkToShare={this.state.linkToShare}
+                onChange={this.handleShareModalText}
+                onCopy={this.handleCopy}
+                title={title}
+            />,
+            <Snackbar
+                key='video-copy-snackbar'
+                open={this.state.copySnackbarOpen}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                autoHideDuration={8000}
+                onRequestClose={this.handleCopySnackbarClose}
+                message={<span>Video link copied to clipboard</span>}
+                action={<IconButton onClick={this.handleCopySnackbarClose} color='inherit'><CloseIcon/></IconButton>}
+            />
+            ])
     }
 }
 
