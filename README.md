@@ -172,3 +172,4 @@
 ##### [Material UI 1.0](https://material-ui-next.com/)
 ##### [AWS Credentials Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 ##### [AWS Javascript SDK Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/welcome.html)
+##### [React Share](https://github.com/nygardk/react-share)
