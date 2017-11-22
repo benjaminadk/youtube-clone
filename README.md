@@ -100,6 +100,9 @@
 #### Video 28 Video Views
 - find and update a videos views when the video loads
 
+#### Video 29 Video Likes
+- thumbs up and thumbs down
+- complete implementation model, schema, resolvers, mutations, refetchQueries
 
 #### Resources
 - ***Upload Background***

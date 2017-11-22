@@ -55,16 +55,64 @@ class Video extends Component {
     }
     
     handleAddView = async () => {
-        const response = await this.props.addView({
-            variables: { videoId: this.props.match.params.videoId }
-        })
-        console.log(response)
+        await this.props.addView({ variables: { videoId: this.props.match.params.videoId } })
+    }
+    
+    handleThumbs = async (control) => {
+        const likesArray = this.props.data.getVideoById.owner.likes
+        const dislikesArray = this.props.data.getVideoById.owner.dislikes
+        const { videoId } = this.props.match.params
+        const likedId = likesArray.find(l => l === videoId)
+        const dislikedId = dislikesArray.find(d => d === videoId)
+        if(!dislikedId && !likedId) {
+            if(control === 'like') {
+                let remove = false
+                return await this.props.addLike({ 
+                    variables: { videoId, remove },
+                    refetchQueries: [{
+                        query: VIDEO_BY_ID_QUERY,
+                        variables: { videoId }
+                    }]
+                })
+            } else if(control === 'dislike') {
+                let remove = false
+                return await this.props.addDislike({
+                    variables: { videoId, remove },
+                    refetchQueries: [{
+                        query: VIDEO_BY_ID_QUERY,
+                        variables: { videoId }
+                    }]
+                })
+            }
+        } else if(!dislikedId && likedId) {
+            if(control === 'like') {
+                let remove = true
+                return await this.props.addLike({
+                    variables: { videoId, remove },
+                    refetchQueries: [{
+                        query: VIDEO_BY_ID_QUERY,
+                        variables: { videoId }
+                    }]
+                })
+            } else if(control === 'dislike') return
+        } else if(dislikedId && !likedId) {
+            if(control === 'dislike') {
+                let remove = true
+                return await this.props.addDislike({
+                    variables: { videoId, remove },
+                    refetchQueries: [{
+                        query: VIDEO_BY_ID_QUERY,
+                        variables: { videoId }
+                    }]
+                })
+            } else if(control === 'like') return
+        }
     }
     
     render(){
         const { data: { loading, getVideoById }} = this.props
         if(loading) return null
-        const { title, description, url, poster, createdOn, views, owner: { id, username, imageUrl }} = getVideoById
+        const { title, description, url, poster, likes, dislikes, createdOn, views, owner: { id, username, imageUrl }} = getVideoById
         return(
             <div style={styles.CONTAINER}>
                 <div>
@@ -75,13 +123,13 @@ class Video extends Component {
                             <Typography type='subheading' style={styles.VIEWS}>{views} views</Typography>
                         </div>
                         <div>
-                            <IconButton style={styles.SPACER}>
+                            <IconButton style={styles.SPACER} onClick={this.handleThumbs.bind(this, 'like')}>
                                 <ThumbsUpIcon/>&nbsp;
-                                <Typography type='button'>109</Typography>
+                                <Typography type='button'>{likes}</Typography>
                             </IconButton>
-                            <IconButton style={styles.SPACER}>
+                            <IconButton style={styles.SPACER} onClick={this.handleThumbs.bind(this, 'dislike')}>
                                 <ThumbsDownIcon/>&nbsp;
-                                <Typography type='button'>8</Typography>
+                                <Typography type='button'>{dislikes}</Typography>
                             </IconButton>
                             <IconButton style={styles.SPACER}>
                                 <ReplyIcon/>
@@ -122,10 +170,14 @@ const VIDEO_BY_ID_QUERY = gql`
             poster
             createdOn
             views
+            likes
+            dislikes
             owner {
                 id
                 username
                 imageUrl
+                likes
+                dislikes
             }
         }
     }
@@ -139,7 +191,25 @@ const ADD_VIEW_MUTATION = gql`
     }
 `
 
+const ADD_LIKE_MUTATION = gql`
+    mutation($videoId: ID!, $remove: Boolean!) {
+        addLike(videoId: $videoId, remove: $remove) {
+            likes
+        }
+    }
+`
+
+const ADD_DISLIKE_MUTATION = gql`
+    mutation($videoId: ID!, $remove: Boolean!) {
+        addDislike(videoId: $videoId, remove: $remove) {
+            dislikes
+        }
+    }
+`
+
 export default compose(
     graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
+    graphql(ADD_LIKE_MUTATION, { name: 'addLike' }),
+    graphql(ADD_DISLIKE_MUTATION, { name: 'addDislike' }),
     graphql(VIDEO_BY_ID_QUERY, { options: props => ({ variables: { videoId: props.match.params.videoId }})})
 )(Video)

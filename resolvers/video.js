@@ -52,6 +52,24 @@ export default {
             const filter = { _id: videoId }
             const update = { $inc: { views: 1 } }
             return await models.Video.findOneAndUpdate(filter, update)
+        },
+        
+        addLike: async (root, { videoId, remove }, { models, user}) => {
+            const filter_1 = { _id: user.id }
+            const update_1 = remove ? { $pull: { likes: videoId } } : { $push: { likes: videoId } }
+            await models.User.findOneAndUpdate(filter_1, update_1)
+            const filter_2 = { _id: videoId }
+            const update_2 = { $inc: { likes: remove ? -1 : 1 } }
+            return await models.Video.findOneAndUpdate(filter_2, update_2)
+        },
+        
+        addDislike: async (root, { videoId, remove }, { models, user}) => {
+            const filter_1 = { _id: user.id }
+            const update_1 = remove ? { $pull: { dislikes: videoId } } : { $push: { dislikes: videoId } }
+            await models.User.findOneAndUpdate(filter_1, update_1)
+            const filter_2 = { _id: videoId }
+            const update_2 = { $inc: { dislikes: remove ? -1 : 1 } }
+            return await models.Video.findOneAndUpdate(filter_2, update_2)
         }
     }
 }

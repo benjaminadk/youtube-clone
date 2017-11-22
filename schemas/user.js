@@ -9,6 +9,8 @@ export default `
         createdOn: String
         videos: [Video]
         jwt: String
+        likes: [ID!]
+        dislikes: [ID!]
     }
     
     type Query {

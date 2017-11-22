@@ -9,6 +9,8 @@ export default `
         poster: String
         createdOn: String!
         views: Int
+        likes: Int
+        dislikes: Int
     }
     
     input VideoInput {
@@ -31,5 +33,7 @@ export default `
         s3Sign(filename: String!, filetype: String!): S3Payload
         createVideo(input: VideoInput): Video
         addView(videoId: ID!): Video
+        addLike(videoId: ID!, remove: Boolean!): Video
+        addDislike(videoId: ID!, remove: Boolean!): Video
     }
 `
