@@ -74,7 +74,7 @@ class Video extends Component {
     handleTimeQuery = () => {
         const time = queryString.parse(this.props.location.search).time || 0
         this.setState({ currentTime: time, currentTimeString: formatTime(time) })
-        this.videoElement.currentTime = time
+        if(time > 0) this.videoElement.currentTime = time
     }
     
     handleAddView = async () => {
@@ -173,6 +173,7 @@ class Video extends Component {
                         src={url} 
                         controls 
                         style={styles.VIDEO}
+                        poster={poster}
                         ref={(video) => { this.videoElement = video }}
                     />
                     <Typography type='headline'>{title}</Typography>

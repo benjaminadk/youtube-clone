@@ -31,6 +31,24 @@ export default {
             return { requestUrl, videoUrl }
         },
         
+        s3SignPoster: async (root, { filename, filetype }, context) => {
+            const s3 = new aws.S3({
+                signatureVersion: 'v4',
+                region: 'us-west-1'
+            })
+            const s3Bucket = 'ytc-tutorial'
+            const s3Params = {
+                Bucket: s3Bucket,
+                Key: filename,
+                Expires: 60,
+                ContentType: filetype,
+                ACL: 'public-read'
+            }
+            const requestUrl = await s3.getSignedUrl('putObject', s3Params)
+            const posterUrl = `https://${s3Bucket}.s3.amazonaws.com/${filename}`
+            return { requestUrl, posterUrl }
+        },
+        
         createVideo: async (root, { input }, { models, user: { id } }) => {
             const { title, description, poster, url } = input
             const video = new models.Video({

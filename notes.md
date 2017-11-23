@@ -1,4 +1,4 @@
-
+split Upload into two components
 metatags - react helmet - build and use an express server somehow?
 
 dropzone for poster

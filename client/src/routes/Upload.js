@@ -1,96 +1,9 @@
 import React, { Component } from 'react'
-import Typography from 'material-ui/Typography'
-import Button from 'material-ui/Button'
-import Dropzone from 'react-dropzone'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
 import axios from 'axios'
-import { LinearProgress } from 'material-ui/Progress'
-import TextField from 'material-ui/TextField'
-import { Link } from 'react-router-dom'
-
-const styles = {
-    CONTAINER: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        backgroundColor: '#F1F1F1',
-        height: '100%'
-    },
-    DROPZONE: {
-        backgroundColor: 'white',
-        border: 'none',
-        height: '60vh',
-        width: '50vw',
-        marginTop: '5vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        cursor: 'pointer'
-    },
-    IMAGE: {
-        margin: '15vh auto 3vh',
-        height: '14vh',
-        width: '10vw'
-    },
-    GRID: {
-        display: 'grid',
-        gridTemplateColumns: '20% 80%',
-        backgroundColor: 'white',
-        height: '70vh',
-        width: '75vw',
-        marginTop: '3vh'
-    },
-    LEFT_COLUMN: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '70vh',
-        width: '15vw'
-    },
-    RIGHT_COLUMN: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    PUB_PROG_CONTAINER: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        marginTop: '3vh'
-    },
-    PROGRESS: {
-        height: '4vh',
-        width: '50vw',
-        marginRight: '5vh'
-    },
-    PUBLISH: {
-        height: '3vh',
-        marginRight: '5vh'
-    },
-    THUMBNAIL: {
-        border: '1px solid black',
-        margin: '3vh'
-    },
-    SUB_GRID: {
-        display: 'grid',
-        gridTemplateColumns: '60% 40%'
-    },
-    SUB_LEFT: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '3vh'
-    },
-    SUB_RIGHT: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    TEXT_INPUT: {
-        marginBottom: '4vh'
-    },
-    PADDING_LEFT: {
-        paddingLeft: '3vh',
-        fontSize: '10px'
-    }
-}
+import UploadDropzone from '../components/UploadDropzone'
+import UploadDetails from '../components/UploadDetails'
 
 class Upload extends Component {
     state = {
@@ -100,16 +13,19 @@ class Upload extends Component {
         title: '',
         description: '',
         url: '',
-        poster: '',
         completed: false,
-        id: ''
+        id: '',
+        poster: '',
+        posterFile: null
     }
     
-    format = filename => {
+    format = (filename, folder) => {
         const d = new Date()
         const date = `${d.getMonth() + 1}-${d.getDate()}-${d.getFullYear()}`
         const cleanFilename = filename.toLowerCase().replace(/[^a-z0-9]/g, "-")
-        return `videos/${date}-${cleanFilename}`
+        if(folder === 'videos') return `videos/${date}-${cleanFilename}`
+        if(folder === 'images') return `images/${date}-${cleanFilename}`
+        
     }
     
     uploadToS3 = async (file, requestUrl) => {
@@ -125,11 +41,13 @@ class Upload extends Component {
         await axios.put(requestUrl, file, options)
     }
     
-    onDrop = (files) => this.setState({ file: files[0]})
+    onDropVideo = (files) => this.setState({ file: files[0]})
     
-    handleUpload = async () => {
+    onDropPoster = (files) => this.setState({ posterFile: files[0]})
+    
+    handleUploadVideo = async () => {
         const { file } = this.state
-        const filename = this.format(file.name)
+        const filename = this.format(file.name, 'videos')
         const filetype = file.type
         const response = await this.props.s3Sign({
             variables: { filename, filetype }
@@ -137,6 +55,18 @@ class Upload extends Component {
         const { requestUrl, videoUrl } = response.data.s3Sign
         await this.setState({ dropzone: false, title: filename, url: videoUrl })
         await this.uploadToS3(file, requestUrl)
+    }
+    
+    handleUploadPoster = async () => {
+        const { posterFile } = this.state
+        const filename = this.format(posterFile.name, 'images')
+        const filetype = posterFile.type
+        const response = await this.props.s3SignPoster({
+            variables: { filename, filetype }
+        })
+        const { requestUrl, posterUrl} = response.data.s3SignPoster
+        await this.setState({ poster: posterUrl })
+        await this.uploadToS3(posterFile, requestUrl)
     }
     
     handleVideo = async () => {
@@ -151,91 +81,28 @@ class Upload extends Component {
     handleChange = e => this.setState({ [e.target.name]: e.target.value })
     
     render(){
-        const { file, progress, dropzone, title, description, id, completed } = this.state
-        const thumbnail = 'http://via.placeholder.com/150x100'
+        const { file, progress, dropzone, title, description, id, completed, poster, posterFile } = this.state
         if(dropzone) return(
-            <div style={styles.CONTAINER}>
-                <Dropzone
-                    style={styles.DROPZONE}
-                    accept='video/webm'
-                    multiple={false}
-                    onDrop={this.onDrop}
-                >
-                    <img 
-                        src='https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg'
-                        alt='upload'
-                        style={styles.IMAGE}
-                    />
-                    <Typography type='headline'>Select files to upload</Typography>
-                    <br/>
-                    <Typography>Or drag and drop video files</Typography>
-                    { file && <Typography>File: {file.name}</Typography> }
-                </Dropzone>
-                { file && <Button
-                    raised
-                    color='primary'
-                    onClick={this.handleUpload}
-                >
-                    Upload
-                </Button> }
-            </div>
+                <UploadDropzone
+                    onDrop={this.onDropVideo}
+                    file={file}
+                    handleUpload={this.handleUploadVideo}
+                />
             )
         if(!dropzone) return(
-            <div style={styles.CONTAINER}>
-                <div style={styles.GRID}>
-                    <div style={styles.LEFT_COLUMN}>
-                        <img src={thumbnail} alt='thumbnail' style={styles.THUMBNAIL}/>
-                        <div style={styles.PADDING_LEFT}>
-                            <p>Upload Status: </p>
-                            <p>{progress === 100 ? 'Upload Complete!' : progress > 0 ? `Upload ${progress}% Complete` : null}</p>
-                            {completed && <Link to={`/video/${id}`}>Watch Your Video</Link>}
-                        </div>
-                    </div>
-                    <div style={styles.RIGHT_COLUMN}>
-                        <div style={styles.PUB_PROG_CONTAINER}>
-                            <LinearProgress 
-                                mode='determinate'
-                                value={progress}
-                                style={styles.PROGRESS}
-                            />
-                            <Button 
-                                style={styles.PUBLISH}
-                                color='primary'
-                                raised
-                                onClick={this.handleVideo}
-                                disabled={progress < 100}
-                            >
-                                Publish
-                            </Button>
-                        </div>
-                        <div style={styles.SUB_GRID}>
-                            <div style={styles.SUB_LEFT}>
-                                <TextField 
-                                    label='Title'
-                                    value={title}
-                                    name='title'
-                                    onChange={this.handleChange}
-                                    fullWidth
-                                    style={styles.TEXT_INPUT}
-                                />
-                                <TextField
-                                    label='Description'
-                                    value={description}
-                                    name='description'
-                                    onChange={this.handleChange}
-                                    fullWidth
-                                    multiline={true}
-                                    rows={4}
-                                    style={styles.TEXT_INPUT}
-                                />
-                            </div>
-                            <div style={styles.SUB_RIGHT}>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <UploadDetails
+                    progress={progress}
+                    completed={completed}
+                    id={id}
+                    description={description}
+                    title={title}
+                    poster={poster}
+                    posterFile={posterFile}
+                    handleChange={this.handleChange}
+                    handleVideo={this.handleVideo}
+                    handleUpload={this.handleUploadPoster}
+                    onDrop={this.onDropPoster}
+                />
             )
     }
 }
@@ -257,7 +124,17 @@ const CREATE_VIDEO_MUTATION = gql`
     }
 `
 
+const S3_SIGN_POSTER_MUTATION = gql`
+    mutation($filename: String!, $filetype: String!) {
+        s3SignPoster(filename: $filename, filetype: $filetype) {
+            requestUrl
+            posterUrl
+        }
+    }
+`
+
 export default compose(
     graphql(S3_SIGN_MUTATION, { name: 's3Sign' }),
+    graphql(S3_SIGN_POSTER_MUTATION, { name: 's3SignPoster' }),
     graphql(CREATE_VIDEO_MUTATION, { name: 'createVideo' })
     )(Upload)

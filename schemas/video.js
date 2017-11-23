@@ -25,6 +25,11 @@ export default `
         videoUrl: String
     }
     
+    type S3Poster {
+        requestUrl: String
+        posterUrl: String
+    }
+    
     type Query {
         getVideoById(videoId: ID!): Video
     }
@@ -35,5 +40,6 @@ export default `
         addView(videoId: ID!): Video
         addLike(videoId: ID!, remove: Boolean!): Video
         addDislike(videoId: ID!, remove: Boolean!): Video
+        s3SignPoster(filename: String!, filetype: String!): S3Poster
     }
 `
