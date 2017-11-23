@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
+import moment from 'moment'
 
 export const Auth = {
     isAuthenticated: false,
@@ -77,4 +78,18 @@ export function timeDifferenceForDate(date) {
   const now = new Date().getTime()
   const updated = new Date(date).getTime()
   return timeDifference(now, updated)
+}
+
+export const reverseFormat = (string) => {
+    const array = string.split(':')
+    if(array.length === 3){
+        return (parseInt(array[0],10) * 3600 + parseInt(array[1],10) * 60 + parseInt(array[2],10))
+    }
+    if(array.length === 2) return (parseInt(array[0],10) * 60 + parseInt(array[1],10))
+}
+
+export const formatTime = (secs) => {
+    const formatted = moment.utc(secs * 1000).format('H:mm:ss')
+    if(secs < 600) return formatted.slice(3)
+    if(secs < 3600) return formatted.slice(2)
 }

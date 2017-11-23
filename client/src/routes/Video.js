@@ -13,6 +13,9 @@ import { timeDifferenceForDate } from '../utils'
 import ShareModal from '../components/ShareModal'
 import Snackbar from 'material-ui/Snackbar'
 import CloseIcon from 'material-ui-icons/Close'
+import queryString from 'query-string'
+import EmbedModal from '../components/EmbedModal'
+import { formatTime } from '../utils'
 
 const styles = {
     CONTAINER: {
@@ -55,12 +58,23 @@ class Video extends Component {
     state = {
         shareDialogOpen: false,
         copySnackbarOpen: false,
-        linkToShare: ''
+        embedDialogOpen: false,
+        linkToShare: '',
+        checked: false,
+        currentTime: 0,
+        currentTimeString: '0:00'
     }
     
     componentDidMount() {
         this.handleAddView()
-        this.setState({ linkToShare: `https://youtube-clone-benjaminadk.c9users.io/video/${this.props.match.params.videoId}`})
+        setTimeout(this.handleTimeQuery, 2500)
+        this.setState({ linkToShare: `https://youtube-clone-benjaminadk.c9users.io${this.props.location.pathname}` })
+    }
+    
+    handleTimeQuery = () => {
+        const time = queryString.parse(this.props.location.search).time || 0
+        this.setState({ currentTime: time, currentTimeString: formatTime(time) })
+        this.videoElement.currentTime = time
     }
     
     handleAddView = async () => {
@@ -118,21 +132,35 @@ class Video extends Component {
         }
     }
     
+    handleCopy = (control) => {
+        this.setState({ copySnackbarOpen: true })
+        if(control === 'share'){
+            document.getElementById('link-text').select()
+            document.execCommand("Copy")
+        } else if(control === 'embed') {
+            document.getElementById('iframe-text').select()
+            document.execCommand("Copy")
+        }
+
+    }
+    
     handleShareModalOpen = () => this.setState({ shareDialogOpen: true })
     
     handleShareModalClose = () => this.setState({ shareDialogOpen: false })
     
     handleShareModalText = (e) => this.setState({ linkToShare: e.target.value })
     
-    handleCopy = () => {
-        this.setState({ copySnackbarOpen: true })
-        document.getElementById('link-text').select()
-        document.execCommand("Copy")
-    }
+    handleShareModalTime = (e) => this.setState({ currentTimeString: e.target.value })
+    
+    handleEmbedModalClose = () => this.setState({ embedDialogOpen: false })
+    
+    handleEmbedModalOpen = () => this.setState({ embedDialogOpen: true, shareDialogOpen: false })
     
     handleCopySnackbarOpen = () => this.setState({ copySnackbarOpen: true })
     
     handleCopySnackbarClose = () => this.setState({ copySnackbarOpen: false })
+    
+    handleCheckbox = () => this.setState({ checked: !this.state.checked })
     
     render(){
         const { data: { loading, getVideoById }} = this.props
@@ -141,7 +169,12 @@ class Video extends Component {
         return([
             <div key='video-main-page' style={styles.CONTAINER}>
                 <div>
-                    <video src={url} controls style={styles.VIDEO}/>
+                    <video
+                        src={url} 
+                        controls 
+                        style={styles.VIDEO}
+                        ref={(video) => { this.videoElement = video }}
+                    />
                     <Typography type='headline'>{title}</Typography>
                     <div style={styles.VIDEO_STATS}>
                         <div>
@@ -186,10 +219,15 @@ class Video extends Component {
                 key='video-share-modal'
                 open={this.state.shareDialogOpen}
                 handleShareModalClose={this.handleShareModalClose}
+                handleEmbedModalOpen={this.handleEmbedModalOpen}
                 linkToShare={this.state.linkToShare}
+                currentTimeString={this.state.currentTimeString}
                 onChange={this.handleShareModalText}
-                onCopy={this.handleCopy}
+                onCopy={this.handleCopy.bind(this, 'share')}
                 title={title}
+                checked={this.state.checked}
+                handleCheckbox={this.handleCheckbox}
+                handleShareModalTime={this.handleShareModalTime}
             />,
             <Snackbar
                 key='video-copy-snackbar'
@@ -197,8 +235,15 @@ class Video extends Component {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                 autoHideDuration={8000}
                 onRequestClose={this.handleCopySnackbarClose}
-                message={<span>Video link copied to clipboard</span>}
+                message={<span>Copied to clipboard</span>}
                 action={<IconButton onClick={this.handleCopySnackbarClose} color='inherit'><CloseIcon/></IconButton>}
+            />,
+            <EmbedModal
+                key='video-embed-modal'
+                open={this.state.embedDialogOpen}
+                handleEmbedModalClose={this.handleEmbedModalClose}
+                url={url}
+                onCopy={this.handleCopy.bind(this, 'embed')}
             />
             ])
     }

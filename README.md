@@ -111,6 +111,9 @@
 #### Video 31 Video Share 2
 - more explanations and implementation
 
+#### Video 32 Video Share 3
+- setup embed option and time query param
+- use momentjs and query-string
 
 #### Resources
 - ***Upload Background***
@@ -173,3 +176,5 @@
 ##### [AWS Credentials Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 ##### [AWS Javascript SDK Docs](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/welcome.html)
 ##### [React Share](https://github.com/nygardk/react-share)
+##### [Query String](https://github.com/sindresorhus/query-string)
+##### [Moment js](https://momentjs.com/)

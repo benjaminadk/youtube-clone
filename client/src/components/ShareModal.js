@@ -4,6 +4,8 @@ import Dialog, { DialogTitle, DialogContent, DialogActions } from 'material-ui/D
 import Divider from 'material-ui/Divider'
 import Button from 'material-ui/Button'
 import TextField from 'material-ui/TextField'
+import Checkbox from 'material-ui/Checkbox'
+import { reverseFormat } from '../utils'
 
 const { 
     TwitterShareButton, 
@@ -29,7 +31,19 @@ const styles = {
     }
 }
 
-export default ({ open, handleShareModalClose, linkToShare, onChange, onCopy, title }) => (
+export default ({ 
+    open, 
+    handleShareModalClose, 
+    linkToShare, 
+    onChange, 
+    onCopy, 
+    title,  
+    currentTimeString,
+    checked,
+    handleCheckbox,
+    handleEmbedModalOpen,
+    handleShareModalTime
+}) => (
     <Dialog 
         open={open}
         onRequestClose={handleShareModalClose}
@@ -54,14 +68,27 @@ export default ({ open, handleShareModalClose, linkToShare, onChange, onCopy, ti
             <Divider style={styles.DIVIDER}/>
             <TextField
                 id='link-text'
-                value={linkToShare}
+                value={checked ? `${linkToShare}?time=${reverseFormat(currentTimeString)}` : linkToShare}
                 onChange={onChange}
                 fullWidth
             />
+            <div>
+                <p>Specific Time</p>
+                <Checkbox
+                    checked={checked}
+                    onChange={handleCheckbox}
+                />
+                <TextField
+                    value={currentTimeString}
+                    onChange={handleShareModalTime}
+                    disabled={checked ? false : true}
+                />
+            </div>
+                
             <Divider style={styles.DIVIDER}/>
         </DialogContent>
         <DialogActions>
-            <Button>Embed</Button>
+            <Button onClick={handleEmbedModalOpen}>Embed</Button>
             <Button onClick={onCopy}>Copy</Button>
         </DialogActions>
     </Dialog>
