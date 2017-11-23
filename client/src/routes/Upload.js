@@ -23,9 +23,7 @@ class Upload extends Component {
         const d = new Date()
         const date = `${d.getMonth() + 1}-${d.getDate()}-${d.getFullYear()}`
         const cleanFilename = filename.toLowerCase().replace(/[^a-z0-9]/g, "-")
-        if(folder === 'videos') return `videos/${date}-${cleanFilename}`
-        if(folder === 'images') return `images/${date}-${cleanFilename}`
-        
+        return `${folder}/${date}-${cleanFilename}`
     }
     
     uploadToS3 = async (file, requestUrl) => {
