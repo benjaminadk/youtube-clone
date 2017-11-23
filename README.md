@@ -115,6 +115,12 @@
 - setup embed option and time query param
 - use momentjs and query-string
 
+#### Video 33 Video Poster
+- total refactor of Upload component
+- add dropzone for poster
+- show poster in Video component
+
+
 #### Resources
 - ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg
