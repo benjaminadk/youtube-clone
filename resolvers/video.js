@@ -6,7 +6,10 @@ export default {
     
         getVideoById: async (root, { videoId }, { models }) => {
             return await models.Video.findById(videoId)
-                .populate('owner')
+                .populate([
+                    { path: 'owner', model: 'user' },
+                    { path: 'comments', model: 'comment', populate: { path: 'postedBy', model: 'user' } }
+                    ])
                 .exec()
         }
     },

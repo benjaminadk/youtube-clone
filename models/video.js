@@ -35,6 +35,11 @@ const videoSchema = new Schema({
     createdOn: {
         type: Date,
         default: Date.now()
+    },
+    
+    comments: {
+        type: [Schema.Types.ObjectId],
+        ref: 'comment'
     }
 })
 

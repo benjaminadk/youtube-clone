@@ -1,6 +1,11 @@
-refactor Video into components
-89vh height upload containers remove height from index route
 
+## LEFT OFF
+- should i keep attempting to populate comments?
+## OR 
+- should i run a second query separate to get comments array?
+-research populate
+- stack overflow
+- nested populate
 
 metatags - react helmet - build and use an express server somehow?
 new ideas for video

@@ -7,6 +7,7 @@ import ThumbsDownIcon from 'material-ui-icons/ThumbDown'
 import ReplyIcon from 'material-ui-icons/Reply'
 import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
+import Input from 'material-ui/Input'
 import { timeDifferenceForDate } from '../utils'
 
 const styles = {
@@ -38,6 +39,30 @@ const styles = {
         backgroundColor: '#FF0000',
         color: '#FFFFFF',
         height: '6.5vh'
+    },
+    FLEX_ROW: {
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: '2vh'
+    },
+    INPUT: {
+        fontSize: '13px'
+    },
+    COMMENT_BUTTONS: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        marginBottom: '3vh'
+    },
+    COMMENT_INFO: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    COMMENT_FLEX_COL: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    REPLY_BUTTON: {
+        marginLeft: '7vh'
     }
 }
 
@@ -55,7 +80,12 @@ export default ({
     imageUrl,
     handleThumbsLike,
     handleThumbsDislike,
-    handleShareModalOpen
+    handleShareModalOpen,
+    handleCommentText,
+    comment,
+    resetComment,
+    createNewComment,
+    comments
 }) => (
      <div>
         <video
@@ -103,6 +133,60 @@ export default ({
                 </Button>
             </div>
         <Divider/>
+        <div style={styles.FLEX_ROW}>
+            <Typography type='subheading'>17 Comments</Typography>
+            <Button>Sort By</Button>
+        </div>
+        <div style={styles.FLEX_ROW}>
+            <Avatar style={styles.SPACER} src={imageUrl} alt='user'/>
+            <Input
+                fullWidth
+                value={comment}
+                onChange={handleCommentText}
+                placeholder='Add a public comment...'
+                style={styles.INPUT}
+            />
+        </div>
+        <div style={styles.COMMENT_BUTTONS}>
+            <Button onClick={resetComment}>Cancel</Button>
+            <Button 
+                disabled={!comment}
+                raised
+                color='primary'
+                onClick={createNewComment}
+            >
+                Comment
+            </Button>
+        </div>
+        <div>
+        { comments && comments.map((c,i) => {
+            return(
+                <div key={`video-comment-${i}`}>
+                    <div style={styles.COMMENT_INFO}>
+                        <Avatar src={c.postedBy.imageUrl} style={styles.SPACER}/>
+                        <div style={styles.COMMENT_FLEX_COL}>
+                            <div style={styles.COMMENT_INFO}>
+                                <Typography type='body2'>{c.postedBy.username}</Typography>&nbsp;&nbsp;
+                                <Typography type='caption'>{timeDifferenceForDate(c.postedOn)}</Typography>
+                            </div>
+                            <Typography type='subheading'>{c.text}</Typography>
+                        </div>
+                    </div>
+                    <div style={styles.COMMENT_INFO}>
+                        <Button 
+                            dense 
+                            style={styles.REPLY_BUTTON}
+                        >
+                            Reply
+                        </Button>
+                        <Typography type='body2'>{c.likes}</Typography>
+                        <IconButton><ThumbsUpIcon/></IconButton>
+                        <IconButton><ThumbsDownIcon/></IconButton>
+                    </div>
+                </div>
+            )   
+        })}
+        </div>
     </div>
     )
                

@@ -27,7 +27,8 @@ class Video extends Component {
         linkToShare: '',
         checked: false,
         currentTime: 0,
-        currentTimeString: '0:00'
+        currentTimeString: '0:00',
+        comment: ''
     }
     
     componentDidMount() {
@@ -109,6 +110,20 @@ class Video extends Component {
 
     }
     
+    handleCreateComment = async () => {
+        const text = this.state.comment
+        const reply = true
+        const { videoId } = this.props.match.params
+        await this.props.createComment({
+            variables: { text, reply, videoId },
+            refetchQueries: [{
+                query: VIDEO_BY_ID_QUERY,
+                variables: { videoId }
+            }]
+        })
+        this.resetComment()
+    }
+    
     handleShareModalOpen = () => this.setState({ shareDialogOpen: true })
     
     handleShareModalClose = () => this.setState({ shareDialogOpen: false })
@@ -127,10 +142,25 @@ class Video extends Component {
     
     handleCheckbox = () => this.setState({ checked: !this.state.checked })
     
+    handleCommentText = (e) => this.setState({ comment: e.target.value })
+    
+    resetComment = () => this.setState({ comment: '' })
+    
     render(){
         const { data: { loading, getVideoById }} = this.props
         if(loading) return null
-        const { title, description, url, poster, likes, dislikes, createdOn, views, owner: { id, username, imageUrl }} = getVideoById
+        const { 
+            title, 
+            description, 
+            url, 
+            poster, 
+            likes, 
+            dislikes, 
+            createdOn, 
+            views, 
+            owner,
+            comments } = getVideoById
+        const { username, imageUrl } = owner
         return([
             <div key='video-main-page' style={styles.CONTAINER}>
                 <VideoMain
@@ -148,6 +178,11 @@ class Video extends Component {
                     handleThumbsDislike={this.handleThumbs.bind(this, 'dislike')}
                     handleThumbsLike={this.handleThumbs.bind(this, 'like')}
                     handleShareModalOpen={this.handleShareModalOpen}
+                    handleCommentText={this.handleCommentText}
+                    comment={this.state.comment}
+                    resetComment={this.resetComment}
+                    createNewComment={this.handleCreateComment}
+                    comments={comments}
                 />
                 <VideoList/>
             </div>,
@@ -197,11 +232,21 @@ const VIDEO_BY_ID_QUERY = gql`
             likes
             dislikes
             owner {
-                id
                 username
                 imageUrl
                 likes
                 dislikes
+            }
+            comments {
+                text
+                reply
+                likes
+                dislikes
+                postedOn
+                postedBy {
+                    username
+                    imageUrl
+                }
             }
         }
     }
@@ -231,9 +276,18 @@ const ADD_DISLIKE_MUTATION = gql`
     }
 `
 
+const CREATE_COMMENT_MUTATION = gql`
+    mutation($text: String!, $reply: Boolean!, $videoId: ID!) {
+        createComment(text: $text, reply: $reply, videoId: $videoId) {
+            id
+        }
+    }
+`
+
 export default compose(
     graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
     graphql(ADD_LIKE_MUTATION, { name: 'addLike' }),
     graphql(ADD_DISLIKE_MUTATION, { name: 'addDislike' }),
+    graphql(CREATE_COMMENT_MUTATION, { name: 'createComment' }),
     graphql(VIDEO_BY_ID_QUERY, { options: props => ({ variables: { videoId: props.match.params.videoId }})})
 )(Video)

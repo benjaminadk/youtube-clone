@@ -11,6 +11,7 @@ export default `
         jwt: String
         likes: [ID!]
         dislikes: [ID!]
+        comments: [ID]
     }
     
     type Query {

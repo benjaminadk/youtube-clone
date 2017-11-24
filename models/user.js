@@ -45,6 +45,11 @@ const userSchema = new Schema({
         ref: 'user'
     },
     
+    comments: {
+        type: [Schema.Types.ObjectId],
+        ref: 'comment'
+    },
+    
     createdOn: {
         type: Date,
         default: Date.now()

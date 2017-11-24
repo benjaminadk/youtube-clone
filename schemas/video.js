@@ -11,6 +11,7 @@ export default `
         views: Int
         likes: Int
         dislikes: Int
+        comments: [Comment]
     }
     
     input VideoInput {

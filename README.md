@@ -124,7 +124,10 @@
 - refactor Video main div into two sub components
 - adjust height of certain components
 
-
+#### Video 35 Comment2
+- comment model, schema, resolvers setup
+- use of mongoose.populate
+- expand our big query for video to include comments
 
 #### Resources
 - ***Upload Background***
