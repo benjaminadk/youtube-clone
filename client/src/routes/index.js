@@ -28,7 +28,6 @@ const drawerWidth = 240
 const styles = theme => ({
   root: {
     width: '100%',
-    minHeight: '97vh',
     zIndex: 1,
     overflow: 'hidden',
   },
@@ -65,7 +64,7 @@ const styles = theme => ({
   drawerPaper: {
     position: 'relative',
     height: '100%',
-    width: drawerWidth,
+    width: drawerWidth
   },
   drawerHeader: {
     display: 'flex',

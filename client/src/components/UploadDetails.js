@@ -12,8 +12,8 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: '#F1F1F1',
-        height: '100%'
+        backgroundColor: 'lightgrey',
+        height: '89vh'
     },
     GRID: {
         display: 'grid',
@@ -112,7 +112,7 @@ export default ({
                     multiple={false}
                     onDrop={onDrop}
                 >
-                {!posterFile && <Typography>Click To Add Poster</Typography>}
+                {!posterFile && <Typography style={styles.TEXT}>Click To Add Poster</Typography>}
                 {poster && <img src={poster} alt='thumbnail' style={styles.THUMBNAIL}/>}
                 </Dropzone>
                 {posterFile && <Button 

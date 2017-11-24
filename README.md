@@ -120,6 +120,11 @@
 - add dropzone for poster
 - show poster in Video component
 
+#### Video 34 Comment 
+- refactor Video main div into two sub components
+- adjust height of certain components
+
+
 
 #### Resources
 - ***Upload Background***

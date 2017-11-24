@@ -9,8 +9,8 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: '#F1F1F1',
-        height: '100%'
+        backgroundColor: 'lightgrey',
+        height: '89vh'
     },
     DROPZONE: {
         backgroundColor: 'white',
@@ -27,7 +27,7 @@ const styles = {
         margin: '15vh auto 3vh',
         height: '14vh',
         width: '10vw'
-    },
+    }
 }
 
 export default ({ onDrop, file, handleUpload }) => (

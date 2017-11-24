@@ -1,28 +1,22 @@
-split Upload into two components
+refactor Video into components
+89vh height upload containers remove height from index route
+
+
 metatags - react helmet - build and use an express server somehow?
-
-dropzone for poster
-
 new ideas for video
-
-views: {
-    type: Number,
-    default: 0
-},
-likes: {
-    type: Number,
-    default: 0
-}
- share modal
- 
- title
- divider
- user avatar 
-    username
-    posted on
 subscribe????
 description with show more?
 comments - add comment 
 
 up next and list of related videos
+
+COMMENT - 
+ref user
+ref video
+like
+dislike
+text
+when
+
+count per video
 
