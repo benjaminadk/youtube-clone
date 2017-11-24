@@ -129,6 +129,9 @@
 - use of mongoose.populate
 - expand our big query for video to include comments
 
+#### Video 36 Comment3
+- slow explanation of client code around comments
+
 #### Resources
 - ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg

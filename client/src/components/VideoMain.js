@@ -134,7 +134,7 @@ export default ({
             </div>
         <Divider/>
         <div style={styles.FLEX_ROW}>
-            <Typography type='subheading'>17 Comments</Typography>
+            <Typography type='subheading'>{comments.length} Comments</Typography>
             <Button>Sort By</Button>
         </div>
         <div style={styles.FLEX_ROW}>
