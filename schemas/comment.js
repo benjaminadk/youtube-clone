@@ -9,9 +9,11 @@ export default `
         postedBy: User
         postedAbout: Video
         postedOn: String
+        subComments: [Comment]
     }
     
     type Mutation {
         createComment(text: String!, reply: Boolean!, videoId: ID!): Comment
+        createSubComment(text: String!, reply: Boolean!, commentId: ID!): Comment
     }
 `

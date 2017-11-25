@@ -8,7 +8,10 @@ export default {
             return await models.Video.findById(videoId)
                 .populate([
                     { path: 'owner', model: 'user' },
-                    { path: 'comments', model: 'comment', populate: { path: 'postedBy', model: 'user' } }
+                    { path: 'comments', model: 'comment', populate: [
+                        { path: 'postedBy', model: 'user' },
+                        { path: 'subComments', model: 'comment', populate: { path: 'postedBy', model: 'user' }}
+                        ] }
                     ])
                 .exec()
         }

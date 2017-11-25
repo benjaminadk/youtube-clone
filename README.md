@@ -124,13 +124,17 @@
 - refactor Video main div into two sub components
 - adjust height of certain components
 
-#### Video 35 Comment2
+#### Video 35 Comment 2
 - comment model, schema, resolvers setup
 - use of mongoose.populate
 - expand our big query for video to include comments
 
-#### Video 36 Comment3
+#### Video 36 Comment 3
 - slow explanation of client code around comments
+
+#### Video 37 Sub Comment
+- remove comments from user model
+- implement sub comments
 
 #### Resources
 - ***Upload Background***
