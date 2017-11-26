@@ -23,6 +23,7 @@ import Home from './Home'
 import Upload from './Upload'
 import UserLanding from './UserLanding'
 import Video from './Video'
+import Channel from './Channel'
 
 
 const drawerWidth = 240
@@ -225,6 +226,7 @@ class PersistentDrawer extends Component {
               <Switch>
                 <Route exact path='/' component={Home}/>
                 <Route path='/upload' component={Upload}/>
+                <Route path='/channel' component={Channel}/>
                 <Route path='/user/:userId' component={UserLanding}/>
                 <Route path='/video/:videoId' component={Video}/>
               </Switch>

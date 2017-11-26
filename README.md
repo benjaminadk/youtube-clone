@@ -146,6 +146,10 @@
 - getToken
 - backend admin 
 
+#### Video 41 My Channel
+- build the My Channel View
+- install react-swipeable-views in client
+
 #### Resources
 
 - ***Upload Background***
@@ -219,6 +223,7 @@
     
 - Backend
     - `npm install -S firebase-admin` in root directory
+    - firebase settings - Firebase Admin SDK - Generate New Private Key
     - create a file the configs admin
     - keeping privateKey hidden is important
     - ***Example firebase/index.js***
@@ -251,3 +256,4 @@
 ##### [Query String](https://github.com/sindresorhus/query-string)
 ##### [Moment js](https://momentjs.com/)
 ##### [Firebase](https://firebase.google.com/)
+##### [React Swipeable Views](https://react-swipeable-views.com)

@@ -6,6 +6,7 @@ export default `
         email: String!
         googleId: String
         imageUrl: String
+        bannerUrl: String
         createdOn: String
         videos: [Video]
         jwt: String
@@ -14,13 +15,21 @@ export default `
         fcmToken: String
     }
     
+    type S3Banner {
+        requestUrl: String
+        bannerUrl: String
+    }
+    
     type Query {
         getUserById(userId: ID!): User
+        currentUser: User
         allUsers: [User!]!
     }
     
     type Mutation {
         getFcmToken(fcmToken: String!): User
+        s3SignBanner(filename: String!, filetype: String!): S3Banner
+        addBanner(bannerUrl: String!): User
     }
 
 `
