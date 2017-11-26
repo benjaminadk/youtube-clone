@@ -13,8 +13,10 @@ import MenuIcon from 'material-ui-icons/Menu'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
 import AppsIcon from 'material-ui-icons/Apps'
 import FileUploadIcon from 'material-ui-icons/FileUpload'
-import AddAlertIcon from 'material-ui-icons/AddAlert'
+import NotificationsIcon from 'material-ui-icons/Notifications'
 import HomeIcon from 'material-ui-icons/Home'
+import SignInIcon from 'material-ui-icons/ExitToApp'
+import AccountIcon from 'material-ui-icons/AccountBox'
 import Avatar from 'material-ui/Avatar'
 import { PrivateRoute } from '../utils'
 import Home from './Home'
@@ -190,7 +192,7 @@ class PersistentDrawer extends Component {
                   <div className={classes.toolbarRight}>
                     <Link to='/upload' className={classes.linkIcon}><FileUploadIcon/></Link>
                     <AppsIcon/>
-                    <AddAlertIcon/>
+                    <NotificationsIcon/>
                     <Avatar 
                       id='avatar' 
                       src={avatarUrl}
@@ -202,7 +204,12 @@ class PersistentDrawer extends Component {
                       onRequestClose={this.handleMenuClose}
                     >
                       <MenuItem>
+                        <ListItemIcon><SignInIcon/></ListItemIcon>
                         <a href='/auth/google' className={classes.link}>Sign In with Google</a>
+                      </MenuItem>
+                      <MenuItem>
+                        <ListItemIcon><AccountIcon/></ListItemIcon>
+                        <Link to='/channel' className={classes.link}>My Channel</Link>
                       </MenuItem>
                     </Menu>
                   </div>

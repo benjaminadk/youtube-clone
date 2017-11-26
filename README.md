@@ -142,6 +142,9 @@
 #### Video 39 Firebase Notification
 - see below for setup instructions
 
+#### Video 40 Firebase Notification 2
+- getToken
+- backend admin 
 
 #### Resources
 
