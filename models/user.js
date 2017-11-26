@@ -45,6 +45,8 @@ const userSchema = new Schema({
         ref: 'user'
     },
     
+    fcmToken: String,
+    
     createdOn: {
         type: Date,
         default: Date.now()

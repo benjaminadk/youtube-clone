@@ -10,6 +10,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { MuiThemeProvider } from 'material-ui/styles'
 import theme from './theme'
 import 'typeface-roboto'
+import firebase from './fire'
+
+const messaging = firebase.messaging()
+messaging.onMessage(function(payload) {
+  console.log("Message received. ", payload)
+})
 
 const httpLink = new HttpLink({ uri: 'https://youtube-clone-benjaminadk.c9users.io:8081/graphql' })
 
