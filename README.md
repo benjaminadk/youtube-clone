@@ -124,15 +124,32 @@
 - refactor Video main div into two sub components
 - adjust height of certain components
 
-#### Video 35 Comment2
+#### Video 35 Comment 2
 - comment model, schema, resolvers setup
 - use of mongoose.populate
 - expand our big query for video to include comments
 
+#### Video 36 Comment 3
+- slow explanation of client code around comments
+
+#### Video 37 Sub Comment
+- remove comments from user model
+- implement sub comments
+
+#### Video 38 Sub Comment 2
+- further explanation of sub comment mutation
+
+#### Video 39 Firebase Notification
+- see below for setup instructions
+
+
 #### Resources
+
 - ***Upload Background***
     - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg
-- ***Sample Bucket Policy***
+- ***YTC Notification Logo***
+    - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/icon.png
+- ***Sample AWS S3 Bucket Policy***
 ```
 {
     "Version": "2012-10-17",
@@ -179,6 +196,44 @@
 </CORSRule>
 </CORSConfiguration>
 ```
+- ***Firebase Cloud Messaging***
+- Frontend
+    - `npm install -S firebase` in client directory
+    - create `firebase-messaging-sw.js` in client/src/public
+    - add `"gcm_sender_id": "103953800507"` to `manifest.json` - number is univeral
+    - create `fire.js` with config information in client/src
+    - import config into your root javascript file - webpack will bundle
+    - ***Example fire.js***
+        ```
+        import firebase from 'firebase'
+        
+        const config = { 
+          messagingSenderId: "<your sender id>"
+        }
+        
+        export default firebase.initializeApp(config)
+        ```
+    
+- Backend
+    - `npm install -S firebase-admin` in root directory
+    - create a file the configs admin
+    - keeping privateKey hidden is important
+    - ***Example firebase/index.js***
+    ```
+    import admin from 'firebase-admin'
+    import keys from '../config/keys'
+    
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: "<your project id>",
+        clientEmail: "<your firebase email>",
+        privateKey: keys.firebaseKey
+      })
+    })
+    
+    console.log('FIREBASE INITIALIZED')
+    ```
+
 
 #### Important Links
 ##### [Apollo 2.0](https://www.apollographql.com/)
@@ -192,3 +247,4 @@
 ##### [React Share](https://github.com/nygardk/react-share)
 ##### [Query String](https://github.com/sindresorhus/query-string)
 ##### [Moment js](https://momentjs.com/)
+##### [Firebase](https://firebase.google.com/)

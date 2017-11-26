@@ -12,6 +12,7 @@ export default `
         likes: Int
         dislikes: Int
         comments: [Comment]
+        fcmToken: String
     }
     
     input VideoInput {

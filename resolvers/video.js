@@ -1,4 +1,5 @@
 import aws from 'aws-sdk'
+import admin from 'firebase-admin'
 
 export default {
     
@@ -8,7 +9,10 @@ export default {
             return await models.Video.findById(videoId)
                 .populate([
                     { path: 'owner', model: 'user' },
-                    { path: 'comments', model: 'comment', populate: { path: 'postedBy', model: 'user' } }
+                    { path: 'comments', model: 'comment', populate: [
+                        { path: 'postedBy', model: 'user' },
+                        { path: 'subComments', model: 'comment', populate: { path: 'postedBy', model: 'user' }}
+                        ] }
                     ])
                 .exec()
         }
@@ -52,14 +56,15 @@ export default {
             return { requestUrl, posterUrl }
         },
         
-        createVideo: async (root, { input }, { models, user: { id } }) => {
+        createVideo: async (root, { input }, { models, user: { id, fcm } }) => {
             const { title, description, poster, url } = input
             const video = new models.Video({
                 owner: id,
                 title,
                 description,
                 poster,
-                url
+                url,
+                fcmToken: fcm
             })
             const savedVideo = await video.save()
             const filter = { _id: id }
@@ -75,13 +80,27 @@ export default {
             return await models.Video.findOneAndUpdate(filter, update)
         },
         
-        addLike: async (root, { videoId, remove }, { models, user}) => {
+        addLike: async (root, { videoId, remove }, { models, user }) => {
             const filter_1 = { _id: user.id }
             const update_1 = remove ? { $pull: { likes: videoId } } : { $push: { likes: videoId } }
-            await models.User.findOneAndUpdate(filter_1, update_1)
+            const currentUser = await models.User.findOneAndUpdate(filter_1, update_1)
             const filter_2 = { _id: videoId }
             const update_2 = { $inc: { likes: remove ? -1 : 1 } }
-            return await models.Video.findOneAndUpdate(filter_2, update_2)
+            const currentVideo = await models.Video.findOneAndUpdate(filter_2, update_2)
+            if(!remove){
+                const payload = {
+                  notification: {
+                    title: `${currentUser.username} Liked Your Video`,
+                    body: `"${currentVideo.title}" now has ${currentVideo.likes + 1} likes`,
+                    click_action : `https://youtube-clone-benjaminadk.c9users.io/video/${videoId}`,
+                    icon: 'https://s3-us-west-1.amazonaws.com/youtube-clone-assets/icon.png'
+                  }
+                }
+                const registrationToken = user.fcm
+                    const response = await admin.messaging().sendToDevice(registrationToken, payload)
+                    console.log('MESSAGE SENT', response)
+            }
+            return currentVideo
         },
         
         addDislike: async (root, { videoId, remove }, { models, user}) => {

@@ -10,6 +10,7 @@ import path from 'path'
 import models from './models'
 import { checkAuthHeaders } from './middleware'
 require('./models/connect')
+require('./firebase')
 
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schemas')))
 const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')))

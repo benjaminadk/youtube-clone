@@ -40,6 +40,11 @@ const videoSchema = new Schema({
     comments: {
         type: [Schema.Types.ObjectId],
         ref: 'comment'
+    },
+    
+    fcmToken: {
+        type: String,
+        default: ''
     }
 })
 

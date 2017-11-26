@@ -179,14 +179,14 @@ class PersistentDrawer extends Component {
               })}
             >
               <Toolbar disableGutters={!open} className={classes.toolbar}>
-                <IconButton
-                  color="contrast"
-                  aria-label="open drawer"
-                  onClick={this.handleDrawerOpen}
-                  className={classNames(classes.menuButton, open && classes.hide)}
-                >
-                  <MenuIcon />
-                </IconButton>
+                  <IconButton
+                    color="contrast"
+                    aria-label="open drawer"
+                    onClick={this.handleDrawerOpen}
+                    className={classNames(classes.menuButton, open && classes.hide)}
+                  >
+                    <MenuIcon />
+                  </IconButton>
                   <div className={classes.toolbarRight}>
                     <Link to='/upload' className={classes.linkIcon}><FileUploadIcon/></Link>
                     <AppsIcon/>

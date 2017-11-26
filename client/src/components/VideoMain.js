@@ -48,10 +48,14 @@ const styles = {
     INPUT: {
         fontSize: '13px'
     },
+    COMMENT_BLOCK: {
+        marginBottom: '5vh'
+    },
     COMMENT_BUTTONS: {
         display: 'flex',
         justifyContent: 'flex-end',
-        marginBottom: '3vh'
+        marginBottom: '3vh',
+        marginTop: '1vh'
     },
     COMMENT_INFO: {
         display: 'flex',
@@ -63,6 +67,14 @@ const styles = {
     },
     REPLY_BUTTON: {
         marginLeft: '7vh'
+    },
+    SMALL_AVATAR: {
+        height: '4vh',
+        width: '4vh',
+        marginRight: '3vh'
+    },
+    SUB_COMMENT_BLOCK: {
+        marginLeft: '10vh'
     }
 }
 
@@ -85,7 +97,13 @@ export default ({
     comment,
     resetComment,
     createNewComment,
-    comments
+    comments,
+    subComment,
+    handleSubCommentText,
+    handleReply,
+    visibleInput,
+    resetSubComment,
+    createNewSubComment
 }) => (
      <div>
         <video
@@ -134,7 +152,7 @@ export default ({
             </div>
         <Divider/>
         <div style={styles.FLEX_ROW}>
-            <Typography type='subheading'>17 Comments</Typography>
+            <Typography type='subheading'>{comments.length} Comments</Typography>
             <Button>Sort By</Button>
         </div>
         <div style={styles.FLEX_ROW}>
@@ -161,7 +179,7 @@ export default ({
         <div>
         { comments && comments.map((c,i) => {
             return(
-                <div key={`video-comment-${i}`}>
+                <div key={`video-comment-${i}`} style={styles.COMMENT_BLOCK}>
                     <div style={styles.COMMENT_INFO}>
                         <Avatar src={c.postedBy.imageUrl} style={styles.SPACER}/>
                         <div style={styles.COMMENT_FLEX_COL}>
@@ -169,13 +187,14 @@ export default ({
                                 <Typography type='body2'>{c.postedBy.username}</Typography>&nbsp;&nbsp;
                                 <Typography type='caption'>{timeDifferenceForDate(c.postedOn)}</Typography>
                             </div>
-                            <Typography type='subheading'>{c.text}</Typography>
+                            <Typography>{c.text}</Typography>
                         </div>
                     </div>
                     <div style={styles.COMMENT_INFO}>
                         <Button 
                             dense 
                             style={styles.REPLY_BUTTON}
+                            onClick={() => handleReply(i)}
                         >
                             Reply
                         </Button>
@@ -183,6 +202,52 @@ export default ({
                         <IconButton><ThumbsUpIcon/></IconButton>
                         <IconButton><ThumbsDownIcon/></IconButton>
                     </div>
+                    {visibleInput === i ? <div>
+                        <div style={styles.COMMENT_INFO}>
+                            <Avatar src={imageUrl} style={styles.SMALL_AVATAR}/>
+                            <Input 
+                                fullWidth
+                                value={subComment}
+                                onChange={handleSubCommentText}
+                                placeholder='Add a public reply...'
+                                style={styles.INPUT}
+                                name={i}
+                            />
+                        </div>
+                        <div style={styles.COMMENT_BUTTONS}>
+                            <Button onClick={resetSubComment}>Cancel</Button>
+                            <Button
+                                disabled={!subComment}
+                                raised
+                                dense
+                                color='primary'
+                                onClick={() => createNewSubComment(c.id)}
+                            >
+                                Reply
+                            </Button>
+                        </div>
+                    </div> : null}
+                    {c.subComments && c.subComments.map((sc,index) => {
+                        return(
+                            <div key={`video-sub-comment-${i}-${index}`} style={styles.SUB_COMMENT_BLOCK}>
+                                <div style={styles.FLEX_ROW}>
+                                    <Avatar src={sc.postedBy.imageUrl} style={styles.SMALL_AVATAR}/>
+                                    <div style={styles.COMMENT_FLEX_COL}>
+                                        <div style={styles.COMMENT_INFO}>
+                                            <Typography type='body2'>{sc.postedBy.username}</Typography>&nbsp;&nbsp;
+                                            <Typography type='caption'>{timeDifferenceForDate(sc.postedOn)}</Typography>
+                                        </div>
+                                        <Typography>{sc.text}</Typography>
+                                    </div>
+                                </div>
+                                <div style={styles.COMMENT_INFO}>
+                                    <Typography type='body2'>{sc.likes}</Typography>
+                                    <IconButton><ThumbsUpIcon/></IconButton>
+                                    <IconButton><ThumbsDownIcon/></IconButton>
+                                </div>
+                            </div>
+                        )
+                    }) }
                 </div>
             )   
         })}

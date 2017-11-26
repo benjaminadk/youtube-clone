@@ -45,10 +45,7 @@ const userSchema = new Schema({
         ref: 'user'
     },
     
-    comments: {
-        type: [Schema.Types.ObjectId],
-        ref: 'comment'
-    },
+    fcmToken: String,
     
     createdOn: {
         type: Date,

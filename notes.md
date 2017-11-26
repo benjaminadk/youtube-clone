@@ -1,27 +1,27 @@
+## change to video 37
 
-## LEFT OFF
-- should i keep attempting to populate comments?
-## OR 
-- should i run a second query separate to get comments array?
--research populate
-- stack overflow
-- nested populate
+### Notifications 
+- when your video gets a comment or like
+- look into messaging or push notifications
+- firebase cloud messaging ?
 
-metatags - react helmet - build and use an express server somehow?
-new ideas for video
-subscribe????
-description with show more?
-comments - add comment 
+### IDEAS
+- metatags - react helmet - build and use an express server somehow?
+- subscribe????
+- description with show more?
+- up next and list of related videos
 
-up next and list of related videos
+## FIREBASE ATTEMPT
 
-COMMENT - 
-ref user
-ref video
-like
-dislike
-text
-when
+### Frontend
+- added key to manifest.json
+- created src/fire.js
+- added code to UserLanding
+- installed firebase package on client
+- added service worker to public
 
-count per video
+### Backend
+- installed firebase-admin
+- thinking of requiring authrorization in the server.js
+- and hooking a message up to a resolver
 

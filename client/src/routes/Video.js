@@ -28,7 +28,9 @@ class Video extends Component {
         checked: false,
         currentTime: 0,
         currentTimeString: '0:00',
-        comment: ''
+        comment: '',
+        subComment: '',
+        visibleInput: null
     }
     
     componentDidMount() {
@@ -124,6 +126,20 @@ class Video extends Component {
         this.resetComment()
     }
     
+    handleCreateSubComment = async (commentId) => {
+        const text = this.state.subComment
+        const reply = false
+        const { videoId } = this.props.match.params
+        await this.props.createSubComment({
+            variables: { text, reply, commentId },
+            refetchQueries: [{
+                query: VIDEO_BY_ID_QUERY,
+                variables: { videoId }
+            }]
+        })
+        this.resetSubComment()
+    }
+    
     handleShareModalOpen = () => this.setState({ shareDialogOpen: true })
     
     handleShareModalClose = () => this.setState({ shareDialogOpen: false })
@@ -144,7 +160,13 @@ class Video extends Component {
     
     handleCommentText = (e) => this.setState({ comment: e.target.value })
     
+    handleSubCommentText = (e) => this.setState({ subComment: e.target.value })
+    
     resetComment = () => this.setState({ comment: '' })
+    
+    resetSubComment = () => this.setState({ visibleInput: null, subComment: '' })
+    
+    handleReply = (i) => this.setState({ visibleInput: i, subComment: '' })
     
     render(){
         const { data: { loading, getVideoById }} = this.props
@@ -183,6 +205,12 @@ class Video extends Component {
                     resetComment={this.resetComment}
                     createNewComment={this.handleCreateComment}
                     comments={comments}
+                    subComment={this.state.subComment}
+                    handleSubCommentText={this.handleSubCommentText}
+                    resetSubComment={this.resetSubComment}
+                    handleReply={this.handleReply}
+                    visibleInput={this.state.visibleInput}
+                    createNewSubComment={this.handleCreateSubComment}
                 />
                 <VideoList/>
             </div>,
@@ -238,6 +266,7 @@ const VIDEO_BY_ID_QUERY = gql`
                 dislikes
             }
             comments {
+                id
                 text
                 reply
                 likes
@@ -246,6 +275,16 @@ const VIDEO_BY_ID_QUERY = gql`
                 postedBy {
                     username
                     imageUrl
+                }
+                subComments {
+                    text
+                    likes
+                    dislikes
+                    postedOn
+                    postedBy {
+                        username
+                        imageUrl
+                    }
                 }
             }
         }
@@ -284,10 +323,19 @@ const CREATE_COMMENT_MUTATION = gql`
     }
 `
 
+const CREATE_SUBCOMMENT_MUTATION = gql`
+    mutation($text: String!, $reply: Boolean!, $commentId: ID!) {
+        createSubComment(text: $text, reply: $reply, commentId: $commentId) {
+            id
+        }
+    }
+`
+
 export default compose(
     graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
     graphql(ADD_LIKE_MUTATION, { name: 'addLike' }),
     graphql(ADD_DISLIKE_MUTATION, { name: 'addDislike' }),
     graphql(CREATE_COMMENT_MUTATION, { name: 'createComment' }),
+    graphql(CREATE_SUBCOMMENT_MUTATION, { name: 'createSubComment' }),
     graphql(VIDEO_BY_ID_QUERY, { options: props => ({ variables: { videoId: props.match.params.videoId }})})
 )(Video)

@@ -31,6 +31,11 @@ const commentSchema = new Schema({
     postedOn: {
         type: Date,
         default: Date.now()
+    },
+    
+    subComments: {
+        type: [Schema.Types.ObjectId],
+        ref: 'comment'
     }
 })
 

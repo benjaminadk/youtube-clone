@@ -7,7 +7,7 @@ const Home = ({ data: { loading, allUsers }}) => {
     return (
         <div>
             {allUsers.map(u => (
-                <div>
+                <div key={`home-${u.username}`}>
                     <h3>{u.username}</h3>
                     <h3>{u.email}</h3>
                     <h3>{u.createdOn}</h3>
