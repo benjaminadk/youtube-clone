@@ -47,6 +47,13 @@ export default {
             currentUser.bannerUrl = bannerUrl
             await currentUser.save()
             return currentUser
+        },
+        
+        addBannerPosition: async (root, { bannerPosition }, { models, user}) => {
+            const currentUser = await models.User.findById(user.id)
+            currentUser.bannerPosition = bannerPosition
+            await currentUser.save()
+            return currentUser
         }
         
     }

@@ -208,7 +208,7 @@ class PersistentDrawer extends Component {
                         <ListItemIcon><SignInIcon/></ListItemIcon>
                         <a href='/auth/google' className={classes.link}>Sign In with Google</a>
                       </MenuItem>
-                      <MenuItem>
+                      <MenuItem onClick={this.handleMenuClose}>
                         <ListItemIcon><AccountIcon/></ListItemIcon>
                         <Link to='/channel' className={classes.link}>My Channel</Link>
                       </MenuItem>

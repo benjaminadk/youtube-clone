@@ -7,6 +7,7 @@ export default `
         googleId: String
         imageUrl: String
         bannerUrl: String
+        bannerPosition: String
         createdOn: String
         videos: [Video]
         jwt: String
@@ -30,6 +31,7 @@ export default `
         getFcmToken(fcmToken: String!): User
         s3SignBanner(filename: String!, filetype: String!): S3Banner
         addBanner(bannerUrl: String!): User
+        addBannerPosition(bannerPosition: String!): User
     }
 
 `

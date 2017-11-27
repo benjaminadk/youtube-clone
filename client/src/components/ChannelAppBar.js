@@ -4,6 +4,8 @@ import Tabs, { Tab } from 'material-ui/Tabs'
 import Avatar from 'material-ui/Avatar'
 import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
+import IconButton from 'material-ui/IconButton'
+import SettingsIcon from 'material-ui-icons/Settings'
 
 const styles = {
     UPPER: {
@@ -42,7 +44,7 @@ const TabLabels = () => {
     })
 }
 
-export default ({ tabIndex, handleTabs, imageUrl, username }) => (
+export default ({ tabIndex, handleTabs, imageUrl, username, openSettingsModal }) => (
     <AppBar position='static'>
         <div style={styles.UPPER}>
             <div style={styles.LEFT}>
@@ -55,6 +57,9 @@ export default ({ tabIndex, handleTabs, imageUrl, username }) => (
             <div style={styles.RIGHT}>
                 <Button raised color='accent'>Customize Channel</Button>
                 <Button style={styles.BUTTON} raised color='accent'>Creator Studio</Button>
+                <IconButton color='inherit' onClick={openSettingsModal}>
+                    <SettingsIcon/>
+                </IconButton>
             </div>
         </div>
         <Tabs value={tabIndex} onChange={handleTabs}>

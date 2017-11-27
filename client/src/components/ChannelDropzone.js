@@ -6,17 +6,27 @@ const styles = {
         width: '100vw',
         height: '33vh',
         backgroundColor: 'lightgrey',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        overflow: 'hidden'
     }
 }
 
-export default ({ onDrop, file }) => (
-    <Dropzone
-        style={styles.DROPZONE}
-        accept='image/jpeg, image/png'
-        onDrop={onDrop}
-        multiple={false}
-    >
-    
-    </Dropzone>
-    )
+export default ({ onDrop, file, bannerUrl, bannerPosition }) => {
+    return(
+        <Dropzone
+            id='dropzone'
+            style={styles.DROPZONE}
+            accept='image/jpeg, image/png'
+            onDrop={onDrop}
+            multiple={false}
+        >
+        { bannerUrl && <div 
+                            style={{
+                            backgroundImage: `url('${bannerUrl}')`, 
+                            backgroundSize: 'cover', 
+                            backgroundPosition: `50% ${bannerPosition || '50%'}`, 
+                            height: '33vh'}}
+                        ></div>}
+        </Dropzone>
+        )
+}
