@@ -51,9 +51,9 @@ export default ({
                     value={videoList}
                     onChange={handleVideoList}
                 >
-                <MenuItem value='upload'>Upload</MenuItem>
-                <MenuItem value='liked'>Liked</MenuItem>
-                <MenuItem value='all'>All</MenuItem>
+                <MenuItem value='upload'>Uploads</MenuItem>
+                <MenuItem value='liked'>Liked Videos</MenuItem>
+                <MenuItem value='all'>All Videos</MenuItem>
                 </Select>
             </FormControl>
             <Button id='sort' onClick={handleOpenSortMenu}><SortIcon/>&nbsp; Sort By</Button>

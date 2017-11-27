@@ -8,7 +8,6 @@ import IconButton from 'material-ui/IconButton'
 import Typography from 'material-ui/Typography'
 import CloseIcon from 'material-ui-icons/Close'
 import firebase from 'firebase'
-import { Link } from 'react-router-dom'
 
 class UserLanding extends Component {
     
@@ -51,8 +50,7 @@ class UserLanding extends Component {
                 </Button>
                 <br/>
                 {fcmToken && <Typography>Web Push Notifications are enabled. You will receive messages when someone likes one of your videos</Typography> }
-                <br/>
-                <Link to='/video/5a19736a608a1f187fa42581'>VIDEO TEST</Link>
+
                 <Snackbar
                   open={this.state.fcmTokenSnackbar}
                   onRequestClose={this.handleFcmSnackbarClose}

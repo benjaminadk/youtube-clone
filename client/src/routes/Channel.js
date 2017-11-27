@@ -20,7 +20,9 @@ class Channel extends Component {
         sortBy: 'newest',
         videoList: 'upload',
         settingsModal: false,
-        bannerPosition: null
+        bannerPosition: null,
+        searchMode: false,
+        searchString: ''
     }
     
     format = filename => {
@@ -97,6 +99,10 @@ class Channel extends Component {
     
     handleVideoList = type => this.setState({ videoList: type})
     
+    handleSearchString = (e) => this.setState({ searchString: e.target.value })
+    
+    handleSearchMode = () => this.setState({ searchMode: true })
+    
     render(){
         const { data: { loading, currentUser }} = this.props
         if(loading) return null
@@ -116,6 +122,10 @@ class Channel extends Component {
                     username={username}
                     imageUrl={imageUrl}
                     openSettingsModal={this.handleOpenSettingsModal}
+                    searchMode={this.state.searchMode}
+                    searchString={this.state.searchString}
+                    handleSearchMode={this.handleSearchMode}
+                    handleSearchString={this.handleSearchString}
                 />
                 <SwipeableViews
                     axis='x'

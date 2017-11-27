@@ -4,8 +4,10 @@ import Tabs, { Tab } from 'material-ui/Tabs'
 import Avatar from 'material-ui/Avatar'
 import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
+import Input from 'material-ui/Input'
 import IconButton from 'material-ui/IconButton'
 import SettingsIcon from 'material-ui-icons/Settings'
+import SearchIcon from 'material-ui-icons/Search'
 
 const styles = {
     UPPER: {
@@ -34,6 +36,11 @@ const styles = {
     },
     LABEL: {
         fontSize: '.95rem'
+    },
+    SEARCH: {
+        alignItems: 'flex-end',
+        marginBottom: '1vh',
+        color: '#FFFFFF'
     }
 }
 
@@ -44,7 +51,17 @@ const TabLabels = () => {
     })
 }
 
-export default ({ tabIndex, handleTabs, imageUrl, username, openSettingsModal }) => (
+export default ({ 
+    tabIndex, 
+    handleTabs, 
+    imageUrl, 
+    username, 
+    openSettingsModal,
+    searchMode,
+    searchString,
+    handleSearchMode,
+    handleSearchString
+}) => (
     <AppBar position='static'>
         <div style={styles.UPPER}>
             <div style={styles.LEFT}>
@@ -62,8 +79,17 @@ export default ({ tabIndex, handleTabs, imageUrl, username, openSettingsModal })
                 </IconButton>
             </div>
         </div>
-        <Tabs value={tabIndex} onChange={handleTabs}>
-            {TabLabels()}    
-        </Tabs>
+        <div style={styles.LEFT}>
+            <Tabs value={tabIndex} onChange={handleTabs}>
+                {TabLabels()}
+            </Tabs>
+            <IconButton onClick={handleSearchMode} color='inherit'><SearchIcon/></IconButton>
+            { searchMode && <Input
+                                style={styles.SEARCH}
+                                placeholder='Search'
+                                value={searchString}
+                                onChange={handleSearchString}
+                            /> }
+        </div>
     </AppBar>
     )
