@@ -146,9 +146,13 @@
 - getToken
 - backend admin 
 
-#### Video 41 My Channel
+#### Video 41 My Channel - Videos
 - build the My Channel View
 - install react-swipeable-views in client
+
+#### Video 42 My Channel - About
+- build the about tab
+- install country-list package
 
 #### Resources
 

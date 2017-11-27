@@ -1,7 +1,7 @@
 import React from 'react'
 import Dialog, { DialogTitle, DialogContent, DialogActions } from 'material-ui/Dialog'
 import Button from 'material-ui/Button'
-import { CircularProgress } from 'material-ui/Progress'
+import { LinearProgress } from 'material-ui/Progress'
 
 const styles = {
     MODAL: {
@@ -19,9 +19,10 @@ export default ({ open, handleModalClose, cancelUpload, uploadBanner, progress }
         >
         <DialogTitle>Upload Channel Banner</DialogTitle>
         <DialogContent style={styles.MODAL}>
-            <CircularProgress
+            <LinearProgress
                 value={progress}
                 mode='determinate'
+                color='primary'
             />
         </DialogContent>
         <DialogActions>

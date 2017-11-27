@@ -29,6 +29,12 @@ const userSchema = new Schema({
     
     bannerPosition: String,
     
+    about: String,
+    
+    country: String,
+    
+    links: [String],
+    
     videos: {
         type: [Schema.Types.ObjectId],
         ref: 'video'

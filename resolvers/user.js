@@ -54,6 +54,15 @@ export default {
             currentUser.bannerPosition = bannerPosition
             await currentUser.save()
             return currentUser
+        },
+        
+        aboutTab: async (root, { input: { about, country, links } }, { models, user }) => {
+            const currentUser = await models.User.findById(user.id)
+            currentUser.about = about
+            currentUser.country = country
+            currentUser.links = links.split(',').map(l => l.trim())
+            await currentUser.save()
+            return currentUser
         }
         
     }

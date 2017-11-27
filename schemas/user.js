@@ -14,11 +14,20 @@ export default `
         likes: [ID!]
         dislikes: [ID!]
         fcmToken: String
+        about: String
+        country: String
+        links: [String]
     }
     
     type S3Banner {
         requestUrl: String
         bannerUrl: String
+    }
+    
+    input AboutInput {
+        about: String
+        country: String
+        links: String
     }
     
     type Query {
@@ -32,6 +41,7 @@ export default `
         s3SignBanner(filename: String!, filetype: String!): S3Banner
         addBanner(bannerUrl: String!): User
         addBannerPosition(bannerPosition: String!): User
+        aboutTab(input: AboutInput): User
     }
 
 `

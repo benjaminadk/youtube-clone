@@ -7,7 +7,12 @@ import ChannelDropzone from '../components/ChannelDropzone'
 import ChannelAppBar from '../components/ChannelAppBar'
 import ChannelModal from '../components/ChannelModal'
 import ChannelSettingsModal from '../components/ChannelSettingsModal'
+import ChannelAboutModal from '../components/ChannelAboutModal'
+import Snackbar from 'material-ui/Snackbar'
+import IconButton from 'material-ui/IconButton'
+import CloseIcon from 'material-ui-icons/Close'
 import Videos from '../components/ChannelTabs/Videos'
+import About from '../components/ChannelTabs/About'
 
 class Channel extends Component {
     
@@ -22,7 +27,12 @@ class Channel extends Component {
         settingsModal: false,
         bannerPosition: null,
         searchMode: false,
-        searchString: ''
+        searchString: '',
+        aboutModal: false,
+        aboutForm: '',
+        countryForm: '',
+        linksForm: '',
+        aboutSnackbar: false
     }
     
     format = filename => {
@@ -75,6 +85,47 @@ class Channel extends Component {
         await this.setState({ bannerPosition: null, settingsModal: false })
     }
     
+    populateAboutForm = () => {
+        const { about, country, links } = this.props.data.currentUser
+        this.setState({
+            aboutForm: about || '',
+            countryForm: country || '',
+            linksForm: links.join(', ') || ''
+        })
+    }
+    
+    saveAboutForm = async () => {
+        await this.props.aboutTab({
+            variables: {
+                input: {
+                    about: this.state.aboutForm,
+                    country: this.state.countryForm,
+                    links: this.state.linksForm
+                }
+            },
+            refetchQueries: [{
+                query: CURRENT_USER_QUERY
+            }]
+        })
+        await this.setState({
+            aboutForm: '',
+            countryForm: '',
+            linksForm: '',
+            aboutModal: false,
+            aboutSnackbar: true
+        })
+    }
+    
+    getTotalViews = videos => {
+        var count = 0
+        videos.forEach(v => count += v.views)
+        return count
+    }
+    
+    handleCountry = (e) => this.setState({ countryForm: e.target.value })
+    
+    handleChangeAboutForm = (e) =>  this.setState({ [e.target.name]: e.target.value })
+    
     handleTabs = (e, tabIndex) => this.setState({ tabIndex })
     
     handleTabIndex = tabIndex => this.setState({ tabIndex })
@@ -103,10 +154,29 @@ class Channel extends Component {
     
     handleSearchMode = () => this.setState({ searchMode: true })
     
+    handleCloseAboutModal = () => this.setState({ aboutModal: false })
+    
+    handleOpenAboutModal = async() => {
+        await this.populateAboutForm()
+        this.setState({ aboutModal: true })
+    }
+    
+    handleAboutSnackbar = () => this.setState({ aboutSnackbar: false })
+    
     render(){
         const { data: { loading, currentUser }} = this.props
         if(loading) return null
-        const { videos, imageUrl, username, bannerUrl, bannerPosition } = currentUser
+        const { 
+            videos, 
+            imageUrl, 
+            username, 
+            email, 
+            bannerUrl, 
+            bannerPosition, 
+            about, 
+            country, 
+            links,
+            createdOn } = currentUser
         const sortedVideos = this.sortControl(videos.slice(), this.state.sortBy)
         return(
             <div>
@@ -147,7 +217,15 @@ class Channel extends Component {
                     <div>THREE</div>
                     <div>FOUR</div>
                     <div>FIVE</div>
-                    <div>SIX</div>
+                    <About
+                        email={email}
+                        country={country}
+                        about={about}
+                        links={links}
+                        createdOn={createdOn}
+                        openAboutModal={this.handleOpenAboutModal}
+                        totalViews={this.getTotalViews(videos)}
+                    />
                 </SwipeableViews>
                 <ChannelModal
                     open={this.state.modal}
@@ -163,6 +241,24 @@ class Channel extends Component {
                     setBannerPosition={this.handleBannerPosition}
                     saveBannerPosition={this.saveBannerPosition}
                 />
+                <ChannelAboutModal
+                    open={this.state.aboutModal}
+                    closeAboutModal={this.handleCloseAboutModal}
+                    saveAboutForm={this.saveAboutForm}
+                    about={this.state.aboutForm}
+                    country={this.state.countryForm}
+                    links={this.state.linksForm}
+                    onChange={this.handleChangeAboutForm}
+                    onChangeCountry={this.handleCountry}
+                />
+                <Snackbar
+                    open={this.state.aboutSnackbar}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                    autoHideDuration={8000}
+                    onRequestClose={this.handleAboutSnackbar}
+                    message={<span>Information Saved To Database</span>}
+                    action={<IconButton color="inherit" onClick={this.handleAboutSnackbar}><CloseIcon/></IconButton>}
+                />
             </div>
             )
     }
@@ -177,6 +273,9 @@ const CURRENT_USER_QUERY = gql`
             createdOn
             bannerUrl
             bannerPosition
+            about
+            country
+            links
             videos {
                 id
                 title
@@ -216,9 +315,18 @@ const ADD_BANNER_POSITION_MUTATION = gql`
     }
 `
 
+const ABOUT_TAB_MUTATION = gql`
+    mutation($input: AboutInput) {
+        aboutTab(input: $input) {
+            about
+        }
+    }
+`
+
 export default compose(
     graphql(S3_SIGN_BANNER_MUTATION, { name: 's3SignBanner' }),
     graphql(ADD_BANNER_MUTATION, { name: 'addBanner' }),
     graphql(ADD_BANNER_POSITION_MUTATION, { name: 'addBannerPosition' }),
+    graphql(ABOUT_TAB_MUTATION, { name: 'aboutTab' }),
     graphql(CURRENT_USER_QUERY)
     )(Channel)
