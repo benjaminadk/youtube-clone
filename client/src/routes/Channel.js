@@ -13,6 +13,7 @@ import IconButton from 'material-ui/IconButton'
 import CloseIcon from 'material-ui-icons/Close'
 import Videos from '../components/ChannelTabs/Videos'
 import About from '../components/ChannelTabs/About'
+import SearchResults from '../components/ChannelTabs/SearchResults'
 
 class Channel extends Component {
     
@@ -28,6 +29,7 @@ class Channel extends Component {
         bannerPosition: null,
         searchMode: false,
         searchString: '',
+        filteredVideos: null,
         aboutModal: false,
         aboutForm: '',
         countryForm: '',
@@ -122,6 +124,17 @@ class Channel extends Component {
         return count
     }
     
+    handleKeyUp = async(e) => {
+        if(e.keyCode === 13) {
+            const { searchString } = this.state
+            const filteredVideos = await this.props.data.currentUser.videos.filter(v => {
+                return v.title.toLowerCase().includes(searchString.toLowerCase())
+            })
+            await this.setState({ filteredVideos })
+            this.handleTabIndex(6)
+        }
+    }
+    
     handleCountry = (e) => this.setState({ countryForm: e.target.value })
     
     handleChangeAboutForm = (e) =>  this.setState({ [e.target.name]: e.target.value })
@@ -196,6 +209,7 @@ class Channel extends Component {
                     searchString={this.state.searchString}
                     handleSearchMode={this.handleSearchMode}
                     handleSearchString={this.handleSearchString}
+                    handleKeyUp={this.handleKeyUp}
                 />
                 <SwipeableViews
                     axis='x'
@@ -225,6 +239,9 @@ class Channel extends Component {
                         createdOn={createdOn}
                         openAboutModal={this.handleOpenAboutModal}
                         totalViews={this.getTotalViews(videos)}
+                    />
+                    <SearchResults
+                        filteredVideos={this.state.filteredVideos}
                     />
                 </SwipeableViews>
                 <ChannelModal

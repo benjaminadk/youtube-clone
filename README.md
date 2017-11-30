@@ -154,6 +154,10 @@
 - build the about tab
 - install country-list package
 
+#### Video 43 My Channel - Search
+- implement simple search of videos
+
+
 #### Resources
 
 - ***Upload Background***

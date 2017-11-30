@@ -60,7 +60,8 @@ export default ({
     searchMode,
     searchString,
     handleSearchMode,
-    handleSearchString
+    handleSearchString,
+    handleKeyUp
 }) => (
     <AppBar position='static'>
         <div style={styles.UPPER}>
@@ -82,6 +83,7 @@ export default ({
         <div style={styles.LEFT}>
             <Tabs value={tabIndex} onChange={handleTabs}>
                 {TabLabels()}
+                <Tab style={{ display: 'none' }} />
             </Tabs>
             <IconButton onClick={handleSearchMode} color='inherit'><SearchIcon/></IconButton>
             { searchMode && <Input
@@ -89,6 +91,7 @@ export default ({
                                 placeholder='Search'
                                 value={searchString}
                                 onChange={handleSearchString}
+                                onKeyUp={handleKeyUp}
                             /> }
         </div>
     </AppBar>
