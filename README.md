@@ -142,6 +142,21 @@
 #### Video 39 Firebase Notification
 - see below for setup instructions
 
+#### Video 40 Firebase Notification 2
+- getToken
+- backend admin 
+
+#### Video 41 My Channel - Videos
+- build the My Channel View
+- install react-swipeable-views in client
+
+#### Video 42 My Channel - About
+- build the about tab
+- install country-list package
+
+#### Video 43 My Channel - Search
+- implement simple search of videos
+
 
 #### Resources
 
@@ -216,6 +231,7 @@
     
 - Backend
     - `npm install -S firebase-admin` in root directory
+    - firebase settings - Firebase Admin SDK - Generate New Private Key
     - create a file the configs admin
     - keeping privateKey hidden is important
     - ***Example firebase/index.js***
@@ -248,3 +264,4 @@
 ##### [Query String](https://github.com/sindresorhus/query-string)
 ##### [Moment js](https://momentjs.com/)
 ##### [Firebase](https://firebase.google.com/)
+##### [React Swipeable Views](https://react-swipeable-views.com)

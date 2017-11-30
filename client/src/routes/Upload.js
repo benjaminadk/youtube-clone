@@ -68,7 +68,8 @@ class Upload extends Component {
     }
     
     handleVideo = async () => {
-        const { title, description, url, poster } = this.state
+        const { title, description, url } = this.state
+        const poster = this.state.poster ? this.state.poster : 'https://s3-us-west-1.amazonaws.com/youtube-clone-assets/thumbnail.jpeg'
         const response2 = await this.props.createVideo({
             variables: { input: { title, description, url, poster }}
         })

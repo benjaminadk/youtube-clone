@@ -93,3 +93,11 @@ export const formatTime = (secs) => {
     if(secs < 600) return formatted.slice(3)
     if(secs < 3600) return formatted.slice(2)
 }
+
+export const formatDate = (date) => {
+  const x = new Date(date)
+  const m = x.getMonth() + 1
+  const d = x.getDay()
+  const y = x.getFullYear()
+  return `${m < 10 ? '0' + m : m}/${d < 10 ? '0' + d : d}/${y}`
+}

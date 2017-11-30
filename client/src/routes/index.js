@@ -13,14 +13,17 @@ import MenuIcon from 'material-ui-icons/Menu'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
 import AppsIcon from 'material-ui-icons/Apps'
 import FileUploadIcon from 'material-ui-icons/FileUpload'
-import AddAlertIcon from 'material-ui-icons/AddAlert'
+import NotificationsIcon from 'material-ui-icons/Notifications'
 import HomeIcon from 'material-ui-icons/Home'
+import SignInIcon from 'material-ui-icons/ExitToApp'
+import AccountIcon from 'material-ui-icons/AccountBox'
 import Avatar from 'material-ui/Avatar'
 import { PrivateRoute } from '../utils'
 import Home from './Home'
 import Upload from './Upload'
 import UserLanding from './UserLanding'
 import Video from './Video'
+import Channel from './Channel'
 
 
 const drawerWidth = 240
@@ -190,7 +193,7 @@ class PersistentDrawer extends Component {
                   <div className={classes.toolbarRight}>
                     <Link to='/upload' className={classes.linkIcon}><FileUploadIcon/></Link>
                     <AppsIcon/>
-                    <AddAlertIcon/>
+                    <NotificationsIcon/>
                     <Avatar 
                       id='avatar' 
                       src={avatarUrl}
@@ -202,7 +205,12 @@ class PersistentDrawer extends Component {
                       onRequestClose={this.handleMenuClose}
                     >
                       <MenuItem>
+                        <ListItemIcon><SignInIcon/></ListItemIcon>
                         <a href='/auth/google' className={classes.link}>Sign In with Google</a>
+                      </MenuItem>
+                      <MenuItem onClick={this.handleMenuClose}>
+                        <ListItemIcon><AccountIcon/></ListItemIcon>
+                        <Link to='/channel' className={classes.link}>My Channel</Link>
                       </MenuItem>
                     </Menu>
                   </div>
@@ -218,6 +226,7 @@ class PersistentDrawer extends Component {
               <Switch>
                 <Route exact path='/' component={Home}/>
                 <Route path='/upload' component={Upload}/>
+                <Route path='/channel' component={Channel}/>
                 <Route path='/user/:userId' component={UserLanding}/>
                 <Route path='/video/:videoId' component={Video}/>
               </Switch>
