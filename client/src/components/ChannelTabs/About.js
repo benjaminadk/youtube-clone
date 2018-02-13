@@ -23,7 +23,7 @@ const styles = {
     }
 }
 
-export default ({ about, email, country, links, openAboutModal, totalViews, createdOn }) => (
+export default ({ about, email, country, links, openAboutModal, totalViews, createdOn, isOwner }) => (
     <div style={styles.GRID}>
         <div>
             <Typography type='title' style={styles.HEADER}>Description</Typography>
@@ -38,11 +38,11 @@ export default ({ about, email, country, links, openAboutModal, totalViews, crea
             <Typography type='title' style={styles.HEADER}>Links</Typography>
             {links.map((l,i) => (<a key={`link-${i}`} href={l} target='_blank' style={styles.CONTENT}>{l}</a>))}
             <Divider style={styles.DIVIDER}/>
-            <div>
+            {isOwner && <div>
                 <IconButton onClick={openAboutModal}>
                     <SettingsIcon/>
                 </IconButton>
-            </div>
+            </div>}
         </div>
         <div>
             <Typography type='title' style={styles.HEADER}>Stats</Typography>

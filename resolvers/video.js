@@ -4,6 +4,12 @@ import admin from 'firebase-admin'
 export default {
     
     Query: {
+        
+        getVideoList: async (root, args, { models }) => {
+            return await models.Video.find({})
+                .populate({ path: 'owner', model: 'user' })
+                .exec()
+        },
     
         getVideoById: async (root, { videoId }, { models }) => {
             return await models.Video.findById(videoId)

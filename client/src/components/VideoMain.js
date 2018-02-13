@@ -9,10 +9,11 @@ import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
 import Input from 'material-ui/Input'
 import { timeDifferenceForDate } from '../utils'
+import { Link } from 'react-router-dom'
 
 const styles = {
     VIDEO: {
-        height: '72vh',
+        height: '75vh',
         marginLeft: '3vh'
     },
     VIDEO_STATS: {
@@ -75,11 +76,15 @@ const styles = {
     },
     SUB_COMMENT_BLOCK: {
         marginLeft: '10vh'
+    },
+    LINK: {
+        textDecoration: 'none'
     }
 }
 
 export default ({ 
     videoRef,
+    id,
     url,
     description,
     poster,
@@ -111,6 +116,7 @@ export default ({
             controls 
             style={styles.VIDEO}
             poster={poster}
+            autoPlay
             ref={videoRef}
         />
         <Typography type='headline'>{title}</Typography>
@@ -135,9 +141,13 @@ export default ({
         </div>
         <Divider/>
             <div style={styles.VIDEO_INFO}>
-                <Avatar src={imageUrl} alt='user' style={styles.AVATAR}/>
+                <Link to={`/channel/${id}`}>
+                    <Avatar src={imageUrl} alt='user' style={styles.AVATAR}/>
+                </Link>
                 <div>
-                    <Typography type='title'>{username}</Typography>
+                    <Link to={`/channel/${id}`} style={styles.LINK}>
+                        <Typography type='title'>{username}</Typography>
+                    </Link>
                     <Typography>Published {timeDifferenceForDate(createdOn)}</Typography>
                     <br/>
                     <br/>

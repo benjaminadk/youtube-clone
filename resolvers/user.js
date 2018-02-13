@@ -6,8 +6,9 @@ export default {
         
         getUserById: async(root, { userId }, { models }) => await models.User.findById(userId),
         
-        currentUser: async(root, args, { models, user }) => {
-            return models.User.findById(user.id)
+        currentUser: async(root, { userId }, { models, user }) => {
+            const id = userId || user.id
+            return models.User.findById(id)
                 .populate({ path: 'videos', model: 'video' })
                 .exec()
         },

@@ -101,3 +101,9 @@ export const formatDate = (date) => {
   const y = x.getFullYear()
   return `${m < 10 ? '0' + m : m}/${d < 10 ? '0' + d : d}/${y}`
 }
+
+export const setNewVideoTag = (date) => {
+  const createdOn = moment(date)
+  const testDate = moment().subtract(2,'weeks')
+  return createdOn > testDate
+}

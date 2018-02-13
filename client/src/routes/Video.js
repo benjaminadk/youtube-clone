@@ -15,7 +15,7 @@ const styles = {
     CONTAINER: {
         marginTop: '3vh',
         display: 'grid',
-        gridTemplateColumns: '70% 30%'
+        gridTemplateColumns: '67% 33%'
     }
 }
 
@@ -169,8 +169,9 @@ class Video extends Component {
     handleReply = (i) => this.setState({ visibleInput: i, subComment: '' })
     
     render(){
-        const { data: { loading, getVideoById }} = this.props
-        if(loading) return null
+        const { data: { loading, getVideoById }, videoList: { getVideoList } } = this.props
+        const videoListLoading = this.props.videoList.loading
+        if(loading || videoListLoading) return null
         const { 
             title, 
             description, 
@@ -182,11 +183,12 @@ class Video extends Component {
             views, 
             owner,
             comments } = getVideoById
-        const { username, imageUrl } = owner
+        const { id, username, imageUrl } = owner
         return([
             <div key='video-main-page' style={styles.CONTAINER}>
                 <VideoMain
                     videoRef={(video) => { this.videoElement = video }}
+                    id={id}
                     url={url}
                     description={description}
                     poster={poster}
@@ -212,7 +214,9 @@ class Video extends Component {
                     visibleInput={this.state.visibleInput}
                     createNewSubComment={this.handleCreateSubComment}
                 />
-                <VideoList/>
+                <VideoList
+                    videoList={getVideoList}
+                />
             </div>,
             <ShareModal     
                 key='video-share-modal'
@@ -260,6 +264,7 @@ const VIDEO_BY_ID_QUERY = gql`
             likes
             dislikes
             owner {
+                id
                 username
                 imageUrl
                 likes
@@ -286,6 +291,22 @@ const VIDEO_BY_ID_QUERY = gql`
                         imageUrl
                     }
                 }
+            }
+        }
+    }
+`
+
+const VIDEO_LIST_QUERY = gql`
+    query {
+        getVideoList {
+            id
+            title
+            poster
+            views
+            createdOn
+            owner {
+                id
+                username
             }
         }
     }
@@ -337,5 +358,6 @@ export default compose(
     graphql(ADD_DISLIKE_MUTATION, { name: 'addDislike' }),
     graphql(CREATE_COMMENT_MUTATION, { name: 'createComment' }),
     graphql(CREATE_SUBCOMMENT_MUTATION, { name: 'createSubComment' }),
+    graphql(VIDEO_LIST_QUERY, { name: 'videoList' }),
     graphql(VIDEO_BY_ID_QUERY, { options: props => ({ variables: { videoId: props.match.params.videoId }})})
 )(Video)

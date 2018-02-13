@@ -33,6 +33,7 @@ export default `
     }
     
     type Query {
+        getVideoList: [Video]
         getVideoById(videoId: ID!): Video
     }
     
