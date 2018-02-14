@@ -25,7 +25,6 @@ import UserLanding from './UserLanding'
 import Video from './Video'
 import Channel from './Channel'
 
-
 const drawerWidth = 240
 
 const styles = theme => ({

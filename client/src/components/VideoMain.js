@@ -5,11 +5,14 @@ import IconButton from 'material-ui/IconButton'
 import ThumbsUpIcon from 'material-ui-icons/ThumbUp'
 import ThumbsDownIcon from 'material-ui-icons/ThumbDown'
 import ReplyIcon from 'material-ui-icons/Reply'
+import PauseIcon from 'material-ui-icons/PauseCircleFilled'
+import PlayIcon from 'material-ui-icons/PlayCircleFilled'
 import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
 import Input from 'material-ui/Input'
 import { timeDifferenceForDate } from '../utils'
 import { Link } from 'react-router-dom'
+import { Transition } from 'react-transition-group'
 
 const styles = {
     VIDEO: {
@@ -79,11 +82,48 @@ const styles = {
     },
     LINK: {
         textDecoration: 'none'
+    },
+    PLAY_PAUSE: {
+        backgroundColor: 'white',
+        color: 'red',
+        borderRadius: '50%'
     }
 }
 
+const duration = 500
+
+const playPauseDefaultStyle = {
+    position: 'absolute',
+    top: '50vh',
+    left: '30vw',
+    transform: 'scale(2.0)',
+    opacity: '0',
+    transition: `all ${duration}ms ease-in-out`
+}
+
+const playPauseTransitionStyles = {
+    entering: { opacity: .5, transform: 'scale(2.0)' },
+    entered: { opacity: .5, transform: 'scale(4.0)' },
+    exiting: { opacity: 0, transform: 'scale(4.0)' },
+    exited: { opacity: 0, transform: 'scale(2.0)' }
+}
+
+const PlayPause = ({ in: inProp, playIcon }) => (
+    <Transition in={inProp} timeout={500}>
+    {(status) => (
+        <div style={{
+            ...playPauseDefaultStyle,
+            ...playPauseTransitionStyles[status]
+        }}>
+           {playIcon ? <PlayIcon style={styles.PLAY_PAUSE}/> : <PauseIcon style={styles.PLAY_PAUSE}/>}
+        </div>
+    )}
+    </Transition>
+    )
+
 export default ({ 
     videoRef,
+    handleVideoClick,
     id,
     url,
     description,
@@ -108,9 +148,12 @@ export default ({
     handleReply,
     visibleInput,
     resetSubComment,
-    createNewSubComment
+    createNewSubComment,
+    showPlayPause,
+    playIcon
 }) => (
      <div>
+        <PlayPause in={!!showPlayPause} playIcon={playIcon}/>
         <video
             src={url} 
             controls 
@@ -118,6 +161,7 @@ export default ({
             poster={poster}
             autoPlay
             ref={videoRef}
+            onClick={handleVideoClick}
         />
         <Typography type='headline'>{title}</Typography>
         <div style={styles.VIDEO_STATS}>

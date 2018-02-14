@@ -14,6 +14,7 @@ const Home = ({ data: { loading, allUsers }}) => {
                     <img src={u.imageUrl} alt={u.id}/>
                 </div>
             ))}
+            
         </div>
         )
 }

@@ -157,6 +157,13 @@
 #### Video 43 My Channel - Search
 - implement simple search of videos
 
+#### Video 44 Video List 1
+- implement basic video list to right of player
+- uses moment to check date and add NEW icon
+
+#### Video 45 Play Pause Feature
+- add onClick play/pause toggle to video component
+- use react-transition-group to add animated icon
 
 #### Resources
 

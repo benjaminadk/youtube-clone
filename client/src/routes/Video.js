@@ -30,7 +30,9 @@ class Video extends Component {
         currentTimeString: '0:00',
         comment: '',
         subComment: '',
-        visibleInput: null
+        visibleInput: null,
+        showPlayPause: false,
+        playIcon: true
     }
     
     componentDidMount() {
@@ -168,6 +170,17 @@ class Video extends Component {
     
     handleReply = (i) => this.setState({ visibleInput: i, subComment: '' })
     
+    handleVideoClick = async () => {
+        if(this.videoElement.paused) {
+            this.videoElement.play()
+        } else {
+            this.videoElement.pause()
+        }
+        await this.setState({ showPlayPause: !this.state.showPlayPause })
+        await setTimeout(() => this.setState({ showPlayPause: !this.state.showPlayPause }), 750)
+        await this.setState({ playIcon: !this.state.playIcon })
+    }
+    
     render(){
         const { data: { loading, getVideoById }, videoList: { getVideoList } } = this.props
         const videoListLoading = this.props.videoList.loading
@@ -188,6 +201,7 @@ class Video extends Component {
             <div key='video-main-page' style={styles.CONTAINER}>
                 <VideoMain
                     videoRef={(video) => { this.videoElement = video }}
+                    handleVideoClick={this.handleVideoClick}
                     id={id}
                     url={url}
                     description={description}
@@ -213,6 +227,8 @@ class Video extends Component {
                     handleReply={this.handleReply}
                     visibleInput={this.state.visibleInput}
                     createNewSubComment={this.handleCreateSubComment}
+                    showPlayPause={this.state.showPlayPause}
+                    playIcon={this.state.playIcon}
                 />
                 <VideoList
                     videoList={getVideoList}

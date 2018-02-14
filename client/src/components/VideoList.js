@@ -53,7 +53,7 @@ const styles = {
     }
 }
 
-export default ({ videoList, checked }) => (
+export default ({ videoList }) => (
     <div style={styles.CONTAINER}>
         <div style={styles.FLEX_ROW}>
             <Typography type='title' style={styles.UP_NEXT}>Up Next</Typography>
