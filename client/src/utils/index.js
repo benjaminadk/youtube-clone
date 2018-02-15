@@ -92,6 +92,7 @@ export const formatTime = (secs) => {
     const formatted = moment.utc(secs * 1000).format('H:mm:ss')
     if(secs < 600) return formatted.slice(3)
     if(secs < 3600) return formatted.slice(2)
+    return formatted
 }
 
 export const formatDate = (date) => {

@@ -85,7 +85,7 @@ const styles = {
     },
     PLAY_PAUSE: {
         backgroundColor: 'white',
-        color: 'red',
+        color: 'black',
         borderRadius: '50%'
     }
 }
@@ -109,7 +109,7 @@ const playPauseTransitionStyles = {
 }
 
 const PlayPause = ({ in: inProp, playIcon }) => (
-    <Transition in={inProp} timeout={500}>
+    <Transition in={inProp} timeout={duration}>
     {(status) => (
         <div style={{
             ...playPauseDefaultStyle,
@@ -159,7 +159,6 @@ export default ({
             controls 
             style={styles.VIDEO}
             poster={poster}
-            autoPlay
             ref={videoRef}
             onClick={handleVideoClick}
         />

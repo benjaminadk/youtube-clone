@@ -5,7 +5,7 @@ import Divider from 'material-ui/Divider'
 import CheckIcon from 'material-ui-icons/CheckCircle'
 import NewIcon from 'material-ui-icons/FiberNew'
 import { Link } from 'react-router-dom'
-import { setNewVideoTag } from '../utils'
+import { setNewVideoTag, formatTime } from '../utils'
 
 const styles = {
     CONTAINER: {
@@ -50,6 +50,21 @@ const styles = {
     NEW: {
         transform: 'translate(1vw,-1vh)',
         color: 'rgba(0, 0, 0, 0.54)'
+    },
+    POSTER_WRAPPER: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    DURATION: {
+        fontFamily: 'Roboto',
+        fontSize: '.70rem',
+        paddingLeft: '2px',
+        paddingRight: '2px',
+        borderRadius: '2px',
+        color: 'white',
+        backgroundColor: '#000000BF',
+        transform: 'translate(4vw, -3vh)'
     }
 }
 
@@ -66,11 +81,14 @@ export default ({ videoList }) => (
                         to={`/video/${v.id}`}
                         style={styles.LIST_ITEM}
                     >
-                        <img 
-                            src={v.poster}
-                            alt='poster'
-                            style={styles.POSTER}
-                        />
+                        <div style={styles.POSTER_WRAPPER}>
+                            <img 
+                                src={v.poster}
+                                alt='poster'
+                                style={styles.POSTER}
+                            />
+                            {v.duration > 0 ? <span style={styles.DURATION}>{formatTime(v.duration)}</span> : null}
+                        </div>
                         <div style={styles.INFO}>
                             <Typography type='body2' style={styles.TITLE}>{v.title}</Typography>
                             <div style={styles.NAME_ROW}>

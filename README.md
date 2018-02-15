@@ -165,6 +165,10 @@
 - add onClick play/pause toggle to video component
 - use react-transition-group to add animated icon
 
+#### Video 46 Video List 2
+- add ability to display video duration on thumbnail
+- uses componentDidUpdate lifecycle method
+
 #### Resources
 
 - ***Upload Background***

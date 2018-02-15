@@ -116,6 +116,12 @@ export default {
             const filter_2 = { _id: videoId }
             const update_2 = { $inc: { dislikes: remove ? -1 : 1 } }
             return await models.Video.findOneAndUpdate(filter_2, update_2)
+        },
+        
+        setDuration: async (root, { videoId, duration }, { models }) => {
+            const filter = { _id: videoId }
+            const update = { duration: duration }
+            return await models.Video.findOneAndUpdate(filter, update)
         }
     }
 }

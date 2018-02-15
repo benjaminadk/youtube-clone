@@ -45,6 +45,11 @@ const videoSchema = new Schema({
     fcmToken: {
         type: String,
         default: ''
+    },
+    
+    duration: {
+        type: Number,
+        default: 0
     }
 })
 
