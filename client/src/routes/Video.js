@@ -15,7 +15,7 @@ const styles = {
     CONTAINER: {
         marginTop: '3vh',
         display: 'grid',
-        gridTemplateColumns: '70% 30%'
+        gridTemplateColumns: '67% 33%'
     }
 }
 
@@ -30,13 +30,23 @@ class Video extends Component {
         currentTimeString: '0:00',
         comment: '',
         subComment: '',
-        visibleInput: null
+        visibleInput: null,
+        showPlayPause: false,
+        playIcon: false
     }
     
     componentDidMount() {
         this.handleAddView()
         setTimeout(this.handleTimeQuery, 2500)
         this.setState({ linkToShare: `https://youtube-clone-benjaminadk.c9users.io${this.props.location.pathname}` })
+        setTimeout(this.handleSetDuration, 3000)
+    }
+    
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.match.params.videoId !== this.props.match.params.videoId) {
+            this.handleAddView()
+            setTimeout(this.handleSetDuration, 3000)
+        }
     }
     
     handleTimeQuery = () => {
@@ -168,9 +178,32 @@ class Video extends Component {
     
     handleReply = (i) => this.setState({ visibleInput: i, subComment: '' })
     
+    handleVideoClick = async () => {
+        if(this.videoElement.paused) {
+            this.videoElement.play()
+        } else {
+            this.videoElement.pause()
+        }
+        await this.setState({ showPlayPause: !this.state.showPlayPause })
+        await setTimeout(() => this.setState({ showPlayPause: !this.state.showPlayPause }), 500)
+        await this.setState({ playIcon: !this.state.playIcon })
+    }
+    
+    handleSetDuration = () => {
+        if(this.props.data.getVideoById.duration === 0) {
+            const { videoId } = this.props.match.params
+            const { duration } = this.videoElement
+            this.props.setDuration({
+                variables: { videoId, duration},
+                refetchQueries: [{ query: VIDEO_LIST_QUERY }]
+            })
+        }
+    }
+    
     render(){
-        const { data: { loading, getVideoById }} = this.props
-        if(loading) return null
+        const { data: { loading, getVideoById }, videoList: { getVideoList } } = this.props
+        const videoListLoading = this.props.videoList.loading
+        if(loading || videoListLoading) return null
         const { 
             title, 
             description, 
@@ -182,11 +215,13 @@ class Video extends Component {
             views, 
             owner,
             comments } = getVideoById
-        const { username, imageUrl } = owner
+        const { id, username, imageUrl } = owner
         return([
             <div key='video-main-page' style={styles.CONTAINER}>
                 <VideoMain
                     videoRef={(video) => { this.videoElement = video }}
+                    handleVideoClick={this.handleVideoClick}
+                    id={id}
                     url={url}
                     description={description}
                     poster={poster}
@@ -211,8 +246,12 @@ class Video extends Component {
                     handleReply={this.handleReply}
                     visibleInput={this.state.visibleInput}
                     createNewSubComment={this.handleCreateSubComment}
+                    showPlayPause={this.state.showPlayPause}
+                    playIcon={this.state.playIcon}
                 />
-                <VideoList/>
+                <VideoList
+                    videoList={getVideoList}
+                />
             </div>,
             <ShareModal     
                 key='video-share-modal'
@@ -259,7 +298,9 @@ const VIDEO_BY_ID_QUERY = gql`
             views
             likes
             dislikes
+            duration
             owner {
+                id
                 username
                 imageUrl
                 likes
@@ -286,6 +327,23 @@ const VIDEO_BY_ID_QUERY = gql`
                         imageUrl
                     }
                 }
+            }
+        }
+    }
+`
+
+const VIDEO_LIST_QUERY = gql`
+    query {
+        getVideoList {
+            id
+            title
+            poster
+            views
+            createdOn
+            duration
+            owner {
+                id
+                username
             }
         }
     }
@@ -331,11 +389,21 @@ const CREATE_SUBCOMMENT_MUTATION = gql`
     }
 `
 
+const SET_DURATION_MUTATION = gql`
+    mutation($videoId: ID!, $duration: Float!) {
+        setDuration(videoId: $videoId, duration: $duration) {
+            duration
+        }
+    }
+`
+
 export default compose(
     graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
     graphql(ADD_LIKE_MUTATION, { name: 'addLike' }),
     graphql(ADD_DISLIKE_MUTATION, { name: 'addDislike' }),
     graphql(CREATE_COMMENT_MUTATION, { name: 'createComment' }),
     graphql(CREATE_SUBCOMMENT_MUTATION, { name: 'createSubComment' }),
+    graphql(SET_DURATION_MUTATION, { name: 'setDuration' }),
+    graphql(VIDEO_LIST_QUERY, { name: 'videoList' }),
     graphql(VIDEO_BY_ID_QUERY, { options: props => ({ variables: { videoId: props.match.params.videoId }})})
 )(Video)

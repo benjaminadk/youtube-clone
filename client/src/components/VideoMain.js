@@ -5,14 +5,18 @@ import IconButton from 'material-ui/IconButton'
 import ThumbsUpIcon from 'material-ui-icons/ThumbUp'
 import ThumbsDownIcon from 'material-ui-icons/ThumbDown'
 import ReplyIcon from 'material-ui-icons/Reply'
+import PauseIcon from 'material-ui-icons/PauseCircleFilled'
+import PlayIcon from 'material-ui-icons/PlayCircleFilled'
 import Button from 'material-ui/Button'
 import Avatar from 'material-ui/Avatar'
 import Input from 'material-ui/Input'
 import { timeDifferenceForDate } from '../utils'
+import { Link } from 'react-router-dom'
+import { Transition } from 'react-transition-group'
 
 const styles = {
     VIDEO: {
-        height: '72vh',
+        height: '75vh',
         marginLeft: '3vh'
     },
     VIDEO_STATS: {
@@ -75,11 +79,52 @@ const styles = {
     },
     SUB_COMMENT_BLOCK: {
         marginLeft: '10vh'
+    },
+    LINK: {
+        textDecoration: 'none'
+    },
+    PLAY_PAUSE: {
+        backgroundColor: 'white',
+        color: 'black',
+        borderRadius: '50%'
     }
 }
 
+const duration = 500
+
+const playPauseDefaultStyle = {
+    position: 'absolute',
+    top: '50vh',
+    left: '30vw',
+    transform: 'scale(2.0)',
+    opacity: '0',
+    transition: `all ${duration}ms ease-in-out`
+}
+
+const playPauseTransitionStyles = {
+    entering: { opacity: .5, transform: 'scale(2.0)' },
+    entered: { opacity: .5, transform: 'scale(4.0)' },
+    exiting: { opacity: 0, transform: 'scale(4.0)' },
+    exited: { opacity: 0, transform: 'scale(2.0)' }
+}
+
+const PlayPause = ({ in: inProp, playIcon }) => (
+    <Transition in={inProp} timeout={duration}>
+    {(status) => (
+        <div style={{
+            ...playPauseDefaultStyle,
+            ...playPauseTransitionStyles[status]
+        }}>
+           {playIcon ? <PlayIcon style={styles.PLAY_PAUSE}/> : <PauseIcon style={styles.PLAY_PAUSE}/>}
+        </div>
+    )}
+    </Transition>
+    )
+
 export default ({ 
     videoRef,
+    handleVideoClick,
+    id,
     url,
     description,
     poster,
@@ -103,15 +148,19 @@ export default ({
     handleReply,
     visibleInput,
     resetSubComment,
-    createNewSubComment
+    createNewSubComment,
+    showPlayPause,
+    playIcon
 }) => (
      <div>
+        <PlayPause in={!!showPlayPause} playIcon={playIcon}/>
         <video
             src={url} 
             controls 
             style={styles.VIDEO}
             poster={poster}
             ref={videoRef}
+            onClick={handleVideoClick}
         />
         <Typography type='headline'>{title}</Typography>
         <div style={styles.VIDEO_STATS}>
@@ -135,9 +184,13 @@ export default ({
         </div>
         <Divider/>
             <div style={styles.VIDEO_INFO}>
-                <Avatar src={imageUrl} alt='user' style={styles.AVATAR}/>
+                <Link to={`/channel/${id}`}>
+                    <Avatar src={imageUrl} alt='user' style={styles.AVATAR}/>
+                </Link>
                 <div>
-                    <Typography type='title'>{username}</Typography>
+                    <Link to={`/channel/${id}`} style={styles.LINK}>
+                        <Typography type='title'>{username}</Typography>
+                    </Link>
                     <Typography>Published {timeDifferenceForDate(createdOn)}</Typography>
                     <br/>
                     <br/>

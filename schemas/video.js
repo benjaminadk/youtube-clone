@@ -13,6 +13,7 @@ export default `
         dislikes: Int
         comments: [Comment]
         fcmToken: String
+        duration: Float
     }
     
     input VideoInput {
@@ -33,6 +34,7 @@ export default `
     }
     
     type Query {
+        getVideoList: [Video]
         getVideoById(videoId: ID!): Video
     }
     
@@ -43,5 +45,6 @@ export default `
         addLike(videoId: ID!, remove: Boolean!): Video
         addDislike(videoId: ID!, remove: Boolean!): Video
         s3SignPoster(filename: String!, filetype: String!): S3Poster
+        setDuration(videoId: ID!, duration: Float!): Video
     }
 `

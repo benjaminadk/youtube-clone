@@ -18,6 +18,7 @@ import SearchResults from '../components/ChannelTabs/SearchResults'
 class Channel extends Component {
     
     state = {
+        isOwner: null,
         file: null,
         progress: 0,
         tabIndex: 0,
@@ -35,6 +36,11 @@ class Channel extends Component {
         countryForm: '',
         linksForm: '',
         aboutSnackbar: false
+    }
+    
+    componentDidMount = async () => {
+        const isOwner = this.props.match.params.userId ? false : true
+        await this.setState({ isOwner })
     }
     
     format = filename => {
@@ -239,6 +245,7 @@ class Channel extends Component {
                         createdOn={createdOn}
                         openAboutModal={this.handleOpenAboutModal}
                         totalViews={this.getTotalViews(videos)}
+                        isOwner={this.state.isOwner}
                     />
                     <SearchResults
                         filteredVideos={this.state.filteredVideos}
@@ -282,8 +289,8 @@ class Channel extends Component {
 }
 
 const CURRENT_USER_QUERY = gql`
-    query {
-        currentUser {
+    query($userId: ID) {
+        currentUser(userId: $userId) {
             username
             email
             imageUrl
@@ -345,5 +352,5 @@ export default compose(
     graphql(ADD_BANNER_MUTATION, { name: 'addBanner' }),
     graphql(ADD_BANNER_POSITION_MUTATION, { name: 'addBannerPosition' }),
     graphql(ABOUT_TAB_MUTATION, { name: 'aboutTab' }),
-    graphql(CURRENT_USER_QUERY)
+    graphql(CURRENT_USER_QUERY, { options: props => ({ variables: { userId: props.match.params.userId || null }})})
     )(Channel)

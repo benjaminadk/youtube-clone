@@ -32,7 +32,7 @@ export default `
     
     type Query {
         getUserById(userId: ID!): User
-        currentUser: User
+        currentUser(userId: ID): User
         allUsers: [User!]!
     }
     

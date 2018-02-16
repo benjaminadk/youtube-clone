@@ -92,6 +92,7 @@ export const formatTime = (secs) => {
     const formatted = moment.utc(secs * 1000).format('H:mm:ss')
     if(secs < 600) return formatted.slice(3)
     if(secs < 3600) return formatted.slice(2)
+    return formatted
 }
 
 export const formatDate = (date) => {
@@ -100,4 +101,10 @@ export const formatDate = (date) => {
   const d = x.getDay()
   const y = x.getFullYear()
   return `${m < 10 ? '0' + m : m}/${d < 10 ? '0' + d : d}/${y}`
+}
+
+export const setNewVideoTag = (date) => {
+  const createdOn = moment(date)
+  const testDate = moment().subtract(2,'weeks')
+  return createdOn > testDate
 }
