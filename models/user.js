@@ -50,6 +50,11 @@ const userSchema = new Schema({
         ref: 'video'
     },
     
+    playlists: {
+        type: [Schema.Types.ObjectId],
+        ref: 'playlist'
+    },
+    
     subscriptions: {
         type: [Schema.Types.ObjectId],
         ref: 'user'

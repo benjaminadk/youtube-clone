@@ -32,7 +32,10 @@ class Video extends Component {
         subComment: '',
         visibleInput: null,
         showPlayPause: false,
-        playIcon: false
+        playIcon: false,
+        anchorEl: null,
+        collapsed: true,
+        newPlaylistTitle: ''
     }
     
     componentDidMount() {
@@ -40,12 +43,32 @@ class Video extends Component {
         setTimeout(this.handleTimeQuery, 2500)
         this.setState({ linkToShare: `https://youtube-clone-benjaminadk.c9users.io${this.props.location.pathname}` })
         setTimeout(this.handleSetDuration, 3000)
+        setTimeout(this.createChecks, 2000)
     }
     
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.match.params.videoId !== this.props.match.params.videoId) {
             this.handleAddView()
             setTimeout(this.handleSetDuration, 3000)
+        }
+    }
+    
+    createChecks = async() => {
+        const videos = this.props.videoList.getVideoList
+        const playlists = this.props.playlists.getUserPlaylists
+        const vIds = []
+        videos.forEach(v => vIds.push(v.id))
+
+        for(let i = 0; i < vIds.length; i++) {
+            this.setState({ [`pop-${i}`]: false, [`menu-${i}`]: false })
+            for(let j = 0; j < playlists.length; j++) {
+               await this.setState({[`${i}-${j}`]: false })
+                playlists[j].videos.forEach(v => {
+                    if(v.id === vIds[i]) {
+                        this.setState({[`${i}-${j}`]: true })
+                    } 
+                })
+            }
         }
     }
     
@@ -56,7 +79,9 @@ class Video extends Component {
     }
     
     handleAddView = async () => {
-        await this.props.addView({ variables: { videoId: this.props.match.params.videoId } })
+        await this.props.addView({ 
+            variables: { videoId: this.props.match.params.videoId }
+        })
     }
     
     handleThumbs = async (control) => {
@@ -200,8 +225,51 @@ class Video extends Component {
         }
     }
     
+    handleMenuAnchor = (i) => this.setState({ [`menu-${i}`]: true })
+    
+    handleMenuClose = (i) => this.setState({ [`menu-${i}`]: false })
+    
+    handlePlaylistPopoverOpen = (i) => {
+        this.handleMenuClose(i)
+        this.setState({ [`pop-${i}`]: true })
+    }
+    
+    handlePlaylistPopoverClose = (i) => this.setState({ [`pop-${i}`]: false })
+    
+    handleCollapse = () => this.setState({ collapsed: false })
+    
+    handleNewPlaylistTitle = e => this.setState({ newPlaylistTitle: e.target.value })
+    
+    handleCreatePlaylist = async (videoId) => {
+        this.handlePlaylistPopoverClose()
+        await this.props.createPlaylist({
+            variables: { input: {
+                title: this.state.newPlaylistTitle,
+                description: "",
+                firstVideo: [videoId]
+            }}
+        })
+        await this.setState({ collapsed: true, newPlaylistTitle: '' })
+    }
+    
+    handlePlaylistCheckboxChange = async (v,p,vId,pId) => {
+        if(!this.state[`${v}-${p}`]) {
+            await this.props.addToPlaylist({
+                variables: { playlistId: pId, videoId: vId, add: true}
+            })
+        } else {
+            await this.props.addToPlaylist({
+                variables: { playlistId: pId, videoId: vId, add: false}
+            })
+        }
+        await this.setState({ [`${v}-${p}`]: !this.state[`${v}-${p}`]})
+    }
+    
     render(){
-        const { data: { loading, getVideoById }, videoList: { getVideoList } } = this.props
+        const { 
+            data: { loading, getVideoById }, 
+            videoList: { getVideoList }, 
+            playlists: { getUserPlaylists } } = this.props
         const videoListLoading = this.props.videoList.loading
         if(loading || videoListLoading) return null
         const { 
@@ -251,6 +319,19 @@ class Video extends Component {
                 />
                 <VideoList
                     videoList={getVideoList}
+                    handleMenuAnchor={this.handleMenuAnchor}
+                    anchorEl={this.state.anchorEl}
+                    handleMenuClose={this.handleMenuClose}
+                    handlePlaylistPopoverOpen={this.handlePlaylistPopoverOpen}
+                    handlePlaylistPopoverClose={this.handlePlaylistPopoverClose}
+                    handleCollapse={this.handleCollapse}
+                    collapsed={this.state.collapsed}
+                    playlists={getUserPlaylists}
+                    newPlaylistTitle={this.state.newPlaylistTitle}
+                    handleNewPlaylistTitle={this.handleNewPlaylistTitle}
+                    handleCreatePlaylist={this.handleCreatePlaylist}
+                    handlePlaylistCheckboxChange={this.handlePlaylistCheckboxChange}
+                    state={this.state}
                 />
             </div>,
             <ShareModal     
@@ -349,6 +430,18 @@ const VIDEO_LIST_QUERY = gql`
     }
 `
 
+const USER_PLAYLIST_QUERY = gql`
+    query {
+        getUserPlaylists {
+            id
+            title
+            videos {
+                id
+            }
+        }
+    }
+`
+
 const ADD_VIEW_MUTATION = gql`
     mutation($videoId: ID!) {
         addView(videoId: $videoId){
@@ -397,6 +490,23 @@ const SET_DURATION_MUTATION = gql`
     }
 `
 
+const CREATE_PLAYLIST_MUTATION = gql`
+    mutation($input: PlaylistInput!) {
+        createPlaylist(input: $input) {
+            title
+        }
+    }
+`
+
+const ADD_TO_PLAYLIST_MUTATION = gql`
+    mutation($playlistId: ID!, $videoId: ID!, $add: Boolean!) {
+        addVideoToPlaylist(playlistId: $playlistId, videoId: $videoId, add: $add) {
+            title
+        }
+    }
+`
+
+
 export default compose(
     graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
     graphql(ADD_LIKE_MUTATION, { name: 'addLike' }),
@@ -404,6 +514,9 @@ export default compose(
     graphql(CREATE_COMMENT_MUTATION, { name: 'createComment' }),
     graphql(CREATE_SUBCOMMENT_MUTATION, { name: 'createSubComment' }),
     graphql(SET_DURATION_MUTATION, { name: 'setDuration' }),
+    graphql(CREATE_PLAYLIST_MUTATION, { name: 'createPlaylist' }),
+    graphql(ADD_TO_PLAYLIST_MUTATION, { name: 'addToPlaylist' }),
     graphql(VIDEO_LIST_QUERY, { name: 'videoList' }),
+    graphql(USER_PLAYLIST_QUERY, { name: 'playlists' }),
     graphql(VIDEO_BY_ID_QUERY, { options: props => ({ variables: { videoId: props.match.params.videoId }})})
 )(Video)

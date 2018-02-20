@@ -169,6 +169,16 @@
 - add ability to display video duration on thumbnail
 - uses componentDidUpdate lifecycle method
 
+#### Video 47 Video List 3
+- set up menu basics
+- more css crapola
+- some additional explanation of Video 46 points
+
+#### Video 48 Playlists 1
+- models, schemas and resolvers for playlists
+- overview of what it looks like in the app
+
+
 #### Resources
 
 - ***Upload Background***
