@@ -178,6 +178,9 @@
 - models, schemas and resolvers for playlists
 - overview of what it looks like in the app
 
+#### Video 49 Playlists 2
+- frontend code - state, menu, popovers, checkboxes
+- using componentDidMount
 
 #### Resources
 
