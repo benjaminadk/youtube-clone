@@ -14,6 +14,8 @@ import CloseIcon from 'material-ui-icons/Close'
 import Videos from '../components/ChannelTabs/Videos'
 import About from '../components/ChannelTabs/About'
 import SearchResults from '../components/ChannelTabs/SearchResults'
+import Playlists from '../components/ChannelTabs/Playlists'
+import { CURRENT_USER_QUERY, USER_PLAYLIST_QUERY } from '../queries'
 
 class Channel extends Component {
     
@@ -35,7 +37,10 @@ class Channel extends Component {
         aboutForm: '',
         countryForm: '',
         linksForm: '',
-        aboutSnackbar: false
+        aboutSnackbar: false,
+        sortMenuPl: false,
+        sortByPl: 'newest',
+        anchorElPl: null
     }
     
     componentDidMount = async () => {
@@ -79,6 +84,15 @@ class Channel extends Component {
         if(sortBy === 'oldest') return videos
         if(sortBy === 'popular') {
             return videos.sort((a,b) => b.views - a.views)
+        }
+    }
+    
+    sortControlPl = (playlists, sortBy) => {
+        if(sortBy === 'newest') return playlists.reverse()
+        if(sortBy === 'oldest') return playlists
+        if(sortBy === 'last') {
+            // need to fix
+            return playlists
         }
     }
     
@@ -182,9 +196,16 @@ class Channel extends Component {
     
     handleAboutSnackbar = () => this.setState({ aboutSnackbar: false })
     
+    handleOpenSortMenuPl = (e) => this.setState({ sortMenuPl: true, anchorElPl: e.target })
+    
+    handleCloseSortMenuPl = () => this.setState({ sortMenuPl: false })
+    
+    handleSortByPl = sortByPl => this.setState({ sortByPl, sortMenuPl: false })
+    
     render(){
-        const { data: { loading, currentUser }} = this.props
-        if(loading) return null
+        const { data: { loading, currentUser }, playlists: { getUserPlaylists } } = this.props
+        const loading2 = this.props.playlists.loading
+        if(loading || loading2) return null
         const { 
             videos, 
             imageUrl, 
@@ -197,6 +218,7 @@ class Channel extends Component {
             links,
             createdOn } = currentUser
         const sortedVideos = this.sortControl(videos.slice(), this.state.sortBy)
+        const sortedPlaylists = this.sortControlPl(getUserPlaylists.slice(), this.state.sortByPl)
         return(
             <div>
                 <ChannelDropzone
@@ -234,7 +256,15 @@ class Channel extends Component {
                         handleVideoList={this.handleVideoList}
                         videoList={this.state.videoList}
                     />
-                    <div>THREE</div>
+                    <Playlists
+                        playlists={sortedPlaylists}
+                        sortByPl={this.state.sortByPl}
+                        sortMenuPl={this.state.sortMenuPl}
+                        handleOpenSortMenuPl={this.handleOpenSortMenuPl}
+                        handleCloseSortMenuPl={this.handleCloseSortMenuPl}
+                        handleSortByPl={this.handleSortByPl}
+                        anchorElPl={this.state.anchorElPl}
+                    />
                     <div>FOUR</div>
                     <div>FIVE</div>
                     <About
@@ -288,32 +318,6 @@ class Channel extends Component {
     }
 }
 
-const CURRENT_USER_QUERY = gql`
-    query($userId: ID) {
-        currentUser(userId: $userId) {
-            username
-            email
-            imageUrl
-            createdOn
-            bannerUrl
-            bannerPosition
-            about
-            country
-            links
-            videos {
-                id
-                title
-                url
-                description
-                createdOn
-                poster
-                views
-                likes
-            }
-        }
-    }
-`
-
 const S3_SIGN_BANNER_MUTATION = gql`
     mutation($filename: String!, $filetype: String!) {
         s3SignBanner(filename: $filename, filetype: $filetype) {
@@ -352,5 +356,6 @@ export default compose(
     graphql(ADD_BANNER_MUTATION, { name: 'addBanner' }),
     graphql(ADD_BANNER_POSITION_MUTATION, { name: 'addBannerPosition' }),
     graphql(ABOUT_TAB_MUTATION, { name: 'aboutTab' }),
+    graphql(USER_PLAYLIST_QUERY, { name: 'playlists' }),
     graphql(CURRENT_USER_QUERY, { options: props => ({ variables: { userId: props.match.params.userId || null }})})
     )(Channel)

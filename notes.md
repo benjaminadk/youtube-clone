@@ -1,16 +1,7 @@
-view user
-added id to Video root query for owner id
-create link on avatar and username display
-problem basically same component as channel minus ability to edit 
-problem channel was using a no variable query based on jwt
-solutions
-1 - make nearly identical component for view-user copy paste?
-2 - change channel query and add in some sort of check to see if viewer is owner
+VID 51
 
-
-channel sub components
-
-dropzone for channel art
-user info
-tabs
-    home, videos, playlists, channels(subs), discussion, about, search
+how to create new playlist before video is saved
+- IDEAS
+    1. make a new query
+    2. update existing query to have boolean for firstVideo - [] option
+    3. somehow insert a visual placeholder and save when video is saved

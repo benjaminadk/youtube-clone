@@ -1,0 +1,7 @@
+.more-vert-icon {
+    opacity: 0;
+}
+
+.video-list-item:hover > .more-vert-icon{
+    opacity: 1;
+}

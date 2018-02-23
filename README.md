@@ -169,6 +169,27 @@
 - add ability to display video duration on thumbnail
 - uses componentDidUpdate lifecycle method
 
+#### Video 47 Video List 3
+- set up menu basics
+- more css crapola
+- some additional explanation of Video 46 points
+
+#### Video 48 Playlists 1
+- models, schemas and resolvers for playlists
+- overview of what it looks like in the app
+
+#### Video 49 Playlists 2
+- frontend code - state, menu, popovers, checkboxes
+- using componentDidMount
+
+#### Video 50 Playlists 3
+- playlists tab - overlay method
+- mutation for adding and removing videos from playlists
+
+#### Video 51 Playlists 4
+- allow user to create new playlist when uploading video
+- refetchQueries and moving some reused queries to their own file
+
 #### Resources
 
 - ***Upload Background***

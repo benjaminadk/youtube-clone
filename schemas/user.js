@@ -10,6 +10,7 @@ export default `
         bannerPosition: String
         createdOn: String
         videos: [Video]
+        playlists: [Playlist]
         jwt: String
         likes: [ID!]
         dislikes: [ID!]
