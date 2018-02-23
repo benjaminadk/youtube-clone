@@ -182,6 +182,14 @@
 - frontend code - state, menu, popovers, checkboxes
 - using componentDidMount
 
+#### Video 50 Playlists 3
+- playlists tab - overlay method
+- mutation for adding and removing videos from playlists
+
+#### Video 51 Playlists 4
+- allow user to create new playlist when uploading video
+- refetchQueries and moving some reused queries to their own file
+
 #### Resources
 
 - ***Upload Background***

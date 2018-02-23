@@ -15,6 +15,7 @@ import Videos from '../components/ChannelTabs/Videos'
 import About from '../components/ChannelTabs/About'
 import SearchResults from '../components/ChannelTabs/SearchResults'
 import Playlists from '../components/ChannelTabs/Playlists'
+import { CURRENT_USER_QUERY, USER_PLAYLIST_QUERY } from '../queries'
 
 class Channel extends Component {
     
@@ -316,46 +317,6 @@ class Channel extends Component {
             )
     }
 }
-
-const CURRENT_USER_QUERY = gql`
-    query($userId: ID) {
-        currentUser(userId: $userId) {
-            username
-            email
-            imageUrl
-            createdOn
-            bannerUrl
-            bannerPosition
-            about
-            country
-            links
-            videos {
-                id
-                title
-                url
-                description
-                createdOn
-                poster
-                views
-                likes
-            }
-        }
-    }
-`
-
-const USER_PLAYLIST_QUERY = gql`
-    query {
-        getUserPlaylists {
-            id
-            title
-            createdOn
-            videos {
-                id
-                poster
-            }
-        }
-    }
-`
 
 const S3_SIGN_BANNER_MUTATION = gql`
     mutation($filename: String!, $filetype: String!) {

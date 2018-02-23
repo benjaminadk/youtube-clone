@@ -23,6 +23,7 @@ export default `
     
     type Mutation {
         createPlaylist(input: PlaylistInput!): Playlist
+        createEmptyPlaylist(title: String!): Playlist
         addVideoToPlaylist(playlistId: ID!, videoId: ID!, add: Boolean!): Playlist
     }
 `

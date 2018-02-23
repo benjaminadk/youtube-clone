@@ -10,6 +10,7 @@ import { formatTime } from '../utils'
 import IconButton from 'material-ui/IconButton'
 import VideoMain from '../components/VideoMain'
 import VideoList from '../components/VideoList'
+import { USER_PLAYLIST_QUERY, VIDEO_LIST_QUERY } from '../queries'
 
 const styles = {
     CONTAINER: {
@@ -408,35 +409,6 @@ const VIDEO_BY_ID_QUERY = gql`
                         imageUrl
                     }
                 }
-            }
-        }
-    }
-`
-
-const VIDEO_LIST_QUERY = gql`
-    query {
-        getVideoList {
-            id
-            title
-            poster
-            views
-            createdOn
-            duration
-            owner {
-                id
-                username
-            }
-        }
-    }
-`
-
-const USER_PLAYLIST_QUERY = gql`
-    query {
-        getUserPlaylists {
-            id
-            title
-            videos {
-                id
             }
         }
     }

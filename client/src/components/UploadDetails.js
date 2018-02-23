@@ -3,7 +3,16 @@ import { LinearProgress } from 'material-ui/Progress'
 import TextField from 'material-ui/TextField'
 import { Link } from 'react-router-dom'
 import Button from 'material-ui/Button'
+import Popover from 'material-ui/Popover'
+import List, { ListItem, ListItemText } from 'material-ui/List';
+import Checkbox from 'material-ui/Checkbox'
+import Divider from 'material-ui/Divider'
 import Typography from 'material-ui/Typography'
+import Input, { InputAdornment } from 'material-ui/Input'
+import { FormControl } from 'material-ui/Form'
+import PublicIcon from 'material-ui-icons/Public'
+import SearchIcon from 'material-ui-icons/Search'
+import PlaylistIcon from 'material-ui-icons/VideoLibrary'
 import Dropzone from 'react-dropzone'
 
 const styles = {
@@ -63,7 +72,8 @@ const styles = {
     },
     SUB_RIGHT: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        alignItems: 'center'
     },
     TEXT_INPUT: {
         marginBottom: '4vh'
@@ -87,6 +97,49 @@ const styles = {
     POSTER_BUTTON: {
         width: '75%',
         marginLeft: '3vh'
+    },
+    PLAYLIST_BUTTON: {
+        marginTop: '15vh',
+        width: '20vw',
+        border: '1px solid',
+        backgroundColor: '#E0E0E0'
+    },
+    POPOVER: {
+        width: '25vw',
+        maxHeight: '75vh'
+    },
+    DENSE_LIST: {
+        paddingTop: '0',
+        paddingBottom: '0',
+        marginTop: '0',
+        marginBottom: '0'
+    },
+    LIST_OVERFLOW: {
+        overflowY: 'auto',
+        maxHeight: '40vh'
+    },
+    TEXTFIELD: {
+        marginLeft: '1vw',
+        marginRight: '1vw',
+        width: '23vw'
+    },
+    PLUS_BUTTON: {
+        width: '25vw'  
+    },
+    CREATE_BUTTON: {
+        width: '25vw',
+        color: 'red'
+    },
+    SEARCH: {
+        width: '21vw',
+        margin: '3vh 2vw 0 2vw',
+        border: '1px solid'
+    },
+    SEARCH_ICON: {
+        transform: 'translatey(1vh)'
+    },
+    PLAYLIST_ICON: {
+        transform: 'scale(.75)'
     }
 }
 
@@ -101,7 +154,24 @@ export default ({
     handleUpload,
     onDrop,
     poster,
-    posterFile
+    posterFile,
+    playlistButtonText,
+    handleOpenPopover,
+    handleClosePopover,
+    popoverOpen,
+    playlists,
+    collapsed,
+    newPlaylistTitle,
+    handleNewPlaylistTitle,
+    handleCollapse,
+    handleCreatePlaylist,
+    searchText,
+    handleSearchText,
+    handleSearch,
+    state,
+    handleCheckbox,
+    processing,
+    playlistButtonDisabled
 }) => (
     <div style={styles.CONTAINER}>
         <div style={styles.GRID}>
@@ -130,7 +200,7 @@ export default ({
                     {completed && <Link to={`/video/${id}`}>Watch Your Video</Link>}
                 </div>
             </div>
-            <div style={styles.RIGHT_COLUMN}>
+            <div style={styles.RIGHT_COLUMN} id='anchorEl'>
                 <div style={styles.PUB_PROG_CONTAINER}>
                     <LinearProgress 
                         mode='determinate'
@@ -142,7 +212,7 @@ export default ({
                         color='primary'
                         raised
                         onClick={handleVideo}
-                        disabled={progress < 100}
+                        disabled={progress < 100 || completed}
                     >
                         Publish
                     </Button>
@@ -169,7 +239,81 @@ export default ({
                         />
                     </div>
                     <div style={styles.SUB_RIGHT}>
-
+                        <Button
+                            style={styles.PLAYLIST_BUTTON}
+                            onClick={handleOpenPopover}
+                            disabled={playlistButtonDisabled}
+                        >
+                            {playlistButtonText === '+ Add to playlist' ? '+ Add to playlist' : <div style={{display: 'flex', justifyContent: 'center'}}><PlaylistIcon style={styles.PLAYLIST_ICON}/>&nbsp;{playlistButtonText}</div>}
+                        </Button>
+                        <Popover
+                            open={popoverOpen}
+                            anchorEl={document.getElementById('anchorEl')}
+                            onRequestClose={handleClosePopover}
+                        >
+                            <div style={styles.POPOVER}>
+                                <FormControl style={styles.SEARCH}>
+                                    <Input
+                                        onChange={handleSearchText}
+                                        onKeyUp={handleSearch}
+                                        value={searchText}
+                                        disableUnderline
+                                        startAdornment={<InputAdornment position="start" style={styles.SEARCH_ICON}><SearchIcon/></InputAdornment>}
+                                    />
+                                </FormControl>
+                                <List 
+                                    dense
+                                    style={styles.LIST_OVERFLOW}    
+                                >
+                                    {playlists && playlists.map((p,i) => {
+                                        return(
+                                            <ListItem
+                                                key={`playlist-item-${i}`}
+                                                style={styles.DENSE_LIST}
+                                            >
+                                                <Checkbox
+                                                    checked={state[`checkbox-${i}`]}
+                                                    onChange={() => handleCheckbox(i,p.title)}
+                                                />
+                                                <ListItemText primary={p.title.length > 30 ? `${p.title.slice(0,29)}...`  : p.title}/>
+                                                <PublicIcon/>
+                                            </ListItem>
+                                        )
+                                    })}
+                                </List>
+                                <Divider/>
+                                {collapsed && <Button 
+                                                onClick={handleCollapse}
+                                                style={styles.PLUS_BUTTON}
+                                               >
+                                                Create new playlist
+                                               </Button>}
+                                {!collapsed && <div>
+                                                {processing && <LinearProgress />}
+                                                <TextField
+                                                    placeholder='Enter playlist name...'
+                                                    label='Name'
+                                                    helperText={`${newPlaylistTitle.length}/150`}
+                                                    value={newPlaylistTitle}
+                                                    onChange={handleNewPlaylistTitle}
+                                                    style={styles.TEXTFIELD}
+                                                />
+                                                <br/>
+                                                <TextField
+                                                    label='Privacy'
+                                                    disabled
+                                                    style={styles.TEXTFIELD}
+                                                />
+                                                <br/>
+                                                <Button 
+                                                    onClick={handleCreatePlaylist}
+                                                    style={styles.CREATE_BUTTON}
+                                                >
+                                                    Create
+                                                </Button>
+                                           </div>}
+                            </div>
+                        </Popover>
                     </div>
                 </div>
             </div>

@@ -35,6 +35,20 @@ export default {
             return savedPlaylist
         },
         
+        createEmptyPlaylist: async (root, { title }, { models, user }) => {
+            const playlist = new models.Playlist({
+                title,
+                description: '',
+                owner: user.id,
+                videos: []
+            })
+            const savedPlaylist = await playlist.save()
+            const filter = { _id: user.id }
+            const update = { $push: { playlists: savedPlaylist._id }}
+            await models.User.findOneAndUpdate(filter, update)
+            return savedPlaylist
+        },
+        
         addVideoToPlaylist: async (root, { playlistId, videoId, add }, { models }) => {
             const filter = { _id: playlistId }
             const update = add ? { $push: { videos: videoId }} : { $pull: { videos: videoId }}

@@ -69,7 +69,8 @@ export default ({
             </div>
         </div>
         <div style={styles.PLAYLIST_ROWS}>
-        {playlists.map((p,i) => {
+        {playlists && playlists.map((p,i) => {
+            if(playlists[i].videos.length) {
             return(
                 <div key={`user-playlist-${i}`}>
                     <div style={Object.assign({},styles.POSTER,{ backgroundImage: `url(${p.videos[0].poster})`})}>
@@ -82,7 +83,10 @@ export default ({
                         <Typography>{p.title}</Typography>
                     </div>
                 </div>
-            )
+            )}
+            else {
+                return null
+            }
         })}
         </div>
     </div>
