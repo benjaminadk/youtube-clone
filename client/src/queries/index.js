@@ -45,6 +45,7 @@ export const VIDEO_LIST_QUERY = gql`
         getVideoList {
             id
             title
+            description
             poster
             views
             createdOn

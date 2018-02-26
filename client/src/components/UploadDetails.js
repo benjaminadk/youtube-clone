@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField'
 import { Link } from 'react-router-dom'
 import Button from 'material-ui/Button'
 import Popover from 'material-ui/Popover'
-import List, { ListItem, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemText } from 'material-ui/List'
 import Checkbox from 'material-ui/Checkbox'
 import Divider from 'material-ui/Divider'
 import Typography from 'material-ui/Typography'

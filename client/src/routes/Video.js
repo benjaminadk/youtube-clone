@@ -80,8 +80,13 @@ class Video extends Component {
     }
     
     handleAddView = async () => {
+        const videoId = this.props.match.params.videoId
         await this.props.addView({ 
-            variables: { videoId: this.props.match.params.videoId }
+            variables: { videoId },
+            refetchQueries: [
+                { query: VIDEO_LIST_QUERY },
+                { query: VIDEO_BY_ID_QUERY, variables: { videoId } }
+                ]
         })
     }
     
