@@ -190,6 +190,10 @@
 - allow user to create new playlist when uploading video
 - refetchQueries and moving some reused queries to their own file
 
+#### Video 53 Search Bar 1
+- search bar is universal - built into routes/index where BrowserRouter is located
+- basic functionality and landing page for results
+
 #### Resources
 
 - ***Upload Background***
@@ -247,7 +251,7 @@
 - Frontend
     - `npm install -S firebase` in client directory
     - create `firebase-messaging-sw.js` in client/src/public
-    - add `"gcm_sender_id": "103953800507"` to `manifest.json` - number is univeral
+    - add `"gcm_sender_id": "103953800507"` to `manifest.json` - number is universal
     - create `fire.js` with config information in client/src
     - import config into your root javascript file - webpack will bundle
     - ***Example fire.js***

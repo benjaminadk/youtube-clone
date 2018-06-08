@@ -34,10 +34,12 @@ class UserLanding extends Component {
     render(){
         const { data: { loading, getUserById } } = this.props
         if(loading) return null
-        const { username, imageUrl, jwt, fcmToken } = getUserById
+        const { username, email, imageUrl, jwt, fcmToken } = getUserById
         if(username) Auth.authenticate()
         window.localStorage.setItem('TOKEN', jwt)
         window.localStorage.setItem('AVATAR', imageUrl)
+        window.localStorage.setItem('USERNAME', username)
+        window.localStorage.setItem('EMAIL', email)
         return(
             <div>
                 <h1>Hey {username}. Welcome to You Tube Clone</h1>
@@ -68,6 +70,7 @@ const USER_BY_ID_QUERY = gql`
     query($userId: ID!){
         getUserById(userId: $userId){
             username
+            email
             imageUrl
             jwt
             fcmToken
