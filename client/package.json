@@ -4,10 +4,12 @@
   "private": true,
   "proxy": {
     "/auth/*": {
-      "target": "http://localhost:8081"
+      "target": "http://localhost:3001"
     }
   },
   "dependencies": {
+    "@material-ui/core": "^1.2.3",
+    "@material-ui/icons": "^1.1.0",
     "apollo-cache-inmemory": "^1.1.1",
     "apollo-client": "^2.0.3",
     "apollo-link": "^1.0.3",
@@ -18,16 +20,14 @@
     "firebase": "^4.6.2",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
-    "material-ui": "^1.0.0-beta.21",
-    "material-ui-icons": "^1.0.0-beta.17",
     "moment": "^2.19.2",
     "query-string": "^5.0.1",
-    "react": "^16.1.1",
+    "react": "^16.4.1",
     "react-apollo": "^2.0.1",
-    "react-dom": "^16.1.1",
+    "react-dom": "^16.4.1",
     "react-dropzone": "^4.2.3",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17",
+    "react-scripts": "^1.1.4",
     "react-share": "^1.17.0",
     "react-swipeable-views": "^0.12.11",
     "typeface-roboto": "0.0.45"

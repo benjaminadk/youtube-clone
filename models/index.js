@@ -1,11 +1,16 @@
-import User from './user'
-import Video from './video'
-import Comment from './comment'
-import Playlist from './playlist'
+require('./user')
+require('./video')
+require('./comment')
+require('./playlist')
+const mongoose = require('mongoose')
+const User = mongoose.model('user')
+const Video = mongoose.model('video')
+const Comment = mongoose.model('comment')
+const Playlist = mongoose.model('playlist')
 
-export default {
-    User,
-    Video,
-    Comment,
-    Playlist
+module.exports = {
+  User,
+  Video,
+  Comment,
+  Playlist
 }

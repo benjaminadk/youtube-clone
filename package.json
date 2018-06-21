@@ -1,15 +1,15 @@
 {
-  "name": "workspace",
+  "name": "youtube-clone",
   "version": "1.0.0",
-  "description": ",-----.,--.                  ,--. ,---.   ,--.,------.  ,------.     '  .--./|  | ,---. ,--.,--. ,-|  || o   \\  |  ||  .-.  \\ |  .---'     |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \\  :|  `--,      '  '--'\\|  |' '-' ''  ''  '\\ `-' | .'  /   |  ||  '--'  /|  `---.      `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'     -----------------------------------------------------------------",
-  "main": "index.js",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "server": "nodemon ./server.js --exec babel-node -e js",
+    "server": "nodemon server.js",
     "client": "npm run start --prefix client",
     "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
-  "author": "",
+  "author": "benjaminadk",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^1.2.0",
@@ -28,8 +28,6 @@
     "passport-google-oauth20": "^1.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
     "nodemon": "^1.12.1"
   }
 }

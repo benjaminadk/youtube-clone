@@ -1,15 +1,19 @@
-import jwt from 'jsonwebtoken';
-const keys = require("../config/keys");
+const jwt = require('jsonwebtoken')
+const keys = require('../config')
 
-export const checkAuthHeaders = (req, res, next) => {
-    const TOKEN = req.headers.authorization
-    jwt.verify(TOKEN, keys.jwtSecret, (err, user) => {
-        if(err){
-           console.log(err.message)
-        }
-        if(user){
-            req.user = user
-        }
-    })
-    next()
+const checkAuthHeaders = (req, res, next) => {
+  const TOKEN = req.headers.authorization
+  jwt.verify(TOKEN, keys.jwtSecret, (err, user) => {
+    if (err) {
+      console.log(err.message)
+    }
+    if (user) {
+      req.user = user
+    }
+  })
+  next()
+}
+
+module.exports = {
+  checkAuthHeaders
 }
