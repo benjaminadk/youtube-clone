@@ -29,7 +29,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Avatar from '@material-ui/core/Avatar'
 
-const drawerWidth = 240
+const drawerWidth = 239
 
 const styles = theme => ({
   appBar: {
@@ -79,18 +79,23 @@ const styles = theme => ({
     paddingRight: '20px',
     width: '20vw'
   },
+  cornerLogo: {
+    height: '20px',
+    transform: 'translatex(-80px)'
+  },
   toolbarCenter: {
     paddingRight: '20px',
     width: '50vw',
     display: 'flex'
   },
   searchContainer: {
-    backgroundColor: 'white'
+    backgroundColor: '#121212'
   },
   search: {
     width: '43vw',
     height: '5vh',
-    paddingLeft: '1vw'
+    paddingLeft: '1vw',
+    color: theme.palette.text.primary
   },
   searchButton: {
     width: '3vw',
@@ -102,17 +107,20 @@ const styles = theme => ({
       color: 'white'
     }
   },
+  avatar: {
+    cursor: 'pointer'
+  },
   link: {
     textDecoration: 'none',
-    color: theme.palette.shades.light.text.primary,
-    display: 'flex'
+    display: 'flex',
+    color: theme.palette.text.primary
   },
   linkIcon: {
-    color: '#FFFFFF'
+    color: theme.palette.text.primary
   },
   menuTop: {
     height: '6vh',
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#939393',
     transform: 'translatey(-8px)'
   },
   userInfo: {
@@ -187,7 +195,17 @@ class RouteAppBar extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <div className={classes.toolbarCenter}>
+            <div>
+              <img
+                src="https://s3-us-west-1.amazonaws.com/youtube-clone-assets/corner-logo.png"
+                alt="youtube"
+                className={classes.cornerLogo}
+              />
+            </div>
+            <div
+              className={classes.toolbarCenter}
+              ref={ref => (this.anchor = ref)}
+            >
               <FormControl className={classes.searchContainer}>
                 <Input
                   className={classes.search}
@@ -210,7 +228,12 @@ class RouteAppBar extends Component {
               </Link>
               <AppsIcon />
               <NotificationsIcon />
-              <Avatar id="avatar" src={avatarUrl} onClick={handleMenuOpen} />
+              <Avatar
+                id="avatar"
+                src={avatarUrl}
+                onClick={handleMenuOpen}
+                className={classes.avatar}
+              />
               <Menu
                 open={menuOpen}
                 anchorEl={document.getElementById('avatar')}
@@ -219,8 +242,8 @@ class RouteAppBar extends Component {
                 <MenuItem className={classes.menuTop}>
                   <Avatar src={avatarUrl} />
                   <div className={classes.userInfo}>
-                    <Typography type="title">{username}</Typography>
-                    <Typography type="body2">{email}</Typography>
+                    <Typography variant="title">{username}</Typography>
+                    <Typography variant="body2">{email}</Typography>
                   </div>
                 </MenuItem>
                 <MenuItem>

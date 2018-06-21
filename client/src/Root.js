@@ -12,6 +12,7 @@ import UserLanding from './containers/UserLanding'
 import Video from './containers/Video'
 import Channel from './containers/Channel'
 import SearchResults from './containers/SearchResults'
+import Loading from './components/Loading'
 import { VIDEO_LIST_QUERY } from './queries/videoList'
 
 const drawerWidth = 240
@@ -28,7 +29,6 @@ const styles = theme => ({
     width: '100%',
     height: '100%'
   },
-
   content: {
     width: '100%',
     flexGrow: 1,
@@ -87,7 +87,11 @@ class PersistentDrawer extends Component {
     this.setState({ filteredVideos })
   }
   render() {
-    const { classes } = this.props
+    const {
+      classes,
+      data: { loading }
+    } = this.props
+    if (loading) return <Loading />
     return (
       <BrowserRouter>
         <div className={classes.root}>

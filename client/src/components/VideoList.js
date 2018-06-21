@@ -1,4 +1,5 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import Switch from '@material-ui/core/Switch'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
@@ -21,62 +22,39 @@ import { Link } from 'react-router-dom'
 import { setNewVideoTag, formatTime } from '../utils'
 import '../styles/VideoList.css'
 
-const styles = {
-  OUTER_CONTAINER: {
+const styles = theme => ({
+  container: {
+    marginLeft: '2vw',
+    marginRight: '2vw'
+  },
+  flexRow: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  upNext: {
+    marginTop: '2.5vh'
+  },
+  outerContainer: {
     display: 'grid',
     gridTemplateColumns: '98% 2%',
     marginRight: '1vw'
   },
-  CONTAINER: {
-    marginLeft: '2vw',
-    marginRight: '2vw'
-  },
-  FLEX_ROW: {
-    display: 'flex',
-    justifyContent: 'space-between'
-  },
-  LIST_ITEM: {
+  listItem: {
     display: 'grid',
     gridTemplateColumns: '45% 55%',
     marginTop: '1vh',
     textDecoration: 'none'
   },
-  POSTER: {
-    width: '11.5vw',
-    height: '6.5vw'
-  },
-  INFO: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '.25vw'
-  },
-  UP_NEXT: {
-    marginTop: '2.5vh'
-  },
-  CHECK: {
-    transform: 'scale(.5) translatey(-1.25vh)',
-    color: 'rgba(0, 0, 0, 0.54)'
-  },
-  NAME_ROW: {
-    display: 'flex'
-  },
-  DIVIDER: {
-    marginTop: '2vh',
-    marginBottom: '2vh'
-  },
-  TITLE: {
-    lineHeight: '1'
-  },
-  NEW: {
-    transform: 'translate(1vw,-1vh)',
-    color: 'rgba(0, 0, 0, 0.54)'
-  },
-  POSTER_WRAPPER: {
+  posterWrapper: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
   },
-  DURATION: {
+  poster: {
+    width: '11.5vw',
+    height: '6.5vw'
+  },
+  duration: {
     fontFamily: 'Roboto',
     fontSize: '.70rem',
     paddingLeft: '2px',
@@ -86,37 +64,60 @@ const styles = {
     backgroundColor: '#000000BF',
     transform: 'translate(4vw, -3vh)'
   },
-  ADD_TO: {
-    padding: '1vw'
+  info: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: '.25vw'
   },
-  POPOVER: {
+  title: {
+    lineHeight: '1'
+  },
+  nameRow: {
+    display: 'flex'
+  },
+  check: {
+    transform: 'scale(.5) translatey(-1.25vh)',
+    color: theme.palette.text.secondary
+  },
+  new: {
+    transform: 'translate(1vw,-1vh)',
+    color: theme.palette.text.secondary
+  },
+  popover: {
     width: '25vw',
     maxHeight: '75vh'
   },
-  PLUS_BUTTON: {
-    width: '25vw'
+  addTo: {
+    padding: '1vw'
   },
-  CREATE_BUTTON: {
-    width: '25vw',
-    color: 'red'
+  list: {
+    overflowY: 'scroll'
   },
-  TEXTFIELD: {
-    marginLeft: '1vw',
-    marginRight: '1vw',
-    width: '23vw'
-  },
-  DENSE_LIST: {
+  denseList: {
     paddingTop: '0',
     paddingBottom: '0',
     marginTop: '0',
     marginBottom: '0'
   },
-  LIST: {
-    overflowY: 'scroll'
+  plusButton: {
+    width: '25vw'
+  },
+  textField: {
+    marginLeft: '1vw',
+    marginRight: '1vw',
+    width: '23vw'
+  },
+  createButton: {
+    width: '25vw',
+    color: 'red'
+  },
+  divider: {
+    marginTop: '2vh',
+    marginBottom: '2vh'
   }
-}
+})
 
-export default ({
+const VideoList = ({
   videoList,
   handleMenuAnchor,
   anchorEl,
@@ -131,11 +132,12 @@ export default ({
   handleCreatePlaylist,
   handlePlaylistCheckbox,
   handlePlaylistCheckboxChange,
-  state
+  state,
+  classes
 }) => (
-  <div style={styles.CONTAINER}>
-    <div style={styles.FLEX_ROW}>
-      <Typography id="up-next" variant="title" style={styles.UP_NEXT}>
+  <div className={classes.container}>
+    <div className={classes.flexRow}>
+      <Typography id="up-next" variant="title" className={classes.upNext}>
         Up Next
       </Typography>
       <Typography variant="button">
@@ -147,28 +149,29 @@ export default ({
         return (
           <div
             key={`video-list-item-${i}`}
-            style={styles.OUTER_CONTAINER}
-            className="video-list-item"
+            className={`video-list-item ${classes.outerContainer}`}
           >
-            <Link to={`/video/${v.id}`} style={styles.LIST_ITEM}>
-              <div style={styles.POSTER_WRAPPER}>
-                <img src={v.poster} alt="poster" style={styles.POSTER} />
+            <Link to={`/video/${v.id}`} className={classes.listItem}>
+              <div className={classes.posterWrapper}>
+                <img src={v.poster} alt="poster" className={classes.poster} />
                 {v.duration > 0 ? (
-                  <span style={styles.DURATION}>{formatTime(v.duration)}</span>
+                  <span className={classes.duration}>
+                    {formatTime(v.duration)}
+                  </span>
                 ) : null}
               </div>
-              <div style={styles.INFO}>
-                <Typography variant="body2" style={styles.TITLE}>
+              <div className={classes.info}>
+                <Typography variant="body2" className={classes.title}>
                   {v.title}
                 </Typography>
-                <div style={styles.NAME_ROW}>
+                <div className={classes.nameRow}>
                   <Typography variant="caption">{v.owner.username}</Typography>
-                  <CheckIcon style={styles.CHECK} />
+                  <CheckIcon className={classes.check} />
                 </div>
-                <div style={styles.NAME_ROW}>
+                <div className={classes.nameRow}>
                   <Typography variant="caption">{v.views} views </Typography>
                   {setNewVideoTag(v.createdOn) ? (
-                    <NewIcon style={styles.NEW} />
+                    <NewIcon className={classes.new} />
                   ) : null}
                 </div>
               </div>
@@ -197,13 +200,13 @@ export default ({
               anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
               onClose={() => handlePlaylistPopoverClose(i)}
             >
-              <div style={styles.POPOVER}>
-                <Typography style={styles.ADD_TO} variant="title">
+              <div className={classes.popover}>
+                <Typography className={classes.addTo} variant="title">
                   Add to...
                 </Typography>
                 <Divider />
-                <List dense style={styles.LIST}>
-                  <ListItem style={styles.DENSE_LIST}>
+                <List dense className={classes.list}>
+                  <ListItem className={classes.denseList}>
                     <Checkbox />
                     <ListItemText primary="Watch later" />
                     <LockIcon />
@@ -213,7 +216,7 @@ export default ({
                       return (
                         <ListItem
                           key={`playlist-item-${ind}`}
-                          style={styles.DENSE_LIST}
+                          className={classes.denseList}
                         >
                           <Checkbox
                             onClick={() =>
@@ -235,7 +238,10 @@ export default ({
                 </List>
                 <Divider />
                 {collapsed && (
-                  <Button onClick={handleCollapse} style={styles.PLUS_BUTTON}>
+                  <Button
+                    onClick={handleCollapse}
+                    className={classes.plusButton}
+                  >
                     + Create new playlist
                   </Button>
                 )}
@@ -247,18 +253,18 @@ export default ({
                       helperText={`${newPlaylistTitle.length}/150`}
                       value={newPlaylistTitle}
                       onChange={handleNewPlaylistTitle}
-                      style={styles.TEXTFIELD}
+                      className={classes.textField}
                     />
                     <br />
                     <TextField
                       label="Privacy"
                       disabled
-                      style={styles.TEXTFIELD}
+                      className={classes.textField}
                     />
                     <br />
                     <Button
                       onClick={() => handleCreatePlaylist(v.id)}
-                      style={styles.CREATE_BUTTON}
+                      className={classes.createButton}
                     >
                       Create
                     </Button>
@@ -266,9 +272,11 @@ export default ({
                 )}
               </div>
             </Popover>
-            {i === 0 ? <Divider style={styles.DIVIDER} /> : null}
+            {i === 0 ? <Divider className={classes.divider} /> : null}
           </div>
         )
       })}
   </div>
 )
+
+export default withStyles(styles)(VideoList)

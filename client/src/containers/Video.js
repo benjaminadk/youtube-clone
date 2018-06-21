@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { graphql, compose } from 'react-apollo'
 import ShareModal from '../components/ShareModal'
 import Snackbar from '@material-ui/core/Snackbar'
@@ -21,13 +22,13 @@ import { ADD_DISLIKE_MUTATION } from '../mutations/addDislike'
 import { ADD_LIKE_MUTATION } from '../mutations/addLike'
 import { ADD_VIEW_MUTATION } from '../mutations/addView'
 
-const styles = {
-  CONTAINER: {
+const styles = theme => ({
+  container: {
     marginTop: '3vh',
     display: 'grid',
     gridTemplateColumns: '67% 33%'
   }
-}
+})
 
 class Video extends Component {
   state = {
@@ -305,7 +306,8 @@ class Video extends Component {
     const {
       data: { loading, getVideoById },
       videoList: { getVideoList },
-      playlists: { getUserPlaylists }
+      playlists: { getUserPlaylists },
+      classes
     } = this.props
     const videoListLoading = this.props.videoList.loading
     if (loading || videoListLoading) return null
@@ -323,7 +325,7 @@ class Video extends Component {
     } = getVideoById
     const { id, username, imageUrl } = owner
     return [
-      <div key="video-main-page" style={styles.CONTAINER}>
+      <div key="video-main-page" className={classes.container}>
         <VideoMain
           videoRef={video => {
             this.videoElement = video
@@ -413,6 +415,7 @@ class Video extends Component {
 }
 
 export default compose(
+  withStyles(styles),
   graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
   graphql(ADD_LIKE_MUTATION, { name: 'addLike' }),
   graphql(ADD_DISLIKE_MUTATION, { name: 'addDislike' }),

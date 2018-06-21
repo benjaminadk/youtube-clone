@@ -1,133 +1,98 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbsDownIcon from '@material-ui/icons/ThumbDown'
 import ReplyIcon from '@material-ui/icons/Reply'
-import PauseIcon from '@material-ui/icons/PauseCircleFilled'
-import PlayIcon from '@material-ui/icons/PlayCircleFilled'
 import Button from '@material-ui/core/Button'
 import Avatar from '@material-ui/core/Avatar'
 import Input from '@material-ui/core/Input'
 import { timeDifferenceForDate } from '../utils'
 import { Link } from 'react-router-dom'
-import { Transition } from 'react-transition-group'
+import PlayPause from './VideoPlayPause'
 
-const styles = {
-  VIDEO: {
+const styles = theme => ({
+  video: {
     height: '75vh',
     marginLeft: '3vh'
   },
-  VIDEO_STATS: {
+  videoStats: {
     display: 'flex',
     justifyContent: 'space-between'
   },
-  VIEWS: {
-    marginTop: '2vh'
+  views: {
+    marginTop: '2vh',
+    marginLeft: '1vw'
   },
-  SPACER: {
+  spacer: {
     marginRight: '3vh'
   },
-  VIDEO_INFO: {
+  videoInfo: {
     display: 'grid',
     gridTemplateColumns: '10% 70% 20%',
     marginTop: '3vh',
-    marginBottom: '3vh'
+    marginBottom: '3vh',
+    marginLeft: '1vw'
   },
-  AVATAR: {
+  avatar: {
     height: '8vh',
     width: '8vh'
   },
-  SUB_BUTTON: {
+  subButton: {
     backgroundColor: '#FF0000',
     color: '#FFFFFF',
     height: '6.5vh'
   },
-  FLEX_ROW: {
+  flexRow: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: '2vh'
+    marginTop: '2vh',
+    marginLeft: '1vw'
   },
-  INPUT: {
-    fontSize: '13px'
+  input: {
+    fontSize: '13px',
+    color: theme.palette.text.primary
   },
-  COMMENT_BLOCK: {
-    marginBottom: '5vh'
+  commentBlock: {
+    marginBottom: '5vh',
+    marginLeft: '1.5vw'
   },
-  COMMENT_BUTTONS: {
+  commentButtons: {
     display: 'flex',
     justifyContent: 'flex-end',
     marginBottom: '3vh',
     marginTop: '1vh'
   },
-  COMMENT_INFO: {
+  submitCommentButton: {
+    color: theme.palette.text.primary
+  },
+  commentInfo: {
     display: 'flex',
     alignItems: 'center'
   },
-  COMMENT_FLEX_COL: {
+  commentFlexCol: {
     display: 'flex',
     flexDirection: 'column'
   },
-  REPLY_BUTTON: {
+  replyButton: {
     marginLeft: '7vh'
   },
-  SMALL_AVATAR: {
+  smallAvatar: {
     height: '4vh',
     width: '4vh',
     marginRight: '3vh'
   },
-  SUB_COMMENT_BLOCK: {
+  subCommentBlock: {
     marginLeft: '10vh'
   },
-  LINK: {
+  link: {
     textDecoration: 'none'
-  },
-  PLAY_PAUSE: {
-    backgroundColor: 'white',
-    color: 'black',
-    borderRadius: '50%'
   }
-}
+})
 
-const duration = 500
-
-const playPauseDefaultStyle = {
-  position: 'absolute',
-  top: '50vh',
-  left: '30vw',
-  transform: 'scale(2.0)',
-  opacity: '0',
-  transition: `all ${duration}ms ease-in-out`
-}
-
-const playPauseTransitionStyles = {
-  entering: { opacity: 0.5, transform: 'scale(2.0)' },
-  entered: { opacity: 0.5, transform: 'scale(4.0)' },
-  exiting: { opacity: 0, transform: 'scale(4.0)' },
-  exited: { opacity: 0, transform: 'scale(2.0)' }
-}
-
-const PlayPause = ({ in: inProp, playIcon }) => (
-  <Transition in={inProp} timeout={duration}>
-    {status => (
-      <div
-        style={{
-          ...playPauseDefaultStyle,
-          ...playPauseTransitionStyles[status]
-        }}
-      >
-        {playIcon ? (
-          <PlayIcon style={styles.PLAY_PAUSE} />
-        ) : (
-          <PauseIcon style={styles.PLAY_PAUSE} />
-        )}
-      </div>
-    )}
-  </Transition>
-)
-
-export default ({
+const VideoMain = ({
   videoRef,
   handleVideoClick,
   id,
@@ -156,35 +121,38 @@ export default ({
   resetSubComment,
   createNewSubComment,
   showPlayPause,
-  playIcon
+  playIcon,
+  classes
 }) => (
   <div>
     <PlayPause in={!!showPlayPause} playIcon={playIcon} />
     <video
       src={url}
       controls
-      style={styles.VIDEO}
+      className={classes.video}
       poster={poster}
       ref={videoRef}
       onClick={handleVideoClick}
     />
-    <Typography variant="headline">{title}</Typography>
-    <div style={styles.VIDEO_STATS}>
+    <Typography variant="headline" style={{ marginLeft: '1vw' }}>
+      {title}
+    </Typography>
+    <div className={classes.videoStats}>
       <div>
-        <Typography variant="subheading" style={styles.VIEWS}>
+        <Typography variant="subheading" className={classes.views}>
           {views} views
         </Typography>
       </div>
       <div>
-        <IconButton style={styles.SPACER} onClick={handleThumbsLike}>
+        <IconButton className={classes.spacer} onClick={handleThumbsLike}>
           <ThumbsUpIcon />&nbsp;
           <Typography variant="button">{likes}</Typography>
         </IconButton>
-        <IconButton style={styles.SPACER} onClick={handleThumbsDislike}>
+        <IconButton className={classes.spacer} onClick={handleThumbsDislike}>
           <ThumbsDownIcon />&nbsp;
           <Typography variant="button">{dislikes}</Typography>
         </IconButton>
-        <IconButton style={styles.SPACER}>
+        <IconButton className={classes.spacer} disableRipple>
           <ReplyIcon />
           <Typography variant="button" onClick={handleShareModalOpen}>
             Share
@@ -193,12 +161,12 @@ export default ({
       </div>
     </div>
     <Divider />
-    <div style={styles.VIDEO_INFO}>
+    <div className={classes.videoInfo}>
       <Link to={`/channel/${id}`}>
-        <Avatar src={imageUrl} alt="user" style={styles.AVATAR} />
+        <Avatar src={imageUrl} alt="user" className={classes.avatar} />
       </Link>
       <div>
-        <Link to={`/channel/${id}`} style={styles.LINK}>
+        <Link to={`/channel/${id}`} className={classes.link}>
           <Typography variant="title">{username}</Typography>
         </Link>
         <Typography>Published {timeDifferenceForDate(createdOn)}</Typography>
@@ -206,32 +174,35 @@ export default ({
         <br />
         <Typography>{description}</Typography>
       </div>
-      <Button raised style={styles.SUB_BUTTON}>
+      <Button variant="raised" className={classes.subButton}>
         Subscribe 123
       </Button>
     </div>
     <Divider />
-    <div style={styles.FLEX_ROW}>
+    <div className={classes.flexRow}>
       <Typography variant="subheading">{comments.length} Comments</Typography>
       <Button>Sort By</Button>
     </div>
-    <div style={styles.FLEX_ROW}>
-      <Avatar style={styles.SPACER} src={imageUrl} alt="user" />
+    <div className={classes.flexRow}>
+      <Avatar className={classes.spacer} src={imageUrl} alt="user" />
       <Input
         fullWidth
         value={comment}
         onChange={handleCommentText}
         placeholder="Add a public comment..."
-        style={styles.INPUT}
+        className={classes.input}
       />
     </div>
-    <div style={styles.COMMENT_BUTTONS}>
-      <Button onClick={resetComment}>Cancel</Button>
+    <div className={classes.commentButtons}>
+      <Button variant="flat" disableRipple onClick={resetComment}>
+        Cancel
+      </Button>
       <Button
         disabled={!comment}
         variant="raised"
-        color="primary"
         onClick={createNewComment}
+        className={classes.submitCommentButton}
+        style={{ backgroundColor: comment ? '#2793e6' : '#162B3C' }}
       >
         Comment
       </Button>
@@ -240,11 +211,11 @@ export default ({
       {comments &&
         comments.map((c, i) => {
           return (
-            <div key={`video-comment-${i}`} style={styles.COMMENT_BLOCK}>
-              <div style={styles.COMMENT_INFO}>
-                <Avatar src={c.postedBy.imageUrl} style={styles.SPACER} />
-                <div style={styles.COMMENT_FLEX_COL}>
-                  <div style={styles.COMMENT_INFO}>
+            <div key={`video-comment-${i}`} className={classes.commentBlock}>
+              <div className={classes.commentInfo}>
+                <Avatar src={c.postedBy.imageUrl} className={classes.spacer} />
+                <div className={classes.commentFlexCol}>
+                  <div className={classes.commentInfo}>
                     <Typography variant="body2">
                       {c.postedBy.username}
                     </Typography>&nbsp;&nbsp;
@@ -255,10 +226,9 @@ export default ({
                   <Typography>{c.text}</Typography>
                 </div>
               </div>
-              <div style={styles.COMMENT_INFO}>
+              <div className={classes.commentInfo}>
                 <Button
-                  dense
-                  style={styles.REPLY_BUTTON}
+                  className={classes.replyButton}
                   onClick={() => handleReply(i)}
                 >
                   Reply
@@ -273,25 +243,27 @@ export default ({
               </div>
               {visibleInput === i ? (
                 <div>
-                  <div style={styles.COMMENT_INFO}>
-                    <Avatar src={imageUrl} style={styles.SMALL_AVATAR} />
+                  <div className={classes.commentInfo}>
+                    <Avatar src={imageUrl} className={classes.smallAvatar} />
                     <Input
                       fullWidth
                       value={subComment}
                       onChange={handleSubCommentText}
                       placeholder="Add a public reply..."
-                      style={styles.INPUT}
+                      className={classes.input}
                       name={i}
                     />
                   </div>
-                  <div style={styles.COMMENT_BUTTONS}>
+                  <div className={classes.commentButtons}>
                     <Button onClick={resetSubComment}>Cancel</Button>
                     <Button
                       disabled={!subComment}
                       variant="raised"
-                      dense
                       color="primary"
                       onClick={() => createNewSubComment(c.id)}
+                      style={{
+                        backgroundColor: subComment ? '#2793e6' : '#162B3C'
+                      }}
                     >
                       Reply
                     </Button>
@@ -303,15 +275,15 @@ export default ({
                   return (
                     <div
                       key={`video-sub-comment-${i}-${index}`}
-                      style={styles.SUB_COMMENT_BLOCK}
+                      className={classes.subCommentBlock}
                     >
-                      <div style={styles.FLEX_ROW}>
+                      <div className={classes.flexRow}>
                         <Avatar
                           src={sc.postedBy.imageUrl}
-                          style={styles.SMALL_AVATAR}
+                          className={classes.smallAvatar}
                         />
-                        <div style={styles.COMMENT_FLEX_COL}>
-                          <div style={styles.COMMENT_INFO}>
+                        <div className={classes.commentFlexCol}>
+                          <div className={classes.commentInfo}>
                             <Typography variant="body2">
                               {sc.postedBy.username}
                             </Typography>&nbsp;&nbsp;
@@ -322,7 +294,7 @@ export default ({
                           <Typography>{sc.text}</Typography>
                         </div>
                       </div>
-                      <div style={styles.COMMENT_INFO}>
+                      <div className={classes.commentInfo}>
                         <Typography variant="body2">{sc.likes}</Typography>
                         <IconButton>
                           <ThumbsUpIcon />
@@ -340,3 +312,5 @@ export default ({
     </div>
   </div>
 )
+
+export default withStyles(styles)(VideoMain)
