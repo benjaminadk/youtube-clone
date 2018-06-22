@@ -10,10 +10,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './styles/theme'
 import 'typeface-roboto'
-import firebase from './fire'
-
-const messaging = firebase.messaging()
-messaging.onMessage(payload => console.log('MESSAGE RECEIVED ', payload))
 
 const uri =
   process.env.NODE_ENV === 'production'

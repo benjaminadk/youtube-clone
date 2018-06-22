@@ -15,6 +15,13 @@ import Loading from './components/Loading'
 import Toast from './components/Toast'
 import { VIDEO_LIST_QUERY } from './queries/videoList'
 import { AUTHENTICATE_MUTATION } from './mutations/authenticate'
+import firebase from 'firebase/app'
+import 'firebase/messaging'
+
+const config = {
+  messagingSenderId: '578692223559'
+}
+firebase.initializeApp(config)
 
 const drawerWidth = 240
 
@@ -63,6 +70,9 @@ const styles = theme => ({
 
 class PersistentDrawer extends Component {
   async componentDidMount() {
+    this.messageListener = firebase
+      .messaging()
+      .onMessage(payload => console.log('MESSAGE RECEIVED ', payload))
     const token = localStorage.getItem('TOKEN')
     if (token) {
       let response = await this.props.authenticate({
