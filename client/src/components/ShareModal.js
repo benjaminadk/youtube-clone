@@ -1,13 +1,19 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { ShareButtons, generateShareIcon } from 'react-share'
 import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
+//import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
+//import DialogActions from '@material-ui/core/DialogActions'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
+//import TextField from '@material-ui/core/TextField'
+import FormControl from '@material-ui/core/FormControl'
+import Input from '@material-ui/core/Input'
+import InputAdornment from '@material-ui/core/InputAdornment'
 import Checkbox from '@material-ui/core/Checkbox'
+import Typography from '@material-ui/core/Typography'
+import CodeIcon from '@material-ui/icons/Code'
 import { reverseFormat } from '../utils'
 
 const {
@@ -21,21 +27,60 @@ const FacebookIcon = generateShareIcon('facebook')
 const GooglePlusIcon = generateShareIcon('google')
 const RedditIcon = generateShareIcon('reddit')
 
-const styles = {
-  BUTTONS: {
+const styles = theme => ({
+  buttons: {
     display: 'flex'
   },
-  DIVIDER: {
-    marginTop: '1vh',
-    marginBottom: '1vh'
+  divider: {
+    marginTop: '3vh',
+    marginBottom: '3vh'
   },
-  LINK: {
+  link: {
     cursor: 'pointer',
-    marginRight: '1vh'
+    marginRight: '2vh',
+    borderRadius: '50%',
+    overflow: 'hidden'
+  },
+  formControl: {
+    marginBottom: '3vh'
+  },
+  input: {
+    backgroundColor: theme.palette.background.default,
+    border: `1px solid ${theme.palette.divider}`,
+    padding: '2px 5px'
+  },
+  copy: {
+    color: '#2793e6'
+  },
+  embed: {
+    height: '64px',
+    width: '64px',
+    borderRadius: '50%',
+    backgroundColor: theme.palette.text.primary,
+    color: theme.palette.divider,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    marginRight: '2vh'
+  },
+  names: {
+    display: 'flex'
+  },
+  name: {
+    width: '64px',
+    marginRight: '2vh',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  input2: {
+    color: theme.palette.text.primary
   }
-}
+})
 
-export default ({
+const links = ['Embed', 'Facebook', 'Twitter', 'Google+', 'Reddit']
+
+const ShareModal = ({
   open,
   handleShareModalClose,
   linkToShare,
@@ -46,26 +91,67 @@ export default ({
   checked,
   handleCheckbox,
   handleEmbedModalOpen,
-  handleShareModalTime
+  handleShareModalTime,
+  classes
 }) => (
   <Dialog open={open} onClose={handleShareModalClose} fullWidth>
-    <DialogTitle>Share</DialogTitle>
+    {/*<DialogTitle>Share</DialogTitle>*/}
     <DialogContent>
-      <div style={styles.BUTTONS}>
-        <FacebookShareButton url={linkToShare} style={styles.LINK}>
+      <div className={classes.buttons}>
+        <div className={classes.embed} onClick={handleEmbedModalOpen}>
+          <CodeIcon />
+        </div>
+        <FacebookShareButton url={linkToShare} className={classes.link}>
           <FacebookIcon />
         </FacebookShareButton>
-        <TwitterShareButton url={linkToShare} title={title} style={styles.LINK}>
+        <TwitterShareButton
+          url={linkToShare}
+          title={title}
+          className={classes.link}
+        >
           <TwitterIcon />
         </TwitterShareButton>
-        <GooglePlusShareButton url={linkToShare} style={styles.LINK}>
+        <GooglePlusShareButton url={linkToShare} className={classes.link}>
           <GooglePlusIcon />
         </GooglePlusShareButton>
-        <RedditShareButton url={linkToShare} title={title} style={styles.LINK}>
+        <RedditShareButton
+          url={linkToShare}
+          title={title}
+          className={classes.link}
+        >
           <RedditIcon />
         </RedditShareButton>
       </div>
-      <Divider style={styles.DIVIDER} />
+      <div className={classes.names}>
+        {links.map(l => (
+          <Typography key={l} variant="body2" className={classes.name}>
+            {l}
+          </Typography>
+        ))}
+      </div>
+
+      <Divider className={classes.divider} />
+      <FormControl id="link-text" className={classes.formControl} fullWidth>
+        <Input
+          value={
+            checked
+              ? `${linkToShare}?time=${reverseFormat(currentTimeString)}`
+              : linkToShare
+          }
+          onChange={onChange}
+          fullWidth
+          disabled
+          className={classes.input}
+          endAdornment={
+            <InputAdornment position="end">
+              <Button className={classes.copy} onClick={onCopy}>
+                Copy
+              </Button>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
+      {/*
       <TextField
         id="link-text"
         value={
@@ -75,26 +161,30 @@ export default ({
         }
         onChange={onChange}
         fullWidth
-      />
+        disabled
+      />*/}
       <div>
-        <p>Specific Time</p>
+        <Typography variant="body2">Specific Time</Typography>
         <Checkbox checked={checked} onChange={handleCheckbox} />
-        <TextField
+        <Input
           value={currentTimeString}
           onChange={handleShareModalTime}
           disabled={checked ? false : true}
+          className={classes.input2}
         />
       </div>
 
-      <Divider style={styles.DIVIDER} />
+      {/*<Divider className={classes.divider} />*/}
     </DialogContent>
-    <DialogActions>
+    {/*<DialogActions>
       <Button variant="raised" color="primary" onClick={handleEmbedModalOpen}>
         Embed
       </Button>
       <Button variant="raised" color="primary" onClick={onCopy}>
         Copy
-      </Button>
-    </DialogActions>
+    </Button>
+    </DialogActions>*/}
   </Dialog>
 )
+
+export default withStyles(styles)(ShareModal)

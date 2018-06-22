@@ -8,7 +8,7 @@ import { ApolloLink, concat } from 'apollo-link'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { MuiThemeProvider } from '@material-ui/core/styles'
-import theme from './theme'
+import theme from './styles/theme'
 import 'typeface-roboto'
 import firebase from './fire'
 
@@ -21,7 +21,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      authorization: window.localStorage.getItem('TOKEN') || null
+      authorization: localStorage.getItem('TOKEN') || null
     }
   }))
   return forward(operation)

@@ -113,17 +113,19 @@ module.exports = {
           notification: {
             title: `${currentUser.username} Liked Your Video`,
             body: `"${currentVideo.title}" now has ${currentVideo.likes +
-              1} likes`,
-            click_action: `https://youtube-clone-benjaminadk.c9users.io/video/${videoId}`,
-            icon:
-              'https://s3-us-west-1.amazonaws.com/youtube-clone-assets/icon.png'
-          }
+              1} likes`
+            // clickAction: `http://localhost:3000/video/${videoId}`,
+            // icon:
+            //   'https://s3-us-west-1.amazonaws.com/youtube-clone-assets/icon.png'
+          },
+          token: user.fcm
         }
-        const registrationToken = user.fcm
-        const response = await admin
-          .messaging()
-          .sendToDevice(registrationToken, payload)
-        console.log('MESSAGE SENT', response)
+        try {
+          const response = await admin.messaging().send(payload)
+          console.log('MESSAGE SENT', response)
+        } catch (error) {
+          console.log(error)
+        }
       }
       return currentVideo
     },

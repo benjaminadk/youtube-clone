@@ -1,18 +1,18 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import Dropzone from 'react-dropzone'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 
-const styles = {
-  CONTAINER: {
+const styles = theme => ({
+  root: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: 'lightgrey',
-    height: '89vh'
+    height: '95vh'
   },
-  DROPZONE: {
+  dropzone: {
     backgroundColor: 'white',
     border: 'none',
     height: '60vh',
@@ -23,17 +23,23 @@ const styles = {
     alignItems: 'center',
     cursor: 'pointer'
   },
-  IMAGE: {
+  image: {
     margin: '15vh auto 3vh',
     height: '14vh',
     width: '10vw'
+  },
+  upload: {
+    width: '50vw',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main
+    }
   }
-}
+})
 
-export default ({ onDrop, file, handleUpload }) => (
-  <div style={styles.CONTAINER}>
+const UploadDropzone = ({ onDrop, file, handleUpload, classes }) => (
+  <div className={classes.root}>
     <Dropzone
-      style={styles.DROPZONE}
+      className={classes.dropzone}
       accept="video/webm"
       multiple={false}
       onDrop={onDrop}
@@ -41,17 +47,37 @@ export default ({ onDrop, file, handleUpload }) => (
       <img
         src="https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg"
         alt="upload"
-        style={styles.IMAGE}
+        className={classes.image}
       />
-      <Typography type="headline">Select files to upload</Typography>
+      <Typography variant="title" color="inherit">
+        Select files to upload
+      </Typography>
       <br />
-      <Typography>Or drag and drop video files</Typography>
-      {file && <Typography>File: {file.name}</Typography>}
+      <Typography variant="title" color="inherit">
+        Or drag and drop video files
+      </Typography>
+      {file && (
+        <Typography
+          variant="body2"
+          color="inherit"
+          style={{ marginTop: '2vh' }}
+        >
+          File: {file.name}
+        </Typography>
+      )}
     </Dropzone>
     {file && (
-      <Button variant="raised" color="primary" onClick={handleUpload}>
+      <Button
+        variant="raised"
+        color="secondary"
+        size="large"
+        className={classes.upload}
+        onClick={handleUpload}
+      >
         Upload
       </Button>
     )}
   </div>
 )
+
+export default withStyles(styles)(UploadDropzone)

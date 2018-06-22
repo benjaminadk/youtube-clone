@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
 import axios from 'axios'
 import UploadDropzone from '../components/UploadDropzone'
@@ -7,6 +6,11 @@ import UploadDetails from '../components/UploadDetails'
 import { VIDEO_LIST_QUERY } from '../queries/videoList'
 import { CURRENT_USER_QUERY } from '../queries/currentUser'
 import { USER_PLAYLIST_QUERY } from '../queries/userPlaylist'
+import { CREATE_VIDEO_MUTATION } from '../mutations/createVideo'
+import { CREATE_EMPTY_PLAYLIST_MUTATION } from '../mutations/createEmptyPlaylist'
+import { ADD_TO_PLAYLIST_MUTATION } from '../mutations/addToPlaylist'
+import { S3_SIGN_MUTATION } from '../mutations/s3Sign'
+import { S3_SIGN_POSTER_MUTATION } from '../mutations/s3SignPoster'
 
 class Upload extends Component {
   state = {
@@ -82,8 +86,8 @@ class Upload extends Component {
       variables: { filename, filetype }
     })
     const { requestUrl, posterUrl } = response.data.s3SignPoster
-    await this.setState({ poster: posterUrl })
     await this.uploadToS3(posterFile, requestUrl)
+    await this.setState({ poster: posterUrl })
   }
 
   handleVideo = async () => {
@@ -288,53 +292,11 @@ class Upload extends Component {
   }
 }
 
-const S3_SIGN_MUTATION = gql`
-  mutation($filename: String!, $filetype: String!) {
-    s3Sign(filename: $filename, filetype: $filetype) {
-      requestUrl
-      videoUrl
-    }
-  }
-`
-
-const CREATE_VIDEO_MUTATION = gql`
-  mutation($input: VideoInput) {
-    createVideo(input: $input) {
-      id
-    }
-  }
-`
-
-const S3_SIGN_POSTER_MUTATION = gql`
-  mutation($filename: String!, $filetype: String!) {
-    s3SignPoster(filename: $filename, filetype: $filetype) {
-      requestUrl
-      posterUrl
-    }
-  }
-`
-
-const CREATE_EMPTY_PLAYLIST_MUTATION = gql`
-  mutation($title: String!) {
-    createEmptyPlaylist(title: $title) {
-      id
-    }
-  }
-`
-
-const ADD_VIDEO_TO_PLAYLIST_MUTATION = gql`
-  mutation($playlistId: ID!, $videoId: ID!, $add: Boolean!) {
-    addVideoToPlaylist(playlistId: $playlistId, videoId: $videoId, add: $add) {
-      id
-    }
-  }
-`
-
 export default compose(
   graphql(S3_SIGN_MUTATION, { name: 's3Sign' }),
   graphql(S3_SIGN_POSTER_MUTATION, { name: 's3SignPoster' }),
   graphql(CREATE_VIDEO_MUTATION, { name: 'createVideo' }),
   graphql(CREATE_EMPTY_PLAYLIST_MUTATION, { name: 'createEmptyPlaylist' }),
-  graphql(ADD_VIDEO_TO_PLAYLIST_MUTATION, { name: 'addVideoToPlaylist' }),
+  graphql(ADD_TO_PLAYLIST_MUTATION, { name: 'addVideoToPlaylist' }),
   graphql(USER_PLAYLIST_QUERY)
 )(Upload)

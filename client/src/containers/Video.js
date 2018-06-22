@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { graphql, compose } from 'react-apollo'
 import ShareModal from '../components/ShareModal'
 import Snackbar from '@material-ui/core/Snackbar'
@@ -9,6 +10,7 @@ import { formatTime } from '../utils'
 import IconButton from '@material-ui/core/IconButton'
 import VideoMain from '../components/VideoMain'
 import VideoList from '../components/VideoList'
+import Loading from '../components/Loading'
 import { USER_PLAYLIST_QUERY } from '../queries/userPlaylist'
 import { VIDEO_LIST_QUERY } from '../queries/videoList'
 import { ADD_TO_PLAYLIST_MUTATION } from '../mutations/addToPlaylist'
@@ -21,13 +23,13 @@ import { ADD_DISLIKE_MUTATION } from '../mutations/addDislike'
 import { ADD_LIKE_MUTATION } from '../mutations/addLike'
 import { ADD_VIEW_MUTATION } from '../mutations/addView'
 
-const styles = {
-  CONTAINER: {
+const styles = theme => ({
+  container: {
     marginTop: '3vh',
     display: 'grid',
     gridTemplateColumns: '67% 33%'
   }
-}
+})
 
 class Video extends Component {
   state = {
@@ -49,19 +51,38 @@ class Video extends Component {
   }
 
   componentDidMount() {
+    // set duration in the background
+    setTimeout(this.handleSetDuration, 3000)
     this.handleAddView()
-    setTimeout(this.handleTimeQuery, 2500)
     this.setState({
       linkToShare: `http://localhost${this.props.location.pathname}`
     })
-    setTimeout(this.handleSetDuration, 3000)
-    setTimeout(this.createChecks, 2000)
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // set duration on new video once it is played since videoId is different
     if (prevProps.match.params.videoId !== this.props.match.params.videoId) {
       this.handleAddView()
       setTimeout(this.handleSetDuration, 3000)
+    }
+
+    // set current time of video by parsing url params
+    if (
+      (prevProps.videoList.loading ||
+        prevProps.playlists.loading ||
+        prevProps.data.loading) &&
+      this.videoElement &&
+      this.props.location.search !== ''
+    ) {
+      this.handleTimeQuery()
+    }
+    // creating check boxes relies on playlists and videos being loaded
+    if (
+      (prevProps.videoList.loading || prevProps.playlists.loading) &&
+      this.props.videoList.getVideoList &&
+      this.props.playlists.getUserPlaylists
+    ) {
+      this.createChecks()
     }
   }
 
@@ -102,11 +123,14 @@ class Video extends Component {
   }
 
   handleThumbs = async control => {
+    //likes and dislikes need to be from user not owner
     const likesArray = this.props.data.getVideoById.owner.likes
     const dislikesArray = this.props.data.getVideoById.owner.dislikes
     const { videoId } = this.props.match.params
     const likedId = likesArray.find(l => l === videoId)
     const dislikedId = dislikesArray.find(d => d === videoId)
+    console.log('likes', likesArray)
+    console.log(videoId)
     if (!dislikedId && !likedId) {
       if (control === 'like') {
         let remove = false
@@ -242,7 +266,7 @@ class Video extends Component {
     await this.setState({ showPlayPause: !this.state.showPlayPause })
     await setTimeout(
       () => this.setState({ showPlayPause: !this.state.showPlayPause }),
-      500
+      250
     )
     await this.setState({ playIcon: !this.state.playIcon })
   }
@@ -305,10 +329,12 @@ class Video extends Component {
     const {
       data: { loading, getVideoById },
       videoList: { getVideoList },
-      playlists: { getUserPlaylists }
+      playlists: { getUserPlaylists },
+      classes
     } = this.props
-    const videoListLoading = this.props.videoList.loading
-    if (loading || videoListLoading) return null
+    const loading2 = this.props.videoList.loading
+    const loading3 = this.props.playlists.loading
+    if (loading || loading2 || loading3) return <Loading />
     const {
       title,
       description,
@@ -323,7 +349,7 @@ class Video extends Component {
     } = getVideoById
     const { id, username, imageUrl } = owner
     return [
-      <div key="video-main-page" style={styles.CONTAINER}>
+      <div key="video-main-page" className={classes.container}>
         <VideoMain
           videoRef={video => {
             this.videoElement = video
@@ -413,6 +439,7 @@ class Video extends Component {
 }
 
 export default compose(
+  withStyles(styles),
   graphql(ADD_VIEW_MUTATION, { name: 'addView' }),
   graphql(ADD_LIKE_MUTATION, { name: 'addLike' }),
   graphql(ADD_DISLIKE_MUTATION, { name: 'addDislike' }),

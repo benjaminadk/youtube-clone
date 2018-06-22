@@ -1,21 +1,23 @@
 import React from 'react'
-import { graphql } from 'react-apollo'
-import { ALL_USERS_QUERY } from '../queries/allUsers'
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
-const Home = ({ data: { loading, allUsers } }) => {
-  if (loading) return null
+const styles = theme => ({
+  root: {
+    marginTop: '5vh',
+    height: '90vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})
+
+const Home = ({ classes }) => {
   return (
-    <div>
-      {allUsers.map(u => (
-        <div key={`home-${u.username}`}>
-          <h3>{u.username}</h3>
-          <h3>{u.email}</h3>
-          <h3>{u.createdOn}</h3>
-          <img src={u.imageUrl} alt={u.id} />
-        </div>
-      ))}
+    <div className={classes.root}>
+      <Typography variant="display3">YouTube Clone Tutorial</Typography>
     </div>
   )
 }
 
-export default graphql(ALL_USERS_QUERY)(Home)
+export default withStyles(styles)(Home)
