@@ -15,7 +15,11 @@ import firebase from './fire'
 const messaging = firebase.messaging()
 messaging.onMessage(payload => console.log('MESSAGE RECEIVED ', payload))
 
-const httpLink = new HttpLink({ uri: 'http://localhost:3001/graphql' })
+const uri =
+  process.env.NODE_ENV === 'production'
+    ? 'https://fake-youtube.herokuapp.com'
+    : 'http://localhost:3001/graphql'
+const httpLink = new HttpLink({ uri })
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
