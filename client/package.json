@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.0.0-beta.51",
     "@material-ui/core": "^1.2.3",
     "@material-ui/icons": "^1.1.0",
     "apollo-cache-inmemory": "^1.1.1",
@@ -14,7 +13,6 @@
     "axios": "^0.17.1",
     "babel-core": "^6.26.3",
     "country-list": "^1.1.0",
-    "cra-append-sw": "^2.5.0",
     "downshift": "^2.0.6",
     "firebase": "^5.1.0",
     "graphql": "^0.11.7",
@@ -33,7 +31,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cra-append-sw ./firebase-messaging-sw.js",
+    "build": "react-scripts build ",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
