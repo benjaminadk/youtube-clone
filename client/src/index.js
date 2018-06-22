@@ -17,7 +17,7 @@ messaging.onMessage(payload => console.log('MESSAGE RECEIVED ', payload))
 
 const uri =
   process.env.NODE_ENV === 'production'
-    ? 'https://fake-youtube.herokuapp.com'
+    ? 'https://fake-youtube.herokuapp.com/graphql'
     : 'http://localhost:3001/graphql'
 const httpLink = new HttpLink({ uri })
 
