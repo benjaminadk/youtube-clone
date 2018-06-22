@@ -1,14 +1,28 @@
-// importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js')
-// importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js')
+importScripts('/__/firebase/5.0.0/firebase-app.js')
+importScripts('/__/firebase/5.0.0/firebase-messaging.js')
+importScripts('/__/firebase/init.js')
 
-// firebase.initializeApp({
-//   messagingSenderId: '578692223559'
-// })
+var messaging = firebase.messaging()
 
-// const messaging = firebase.messaging()
-// messaging.onMessage(payload => console.log('MESSAGE RECEIVED ', payload))
-// messaging.setBackgroundMessageHandler(function(payload) {
-//   console.log('FIREBASE MESSAGE ', payload)
+firebase.initializeApp({
+  messagingSenderId: '578692223559'
+})
 
-//   return self.registration.showNotification()
+const messaging = firebase.messaging()
+
+messaging.setBackgroundMessageHandler(function(payload) {
+  console.log(
+    '[firebase-messaging-sw.js] Received background message ',
+    payload
+  )
+  var notificationTitle = 'Background Message Title'
+  var notificationOptions = {
+    body: 'Background Message body.',
+    icon: '/firebase-logo.png'
+  }
+
+  return self.registration.showNotification(
+    notificationTitle,
+    notificationOptions
+  )
 })
