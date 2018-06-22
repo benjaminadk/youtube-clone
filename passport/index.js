@@ -10,7 +10,7 @@ const googleOauth = new GoogleStrategy(
   {
     clientID: keys.googleClientId,
     clientSecret: keys.googleClientSecret,
-    callbackURL: 'http://localhost:3001/auth/google/callback',
+    callbackURL: key.googleCallback,
     passRequestToCallback: true
   },
   async (request, accessToken, refreshToken, profile, done) => {
@@ -65,12 +65,12 @@ const googleScope = passport.authenticate('google', {
 })
 
 const googleCallback = passport.authenticate('google', {
-  failureRedirect: 'http://localhost:3000',
+  failureRedirect: keys.googleFailureRedirect,
   session: false
 })
 
 const googleRedirect = (req, res) => {
-  res.redirect(`http://localhost:3000/user/${userId}`)
+  res.redirect(`${keys.googleRedirect}${userId}`)
 }
 
 module.exports = {
