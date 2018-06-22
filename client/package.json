@@ -2,11 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": {
-    "/auth/*": {
-      "target": "http://localhost:3001"
-    }
-  },
   "dependencies": {
     "@material-ui/core": "^1.2.3",
     "@material-ui/icons": "^1.1.0",
@@ -18,7 +13,7 @@
     "axios": "^0.17.1",
     "country-list": "^1.1.0",
     "downshift": "^2.0.6",
-    "firebase": "^4.6.2",
+    "firebase": "^5.1.0",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
     "moment": "^2.19.2",

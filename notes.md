@@ -1,7 +1,4 @@
-VID 51
-
-how to create new playlist before video is saved
-- IDEAS
-    1. make a new query
-    2. update existing query to have boolean for firstVideo - [] option
-    3. somehow insert a visual placeholder and save when video is saved
+- add toast when upload completes
+- add try catches to resolvers
+- change payloads on some resolvers to success booleans
+- check in front end and show appropriate feedback in toast

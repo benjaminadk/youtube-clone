@@ -123,11 +123,14 @@ class Video extends Component {
   }
 
   handleThumbs = async control => {
+    //likes and dislikes need to be from user not owner
     const likesArray = this.props.data.getVideoById.owner.likes
     const dislikesArray = this.props.data.getVideoById.owner.dislikes
     const { videoId } = this.props.match.params
     const likedId = likesArray.find(l => l === videoId)
     const dislikedId = dislikesArray.find(d => d === videoId)
+    console.log('likes', likesArray)
+    console.log(videoId)
     if (!dislikedId && !likedId) {
       if (control === 'like') {
         let remove = false

@@ -265,6 +265,14 @@
 
 #### Resources
 
+```
+   "proxy": {
+     "/auth/*": {
+       "target": "http://localhost:3001"
+     }
+   },
+```
+
 - **_Upload Background_**
   - https://s3-us-west-1.amazonaws.com/youtube-clone-assets/upload-background.svg
 - **_YTC Notification Logo_**

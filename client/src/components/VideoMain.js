@@ -187,7 +187,11 @@ const VideoMain = ({
       <Button>Sort By</Button>
     </div>
     <div className={classes.flexRow}>
-      <Avatar className={classes.spacer} src={imageUrl} alt="user" />
+      <Avatar
+        className={classes.spacer}
+        src={localStorage.getItem('AVATAR')}
+        alt="user"
+      />
       <Input
         fullWidth
         value={comment}
