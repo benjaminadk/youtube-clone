@@ -10,7 +10,7 @@ const googleOauth = new GoogleStrategy(
   {
     clientID: keys.googleClientId,
     clientSecret: keys.googleClientSecret,
-    callbackURL: key.googleCallback,
+    callbackURL: keys.googleCallback,
     passRequestToCallback: true
   },
   async (request, accessToken, refreshToken, profile, done) => {
