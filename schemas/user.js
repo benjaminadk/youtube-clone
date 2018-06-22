@@ -30,6 +30,11 @@ module.exports = `
         country: String
         links: String
     }
+
+    type LoginPayload {
+        success: Boolean
+        message: String
+    }
     
     type Query {
         getUserById(userId: ID!): User
@@ -38,6 +43,7 @@ module.exports = `
     }
     
     type Mutation {
+        authenticate(token: String): LoginPayload
         getFcmToken(fcmToken: String!): User
         s3SignBanner(filename: String!, filetype: String!): S3Banner
         addBanner(bannerUrl: String!): User

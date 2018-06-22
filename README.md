@@ -251,8 +251,17 @@
 
 - upgraded to Material-UI v1 (was beta)
 - refactor around breaking changes
+  - different prop names for MUI components - `onClose` vs `onRequestClose` for modals, menus
+  - use or `variant` instead of `type` props typography
+  - covert inline style props to className using MUI's `withStyles` component
+  - work with theme creation
 - upgraded React and ReactDOM
 - refactored backend - removed babel and thus `import` statements
+  - use CommonJs `require` statements
+  - no great advantage and an extract build step with babel
+- added aws credentials to resolver files in aws s3 instansiation
+  - credentials go into `dev.js` now
+- fixing small bugs
 
 #### Resources
 
@@ -313,12 +322,14 @@
 
 - **_Firebase Cloud Messaging_**
 - Frontend
+
   - `npm install -S firebase` in client directory
   - create `firebase-messaging-sw.js` in client/src/public
   - add `"gcm_sender_id": "103953800507"` to `manifest.json` - number is universal
   - create `fire.js` with config information in client/src
   - import config into your root javascript file - webpack will bundle
   - **_Example fire.js_**
+
     ```
     import firebase from 'firebase'
 
@@ -328,6 +339,7 @@
 
     export default firebase.initializeApp(config)
     ```
+
 - Backend
   - `npm install -S firebase-admin` in root directory
   - firebase settings - Firebase Admin SDK - Generate New Private Key
@@ -335,21 +347,20 @@
   - keeping privateKey hidden is important
   - **_Example firebase/index.js_**
 
+```
+import admin from 'firebase-admin'
+import keys from '../config/keys'
 
-  ```
-  import admin from 'firebase-admin'
-  import keys from '../config/keys'
-
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: "<your project id>",
-      clientEmail: "<your firebase email>",
-      privateKey: keys.firebaseKey
-    })
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: "<your project id>",
+    clientEmail: "<your firebase email>",
+    privateKey: keys.firebaseKey
   })
+})
 
-  console.log('FIREBASE INITIALIZED')
-  ```
+console.log('FIREBASE INITIALIZED')
+```
 
 #### Important Links
 

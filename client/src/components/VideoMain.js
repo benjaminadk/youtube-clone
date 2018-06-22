@@ -41,9 +41,11 @@ const styles = theme => ({
     width: '8vh'
   },
   subButton: {
-    backgroundColor: '#FF0000',
     color: '#FFFFFF',
-    height: '6.5vh'
+    height: '6.5vh',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main
+    }
   },
   flexRow: {
     display: 'flex',
@@ -152,12 +154,13 @@ const VideoMain = ({
           <ThumbsDownIcon />&nbsp;
           <Typography variant="button">{dislikes}</Typography>
         </IconButton>
-        <IconButton className={classes.spacer} disableRipple>
-          <ReplyIcon />
-          <Typography variant="button" onClick={handleShareModalOpen}>
-            Share
-          </Typography>
-        </IconButton>
+        <Button
+          className={classes.spacer}
+          onClick={handleShareModalOpen}
+          disableRipple
+        >
+          <ReplyIcon /> Share
+        </Button>
       </div>
     </div>
     <Divider />
@@ -174,7 +177,7 @@ const VideoMain = ({
         <br />
         <Typography>{description}</Typography>
       </div>
-      <Button variant="raised" className={classes.subButton}>
+      <Button variant="raised" color="secondary" className={classes.subButton}>
         Subscribe 123
       </Button>
     </div>

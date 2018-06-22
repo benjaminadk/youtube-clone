@@ -6,7 +6,6 @@ import PlayIcon from '@material-ui/icons/PlayCircleFilled'
 
 const styles = theme => ({
   playPause: {
-    backgroundColor: 'white',
     color: 'black',
     borderRadius: '50%',
     border: '5px solid black'
@@ -19,13 +18,15 @@ const playPauseDefaultStyle = {
   left: '30vw',
   transform: 'scale(2.0)',
   opacity: '0',
-  transition: `all ${duration}ms ease-in-out`
+  transition: `all ${duration}ms ease-in-out`,
+  backgroundColor: 'grey',
+  cursor: 'pointer'
 }
 
 const playPauseTransitionStyles = {
   entering: { opacity: 0.5, transform: 'scale(2.0)' },
-  entered: { opacity: 0.5, transform: 'scale(4.0)' },
-  exiting: { opacity: 0, transform: 'scale(4.0)' },
+  entered: { opacity: 0, transform: 'scale(4.0)' },
+  exiting: { opacity: 0.5, transform: 'scale(4.0)' },
   exited: { opacity: 0, transform: 'scale(2.0)' }
 }
 

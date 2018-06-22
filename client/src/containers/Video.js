@@ -10,6 +10,7 @@ import { formatTime } from '../utils'
 import IconButton from '@material-ui/core/IconButton'
 import VideoMain from '../components/VideoMain'
 import VideoList from '../components/VideoList'
+import Loading from '../components/Loading'
 import { USER_PLAYLIST_QUERY } from '../queries/userPlaylist'
 import { VIDEO_LIST_QUERY } from '../queries/videoList'
 import { ADD_TO_PLAYLIST_MUTATION } from '../mutations/addToPlaylist'
@@ -50,19 +51,38 @@ class Video extends Component {
   }
 
   componentDidMount() {
+    // set duration in the background
+    setTimeout(this.handleSetDuration, 3000)
     this.handleAddView()
-    setTimeout(this.handleTimeQuery, 2500)
     this.setState({
       linkToShare: `http://localhost${this.props.location.pathname}`
     })
-    setTimeout(this.handleSetDuration, 3000)
-    setTimeout(this.createChecks, 2000)
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // set duration on new video once it is played since videoId is different
     if (prevProps.match.params.videoId !== this.props.match.params.videoId) {
       this.handleAddView()
       setTimeout(this.handleSetDuration, 3000)
+    }
+
+    // set current time of video by parsing url params
+    if (
+      (prevProps.videoList.loading ||
+        prevProps.playlists.loading ||
+        prevProps.data.loading) &&
+      this.videoElement &&
+      this.props.location.search !== ''
+    ) {
+      this.handleTimeQuery()
+    }
+    // creating check boxes relies on playlists and videos being loaded
+    if (
+      (prevProps.videoList.loading || prevProps.playlists.loading) &&
+      this.props.videoList.getVideoList &&
+      this.props.playlists.getUserPlaylists
+    ) {
+      this.createChecks()
     }
   }
 
@@ -243,7 +263,7 @@ class Video extends Component {
     await this.setState({ showPlayPause: !this.state.showPlayPause })
     await setTimeout(
       () => this.setState({ showPlayPause: !this.state.showPlayPause }),
-      500
+      250
     )
     await this.setState({ playIcon: !this.state.playIcon })
   }
@@ -309,8 +329,9 @@ class Video extends Component {
       playlists: { getUserPlaylists },
       classes
     } = this.props
-    const videoListLoading = this.props.videoList.loading
-    if (loading || videoListLoading) return null
+    const loading2 = this.props.videoList.loading
+    const loading3 = this.props.playlists.loading
+    if (loading || loading2 || loading3) return <Loading />
     const {
       title,
       description,

@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { graphql, compose } from 'react-apollo'
-import { Auth } from '../utils'
+import { Auth } from '../utils/routing'
 import Button from '@material-ui/core/Button'
-import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-import CloseIcon from '@material-ui/icons/Close'
+import Loading from '../components/Loading'
+import Toast from '../components/Toast'
 import firebase from 'firebase'
 import { USER_BY_ID_QUERY } from '../queries/userById'
 import { FCM_TOKEN_MUTATION } from '../mutations/fcmToken'
 
 const styles = theme => ({
   root: {
-    marginTop: '5vh'
+    marginTop: '5vh',
+    height: '95vh'
   }
 })
 
@@ -47,15 +47,15 @@ class UserLanding extends Component {
       data: { loading, getUserById },
       classes
     } = this.props
-    if (loading) return null
+    if (loading) return <Loading />
     const { username, email, imageUrl, jwt, fcmToken } = getUserById
     if (username) Auth.authenticate()
     localStorage.setItem('TOKEN', jwt)
     localStorage.setItem('AVATAR', imageUrl)
     localStorage.setItem('USERNAME', username)
     localStorage.setItem('EMAIL', email)
-    return (
-      <div className={classes.root}>
+    return [
+      <div key="main" className={classes.root}>
         <Typography variant="title">
           Hey {username}. Welcome to You Tube Clone
         </Typography>
@@ -73,21 +73,14 @@ class UserLanding extends Component {
             someone likes one of your videos
           </Typography>
         )}
-
-        <Snackbar
-          open={this.state.fcmTokenSnackbar}
-          onRequestClose={this.handleFcmSnackbarClose}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          autoHideDuration={8000}
-          message={<span>Current Notification Token Saved</span>}
-          action={
-            <IconButton onClick={this.handleFcmSnackbarClose} color="inherit">
-              <CloseIcon />
-            </IconButton>
-          }
-        />
-      </div>
-    )
+      </div>,
+      <Toast
+        key="snackbar"
+        open={this.state.fcmTokenSnackbar}
+        onClose={this.handleFcmSnackbarClose}
+        message="Current Notification Token Saved"
+      />
+    ]
   }
 }
 

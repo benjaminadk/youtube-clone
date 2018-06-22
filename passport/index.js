@@ -30,10 +30,11 @@ const googleOauth = new GoogleStrategy(
 
       const token = jwt.sign(
         {
-          id: savedUser._id
+          id: savedUser._id,
+          username: savedUser.username
         },
         keys.jwtSecret,
-        { expiresIn: '7d' }
+        { expiresIn: '30d' }
       )
       savedUser.jwt = token
       await savedUser.save()
@@ -44,10 +45,11 @@ const googleOauth = new GoogleStrategy(
     const newToken = jwt.sign(
       {
         id: user._id,
+        username: user.username,
         fcm: user.fcmToken
       },
       keys.jwtSecret,
-      { expiresIn: '7d' }
+      { expiresIn: '30d' }
     )
     user.jwt = newToken
     await user.save()

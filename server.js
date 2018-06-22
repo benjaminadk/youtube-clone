@@ -18,7 +18,7 @@ const cors = require('cors')
 const path = require('path')
 require('./models/connect')
 const models = require('./models')
-const { checkAuthHeaders } = require('./middleware')
+const { checkAuthHeaders } = require('./middleware/checkAuthHeaders')
 const keys = require('./config')
 require('./firebase')
 

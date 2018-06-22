@@ -1,25 +1,16 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import TextField from '@material-ui/core/TextField'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
-import Popover from '@material-ui/core/Popover'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import Checkbox from '@material-ui/core/Checkbox'
-import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
-import Input from '@material-ui/core/Input'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import FormControl from '@material-ui/core/FormControl'
-import PublicIcon from '@material-ui/icons/Public'
-import SearchIcon from '@material-ui/icons/Search'
 import PlaylistIcon from '@material-ui/icons/VideoLibrary'
 import Dropzone from 'react-dropzone'
+import UploadPopover from './UploadPopover'
 
-const styles = {
-  CONTAINER: {
+const styles = theme => ({
+  container: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
@@ -27,7 +18,7 @@ const styles = {
     backgroundColor: 'lightgrey',
     height: '89vh'
   },
-  GRID: {
+  grid: {
     display: 'grid',
     gridTemplateColumns: '20% 80%',
     backgroundColor: 'white',
@@ -35,57 +26,60 @@ const styles = {
     width: '75vw',
     marginTop: '3vh'
   },
-  LEFT_COLUMN: {
+  leftColumn: {
     display: 'flex',
     flexDirection: 'column',
     height: '70vh',
     width: '15vw'
   },
-  RIGHT_COLUMN: {
+  rightColumn: {
     display: 'flex',
     flexDirection: 'column'
   },
-  PUB_PROG_CONTAINER: {
+  pubProgContainer: {
     display: 'flex',
     justifyContent: 'flex-end',
     marginTop: '3vh'
   },
-  PROGRESS: {
+  progress: {
     height: '4vh',
     width: '50vw',
     marginRight: '5vh'
   },
-  PUBLISH: {
+  text: {
+    color: theme.palette.background.default
+  },
+  publish: {
     height: '3vh',
     marginRight: '5vh'
   },
-  THUMBNAIL: {
+  thumbnail: {
     flexShrink: 0,
     maxWidth: '100%',
     maxHeight: '100%'
   },
-  SUB_GRID: {
+  subGrid: {
     display: 'grid',
     gridTemplateColumns: '60% 40%'
   },
-  SUB_LEFT: {
+  subLeft: {
     display: 'flex',
     flexDirection: 'column',
     padding: '3vh'
   },
-  SUB_RIGHT: {
+  subRight: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
   },
-  TEXT_INPUT: {
+  textInput: {
     marginBottom: '4vh'
   },
-  PADDING_LEFT: {
+  paddingLeft: {
     paddingLeft: '3vh',
     fontSize: '10px'
   },
-  DROPZONE: {
+  dropzone: {
     height: '12.5vh',
     width: '22vh',
     backgroundColor: 'lightgrey',
@@ -97,56 +91,30 @@ const styles = {
     border: '2px solid black',
     overflow: 'hidden'
   },
-  POSTER_BUTTON: {
+  posterButton: {
     width: '75%',
     marginLeft: '3vh'
   },
-  PLAYLIST_BUTTON: {
+  playlistButton: {
     marginTop: '15vh',
-    width: '20vw',
-    border: '1px solid',
-    backgroundColor: '#E0E0E0'
+    width: '20vw'
   },
-  POPOVER: {
-    width: '25vw',
-    maxHeight: '75vh'
-  },
-  DENSE_LIST: {
-    paddingTop: '0',
-    paddingBottom: '0',
-    marginTop: '0',
-    marginBottom: '0'
-  },
-  LIST_OVERFLOW: {
-    overflowY: 'auto',
-    maxHeight: '40vh'
-  },
-  TEXTFIELD: {
+  textField: {
     marginLeft: '1vw',
     marginRight: '1vw',
-    width: '23vw'
+    marginTop: '2vh',
+    width: '23vw',
+    color: theme.palette.text.primary
   },
-  PLUS_BUTTON: {
+  plusButton: {
     width: '25vw'
   },
-  CREATE_BUTTON: {
-    width: '25vw',
-    color: 'red'
-  },
-  SEARCH: {
-    width: '21vw',
-    margin: '3vh 2vw 0 2vw',
-    border: '1px solid'
-  },
-  SEARCH_ICON: {
-    transform: 'translatey(1vh)'
-  },
-  PLAYLIST_ICON: {
+  playlistIcon: {
     transform: 'scale(.75)'
   }
-}
+})
 
-export default ({
+const UploadDetails = ({
   progress,
   completed,
   id,
@@ -174,36 +142,38 @@ export default ({
   state,
   handleCheckbox,
   processing,
-  playlistButtonDisabled
+  playlistButtonDisabled,
+  classes
 }) => (
-  <div style={styles.CONTAINER}>
-    <div style={styles.GRID}>
-      <div style={styles.LEFT_COLUMN}>
+  <div className={classes.container}>
+    <div className={classes.grid}>
+      <div className={classes.leftColumn}>
         <Dropzone
-          style={styles.DROPZONE}
+          className={classes.dropzone}
           accept="image/jpeg, image/png"
           multiple={false}
           onDrop={onDrop}
         >
           {!posterFile && (
-            <Typography style={styles.TEXT}>Click To Add Poster</Typography>
+            <Typography className={classes.text}>
+              Click To Add Poster
+            </Typography>
           )}
           {poster && (
-            <img src={poster} alt="thumbnail" style={styles.THUMBNAIL} />
+            <img src={poster} alt="thumbnail" className={classes.thumbnail} />
           )}
         </Dropzone>
         {posterFile && (
           <Button
-            style={styles.POSTER_BUTTON}
+            className={classes.posterButton}
             variant="raised"
-            dense
-            color="primary"
+            color="secondary"
             onClick={handleUpload}
           >
             Upload Poster
           </Button>
         )}
-        <div style={styles.PADDING_LEFT}>
+        <div className={classes.paddingLeft}>
           <p>Upload Status: </p>
           <p>
             {progress === 100
@@ -215,16 +185,17 @@ export default ({
           {completed && <Link to={`/video/${id}`}>Watch Your Video</Link>}
         </div>
       </div>
-      <div style={styles.RIGHT_COLUMN} id="anchorEl">
-        <div style={styles.PUB_PROG_CONTAINER}>
+      <div className={classes.rightColumn} id="anchorEl">
+        <div className={classes.pubProgContainer}>
           <LinearProgress
-            mode="determinate"
+            variant="determinate"
             value={progress}
-            style={styles.PROGRESS}
+            color="secondary"
+            className={classes.progress}
           />
           <Button
-            style={styles.PUBLISH}
-            color="primary"
+            className={classes.publish}
+            color="secondary"
             variant="raised"
             onClick={handleVideo}
             disabled={progress < 100 || completed}
@@ -232,15 +203,15 @@ export default ({
             Publish
           </Button>
         </div>
-        <div style={styles.SUB_GRID}>
-          <div style={styles.SUB_LEFT}>
+        <div className={classes.subGrid}>
+          <div className={classes.subLeft}>
             <TextField
               label="Title"
               value={title}
               name="title"
               onChange={handleChange}
               fullWidth
-              style={styles.TEXT_INPUT}
+              className={classes.textInput}
             />
             <TextField
               label="Description"
@@ -250,108 +221,49 @@ export default ({
               fullWidth
               multiline={true}
               rows={4}
-              style={styles.TEXT_INPUT}
+              className={classes.textInput}
             />
           </div>
-          <div style={styles.SUB_RIGHT}>
+          <div className={classes.subRight}>
             <Button
-              style={styles.PLAYLIST_BUTTON}
+              className={classes.playlistButton}
               onClick={handleOpenPopover}
+              variant="raised"
+              color="secondary"
               disabled={playlistButtonDisabled}
             >
               {playlistButtonText === '+ Add to playlist' ? (
                 '+ Add to playlist'
               ) : (
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <PlaylistIcon style={styles.PLAYLIST_ICON} />&nbsp;{
+                  <PlaylistIcon className={classes.playlistIcon} />&nbsp;{
                     playlistButtonText
                   }
                 </div>
               )}
             </Button>
-            <Popover
-              open={popoverOpen}
+            <UploadPopover
+              popoverOpen={popoverOpen}
               anchorEl={document.getElementById('anchorEl')}
-              onClose={handleClosePopover}
-            >
-              <div style={styles.POPOVER}>
-                <FormControl style={styles.SEARCH}>
-                  <Input
-                    onChange={handleSearchText}
-                    onKeyUp={handleSearch}
-                    value={searchText}
-                    disableUnderline
-                    startAdornment={
-                      <InputAdornment
-                        position="start"
-                        style={styles.SEARCH_ICON}
-                      >
-                        <SearchIcon />
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-                <List dense style={styles.LIST_OVERFLOW}>
-                  {playlists &&
-                    playlists.map((p, i) => {
-                      return (
-                        <ListItem
-                          key={`playlist-item-${i}`}
-                          style={styles.DENSE_LIST}
-                        >
-                          <Checkbox
-                            checked={state[`checkbox-${i}`]}
-                            onChange={() => handleCheckbox(i, p.title)}
-                          />
-                          <ListItemText
-                            primary={
-                              p.title.length > 30
-                                ? `${p.title.slice(0, 29)}...`
-                                : p.title
-                            }
-                          />
-                          <PublicIcon />
-                        </ListItem>
-                      )
-                    })}
-                </List>
-                <Divider />
-                {collapsed && (
-                  <Button onClick={handleCollapse} style={styles.PLUS_BUTTON}>
-                    Create new playlist
-                  </Button>
-                )}
-                {!collapsed && (
-                  <div>
-                    {processing && <LinearProgress />}
-                    <TextField
-                      placeholder="Enter playlist name..."
-                      label="Name"
-                      helperText={`${newPlaylistTitle.length}/150`}
-                      value={newPlaylistTitle}
-                      onChange={handleNewPlaylistTitle}
-                      style={styles.TEXTFIELD}
-                    />
-                    <br />
-                    <TextField
-                      label="Privacy"
-                      disabled
-                      style={styles.TEXTFIELD}
-                    />
-                    <br />
-                    <Button
-                      onClick={handleCreatePlaylist}
-                      style={styles.CREATE_BUTTON}
-                    >
-                      Create
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </Popover>
+              handleClosePopover={handleClosePopover}
+              handleSearchText={handleSearchText}
+              handleSearch={handleSearch}
+              handleCheckbox={handleCheckbox}
+              handleCollapse={handleCollapse}
+              handleNewPlaylistTitle={handleNewPlaylistTitle}
+              handleCreatePlaylist={handleCreatePlaylist}
+              newPlaylistTitle={newPlaylistTitle}
+              searchText={searchText}
+              playlists={playlists}
+              collapsed={collapsed}
+              processing={processing}
+              state={state}
+            />
           </div>
         </div>
       </div>
     </div>
   </div>
 )
+
+export default withStyles(styles)(UploadDetails)

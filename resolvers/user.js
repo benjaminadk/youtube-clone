@@ -1,4 +1,5 @@
 const aws = require('aws-sdk')
+const jwt = require('jsonwebtoken')
 const keys = require('../config')
 
 module.exports = {
@@ -17,6 +18,21 @@ module.exports = {
   },
 
   Mutation: {
+    authenticate: async (root, { token }, { models }) => {
+      try {
+        const { username } = await jwt.verify(token, keys.jwtSecret)
+        return {
+          success: true,
+          message: `🤖 Welcome Back.  ${username || ''}`
+        }
+      } catch (error) {
+        return {
+          success: false,
+          message: `Error: ${error.message}`
+        }
+      }
+    },
+
     getFcmToken: async (root, { fcmToken }, { models, user }) => {
       const currentUser = await models.User.findById(user.id)
       currentUser.fcmToken = fcmToken

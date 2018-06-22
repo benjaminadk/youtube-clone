@@ -185,7 +185,7 @@ const VideoList = ({
             </IconButton>
             <Menu
               anchorEl={document.getElementById(`anchor-${i}`)}
-              open={state[`menu-${i}`]}
+              open={state[`menu-${i}`] || false}
               onClose={() => handleMenuClose(i)}
             >
               <MenuItem onClick={handleMenuClose}>Not interested</MenuItem>
@@ -195,7 +195,7 @@ const VideoList = ({
               </MenuItem>
             </Menu>
             <Popover
-              open={state[`pop-${i}`]}
+              open={state[`pop-${i}`] || false}
               anchorEl={document.getElementById('up-next')}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
               onClose={() => handlePlaylistPopoverClose(i)}
@@ -222,7 +222,7 @@ const VideoList = ({
                             onClick={() =>
                               handlePlaylistCheckboxChange(i, ind, v.id, p.id)
                             }
-                            checked={state[`${i}-${ind}`]}
+                            checked={state[`${i}-${ind}`] || false}
                           />
                           <ListItemText
                             primary={
