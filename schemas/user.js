@@ -11,6 +11,7 @@ module.exports = `
         createdOn: String
         videos: [Video]
         playlists: [Playlist]
+        subscriptions: [User]
         jwt: String
         likes: [ID!]
         dislikes: [ID!]

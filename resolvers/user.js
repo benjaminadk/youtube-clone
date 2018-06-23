@@ -8,7 +8,8 @@ module.exports = {
       await models.User.findById(userId),
 
     currentUser: async (root, { userId }, { models, user }) => {
-      const id = userId || user.id
+      const id = userId || user ? user.id : null
+      if (!id) return null
       return models.User.findById(id)
         .populate([
           { path: 'videos', model: 'video' },

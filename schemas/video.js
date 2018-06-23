@@ -47,4 +47,14 @@ module.exports = `
         s3SignPoster(filename: String!, filetype: String!): S3Poster
         setDuration(videoId: ID!, duration: Float!): Video
     }
+
+    type Subscription {
+        likeAdded(videoId: ID): Video
+    }
+
+    schema {
+        query: Query
+        mutation: Mutation
+        subscription: Subscription
+    }
 `

@@ -1,6 +1,8 @@
 const aws = require('aws-sdk')
 const admin = require('firebase-admin')
 const keys = require('../config')
+const { withFilter, PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 module.exports = {
   Query: {
@@ -108,24 +110,42 @@ module.exports = {
         filter_2,
         update_2
       )
+      const video = await models.Video.findById(videoId)
+        .populate([
+          { path: 'owner', model: 'user' },
+          {
+            path: 'comments',
+            model: 'comment',
+            populate: [
+              { path: 'postedBy', model: 'user' },
+              {
+                path: 'subComments',
+                model: 'comment',
+                populate: { path: 'postedBy', model: 'user' }
+              }
+            ]
+          }
+        ])
+        .exec()
       if (!remove) {
-        const payload = {
-          notification: {
-            title: `${currentUser.username} Liked Your Video`,
-            body: `"${currentVideo.title}" now has ${currentVideo.likes +
-              1} likes`
-            // clickAction: `http://localhost:3000/video/${videoId}`,
-            // icon:
-            //   'https://s3-us-west-1.amazonaws.com/youtube-clone-assets/icon.png'
-          },
-          token: user.fcm
-        }
-        try {
-          const response = await admin.messaging().send(payload)
-          console.log('MESSAGE SENT', response)
-        } catch (error) {
-          console.log(error)
-        }
+        await pubsub.publish('likeAdded', { likeAdded: video })
+        // const payload = {
+        //   notification: {
+        //     title: `${currentUser.username} Liked Your Video`,
+        //     body: `"${currentVideo.title}" now has ${currentVideo.likes +
+        //       1} likes`,
+        //     clickAction: `http://localhost:3000/video/${videoId}`,
+        //     icon:
+        //       'https://s3-us-west-1.amazonaws.com/youtube-clone-assets/icon.png'
+        //   },
+        //   token: user.fcm
+        // }
+        // try {
+        //   const response = await admin.messaging().send(payload)
+        //   console.log('MESSAGE SENT', response)
+        // } catch (error) {
+        //   console.log(error)
+        // }
       }
       return currentVideo
     },
@@ -145,6 +165,17 @@ module.exports = {
       const filter = { _id: videoId }
       const update = { duration: duration }
       return await models.Video.findOneAndUpdate(filter, update)
+    }
+  },
+
+  Subscription: {
+    likeAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator('likeAdded'),
+        (payload, { videoId }) => {
+          return payload.likeAdded.id === videoId
+        }
+      )
     }
   }
 }

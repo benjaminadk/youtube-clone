@@ -3,6 +3,9 @@ const bodyParser = require('body-parser')
 const sslRedirect = require('heroku-ssl-redirect')
 const compression = require('compression')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
+const { execute, subscribe } = require('graphql')
+const { createServer } = require('http')
+const { SubscriptionServer } = require('subscriptions-transport-ws')
 const passport = require('passport')
 const {
   googleOauth,
@@ -61,7 +64,8 @@ server.use(
 server.use(
   '/graphiql',
   graphiqlExpress({
-    endpointURL: '/graphql'
+    endpointURL: '/graphql',
+    subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
   })
 )
 
@@ -72,4 +76,20 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-server.listen(PORT, () => console.log(`SERVER LISTENING ON PORT: ${PORT}`))
+const ws = createServer(server)
+ws.listen(PORT, () => {
+  console.log(`APOLLO SERVER UP AT http://localhost:${PORT}`)
+  new SubscriptionServer(
+    {
+      execute,
+      subscribe,
+      schema
+    },
+    {
+      server: ws,
+      path: '/subscriptions'
+    }
+  )
+})
+
+//server.listen(PORT, () => console.log(`SERVER LISTENING ON PORT: ${PORT}`))

@@ -22,6 +22,8 @@ import { CREATE_COMMENT_MUTATION } from '../mutations/createComment'
 import { ADD_DISLIKE_MUTATION } from '../mutations/addDislike'
 import { ADD_LIKE_MUTATION } from '../mutations/addLike'
 import { ADD_VIEW_MUTATION } from '../mutations/addView'
+import { LIKE_ADDED_SUB } from '../subscriptions/likeAdded'
+import { CURRENT_USER_QUERY } from '../queries/currentUser'
 
 const styles = theme => ({
   container: {
@@ -57,6 +59,8 @@ class Video extends Component {
     this.setState({
       linkToShare: `http://localhost${this.props.location.pathname}`
     })
+    // initialize subscription
+    this.likeAddedSubscription()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -82,6 +86,15 @@ class Video extends Component {
     ) {
       this.createChecks()
     }
+  }
+
+  likeAddedSubscription = () => {
+    this.props.data.subscribeToMore({
+      document: LIKE_ADDED_SUB,
+      variables: { videoId: this.props.match.params.videoId },
+      //updateQuery
+      onError: err => console.error(err)
+    })
   }
 
   createChecks = async () => {
@@ -127,8 +140,8 @@ class Video extends Component {
     if (videoIds.indexOf(videoId) !== -1) {
       return
     }
-    const likesArray = this.props.user.likes
-    const dislikesArray = this.props.user.dislikes
+    const likesArray = this.props.user.likes || []
+    const dislikesArray = this.props.user.dislikes || []
     const likedId = likesArray.find(l => l === videoId)
     const dislikedId = dislikesArray.find(d => d === videoId)
     if (!dislikedId && !likedId) {
@@ -140,6 +153,10 @@ class Video extends Component {
             {
               query: VIDEO_BY_ID_QUERY,
               variables: { videoId }
+            },
+            {
+              query: CURRENT_USER_QUERY,
+              variables: { userId: null }
             }
           ]
         })
@@ -151,6 +168,10 @@ class Video extends Component {
             {
               query: VIDEO_BY_ID_QUERY,
               variables: { videoId }
+            },
+            {
+              query: CURRENT_USER_QUERY,
+              variables: { userId: null }
             }
           ]
         })
@@ -164,6 +185,10 @@ class Video extends Component {
             {
               query: VIDEO_BY_ID_QUERY,
               variables: { videoId }
+            },
+            {
+              query: CURRENT_USER_QUERY,
+              variables: { userId: null }
             }
           ]
         })
@@ -177,6 +202,10 @@ class Video extends Component {
             {
               query: VIDEO_BY_ID_QUERY,
               variables: { videoId }
+            },
+            {
+              query: CURRENT_USER_QUERY,
+              variables: { userId: null }
             }
           ]
         })
@@ -448,5 +477,6 @@ export default compose(
   graphql(USER_PLAYLIST_QUERY, { name: 'playlists' }),
   graphql(VIDEO_BY_ID_QUERY, {
     options: props => ({ variables: { videoId: props.match.params.videoId } })
-  })
+  }),
+  graphql(LIKE_ADDED_SUB, { name: 'likeAdded' })
 )(Video)

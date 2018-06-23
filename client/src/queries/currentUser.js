@@ -12,6 +12,8 @@ export const CURRENT_USER_QUERY = gql`
       about
       country
       links
+      likes
+      dislikes
       videos {
         id
         title
