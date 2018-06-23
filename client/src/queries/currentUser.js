@@ -22,6 +22,17 @@ export const CURRENT_USER_QUERY = gql`
         views
         likes
       }
+      playlists {
+        id
+        title
+        description
+        views
+        createdOn
+        videos {
+          id
+          poster
+        }
+      }
     }
   }
 `

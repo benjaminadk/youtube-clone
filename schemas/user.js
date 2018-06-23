@@ -31,7 +31,7 @@ module.exports = `
         links: String
     }
 
-    type LoginPayload {
+    type Payload {
         success: Boolean
         message: String
     }
@@ -43,12 +43,12 @@ module.exports = `
     }
     
     type Mutation {
-        authenticate(token: String): LoginPayload
+        authenticate(token: String): Payload
         getFcmToken(fcmToken: String!): User
         s3SignBanner(filename: String!, filetype: String!): S3Banner
-        addBanner(bannerUrl: String!): User
-        addBannerPosition(bannerPosition: String!): User
-        aboutTab(input: AboutInput): User
+        addBanner(bannerUrl: String!): Payload
+        addBannerPosition(bannerPosition: String!): Payload
+        aboutTab(input: AboutInput): Payload
     }
 
 `

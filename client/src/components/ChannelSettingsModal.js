@@ -6,7 +6,6 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
-import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
@@ -39,7 +38,6 @@ export default ({
     <DialogTitle>Banner Position</DialogTitle>
     <DialogContent>
       <FormControl>
-        <FormLabel>Banner Vertical Position</FormLabel>
         <RadioGroup value={bannerPosition} onChange={setBannerPosition}>
           {renderRadioButtons()}
         </RadioGroup>
@@ -47,7 +45,7 @@ export default ({
     </DialogContent>
     <DialogActions>
       <Button onClick={closeSettingsModal}>Cancel</Button>
-      <Button variant="raised" color="primary" onClick={saveBannerPosition}>
+      <Button variant="raised" color="secondary" onClick={saveBannerPosition}>
         Set Position
       </Button>
     </DialogActions>

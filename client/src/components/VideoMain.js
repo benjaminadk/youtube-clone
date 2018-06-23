@@ -240,13 +240,14 @@ const VideoMain = ({
                 >
                   Reply
                 </Button>
+                <IconButton>
+                  <ThumbsUpIcon style={{ fontSize: 16 }} />
+                </IconButton>
                 <Typography variant="body2">{c.likes}</Typography>
                 <IconButton>
-                  <ThumbsUpIcon />
+                  <ThumbsDownIcon style={{ fontSize: 16 }} />
                 </IconButton>
-                <IconButton>
-                  <ThumbsDownIcon />
-                </IconButton>
+                <Typography variant="body2">{c.dislikes}</Typography>
               </div>
               {visibleInput === i ? (
                 <div>
@@ -302,13 +303,14 @@ const VideoMain = ({
                         </div>
                       </div>
                       <div className={classes.commentInfo}>
+                        <IconButton style={{ marginLeft: '4vw' }}>
+                          <ThumbsUpIcon style={{ fontSize: 14 }} />
+                        </IconButton>
                         <Typography variant="body2">{sc.likes}</Typography>
                         <IconButton>
-                          <ThumbsUpIcon />
+                          <ThumbsDownIcon style={{ fontSize: 14 }} />
                         </IconButton>
-                        <IconButton>
-                          <ThumbsDownIcon />
-                        </IconButton>
+                        <Typography variant="body2">{sc.dislikes}</Typography>
                       </div>
                     </div>
                   )

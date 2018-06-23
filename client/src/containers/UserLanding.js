@@ -6,7 +6,8 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Loading from '../components/Loading'
 import Toast from '../components/Toast'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/messaging'
 import { USER_BY_ID_QUERY } from '../queries/userById'
 import { FCM_TOKEN_MUTATION } from '../mutations/fcmToken'
 
@@ -30,6 +31,9 @@ class UserLanding extends Component {
 
   handleNotification = async () => {
     const messaging = firebase.messaging()
+    messaging.usePublicVapidKey(
+      'BDzLR1ZJVvKmsUT4odhM_BYXP7tmXBso5jOiblQ3CDPhjwQzXaYAAKrPLq2ZfD6qCiiwygZUvh1WHHpXvA91JQ4'
+    )
     try {
       await messaging.requestPermission()
       const currentToken = await messaging.getToken()

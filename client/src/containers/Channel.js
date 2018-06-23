@@ -7,23 +7,20 @@ import ChannelAppBar from '../components/ChannelAppBar'
 import ChannelModal from '../components/ChannelModal'
 import ChannelSettingsModal from '../components/ChannelSettingsModal'
 import ChannelAboutModal from '../components/ChannelAboutModal'
-import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
 import Videos from '../components/ChannelTabs/Videos'
 import About from '../components/ChannelTabs/About'
 import SearchResults from '../components/ChannelTabs/SearchResults'
 import Playlists from '../components/ChannelTabs/Playlists'
-import { USER_PLAYLIST_QUERY } from '../queries/userPlaylist'
+import Toast from '../components/Toast'
 import { CURRENT_USER_QUERY } from '../queries/currentUser'
 import { ABOUT_TAB_MUTATION } from '../mutations/aboutTab'
 import { ADD_BANNER_POSITION_MUTATION } from '../mutations/addBannerPosition'
 import { ADD_BANNER_MUTATION } from '../mutations/addBanner'
 import { S3_SIGN_BANNER_MUTATION } from '../mutations/s3SignBanner'
+import { formatFilename } from '../utils/formatFilename'
 
 class Channel extends Component {
   state = {
-    isOwner: null,
     file: null,
     progress: 0,
     tabIndex: 0,
@@ -41,21 +38,18 @@ class Channel extends Component {
     countryForm: '',
     linksForm: '',
     aboutSnackbar: false,
+    aboutSnackbarMessage: '',
     sortMenuPl: false,
     sortByPl: 'newest',
     anchorElPl: null
   }
 
-  componentDidMount = async () => {
-    const isOwner = this.props.match.params.userId ? false : true
-    await this.setState({ isOwner })
-  }
-
-  format = filename => {
-    const d = new Date()
-    const date = `${d.getMonth() + 1}-${d.getDate()}-${d.getFullYear()}`
-    const cleanFilename = filename.toLowerCase().replace(/[^a-z0-9]/g, '-')
-    return `banners/${date}-${cleanFilename}`
+  componentDidUpdate(prevProps) {
+    if (!prevProps.user && this.props.user) {
+      if (this.props.user.id !== this.props.match.params.userId) {
+        this.props.history.push('/')
+      }
+    }
   }
 
   uploadToS3 = async (file, requestUrl) => {
@@ -75,15 +69,24 @@ class Channel extends Component {
 
   handleBannerUpload = async () => {
     const { file } = this.state
-    const filename = this.format(file.name)
+    const filename = formatFilename(file.name, 'banner')
     const filetype = file.type
     const response = await this.props.s3SignBanner({
       variables: { filename, filetype }
     })
     const { requestUrl, bannerUrl } = response.data.s3SignBanner
     await this.uploadToS3(file, requestUrl)
-    await this.props.addBanner({ variables: { bannerUrl } })
-    await this.handleCancelUpload()
+    let response2 = await this.props.addBanner({
+      variables: { bannerUrl },
+      refetchQueries: [
+        { query: CURRENT_USER_QUERY, variables: { userId: null } }
+      ]
+    })
+    await this.setState({
+      modal: false,
+      aboutSnackbar: true,
+      aboutSnackbarMessage: response2.data.addBanner.message
+    })
   }
 
   sortControl = (videos, sortBy) => {
@@ -108,16 +111,14 @@ class Channel extends Component {
     await this.props.addBannerPosition({
       variables: { bannerPosition },
       refetchQueries: [
-        {
-          query: CURRENT_USER_QUERY
-        }
+        { query: CURRENT_USER_QUERY, variables: { userId: null } }
       ]
     })
     await this.setState({ bannerPosition: null, settingsModal: false })
   }
 
   populateAboutForm = () => {
-    const { about, country, links } = this.props.data.currentUser
+    const { about, country, links } = this.props.user
     this.setState({
       aboutForm: about || '',
       countryForm: country || '',
@@ -126,7 +127,7 @@ class Channel extends Component {
   }
 
   saveAboutForm = async () => {
-    await this.props.aboutTab({
+    let response = await this.props.aboutTab({
       variables: {
         input: {
           about: this.state.aboutForm,
@@ -136,7 +137,8 @@ class Channel extends Component {
       },
       refetchQueries: [
         {
-          query: CURRENT_USER_QUERY
+          query: CURRENT_USER_QUERY,
+          variables: { userId: null }
         }
       ]
     })
@@ -145,7 +147,8 @@ class Channel extends Component {
       countryForm: '',
       linksForm: '',
       aboutModal: false,
-      aboutSnackbar: true
+      aboutSnackbar: true,
+      aboutSnackbarMessage: response.data.aboutTab.message
     })
   }
 
@@ -158,11 +161,9 @@ class Channel extends Component {
   handleKeyUp = async e => {
     if (e.keyCode === 13) {
       const { searchString } = this.state
-      const filteredVideos = await this.props.data.currentUser.videos.filter(
-        v => {
-          return v.title.toLowerCase().includes(searchString.toLowerCase())
-        }
-      )
+      const filteredVideos = await this.props.user.videos.filter(v => {
+        return v.title.toLowerCase().includes(searchString.toLowerCase())
+      })
       await this.setState({ filteredVideos })
       this.handleTabIndex(6)
     }
@@ -196,7 +197,7 @@ class Channel extends Component {
   handleBannerPosition = (e, bannerPosition) =>
     this.setState({ bannerPosition })
 
-  handleVideoList = type => this.setState({ videoList: type })
+  handleVideoList = e => this.setState({ videoList: e.target.value })
 
   handleSearchString = e => this.setState({ searchString: e.target.value })
 
@@ -220,12 +221,6 @@ class Channel extends Component {
 
   render() {
     const {
-      data: { loading, currentUser },
-      playlists: { getUserPlaylists }
-    } = this.props
-    const loading2 = this.props.playlists.loading
-    if (loading || loading2) return null
-    const {
       videos,
       imageUrl,
       username,
@@ -235,11 +230,12 @@ class Channel extends Component {
       about,
       country,
       links,
+      playlists,
       createdOn
-    } = currentUser
+    } = this.props.user
     const sortedVideos = this.sortControl(videos.slice(), this.state.sortBy)
     const sortedPlaylists = this.sortControlPl(
-      getUserPlaylists.slice(),
+      playlists.slice(),
       this.state.sortByPl
     )
     return (
@@ -298,7 +294,6 @@ class Channel extends Component {
             createdOn={createdOn}
             openAboutModal={this.handleOpenAboutModal}
             totalViews={this.getTotalViews(videos)}
-            isOwner={this.state.isOwner}
           />
           <SearchResults filteredVideos={this.state.filteredVideos} />
         </SwipeableViews>
@@ -326,17 +321,10 @@ class Channel extends Component {
           onChange={this.handleChangeAboutForm}
           onChangeCountry={this.handleCountry}
         />
-        <Snackbar
+        <Toast
           open={this.state.aboutSnackbar}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          autoHideDuration={8000}
-          onRequestClose={this.handleAboutSnackbar}
-          message={<span>Information Saved To Database</span>}
-          action={
-            <IconButton color="inherit" onClick={this.handleAboutSnackbar}>
-              <CloseIcon />
-            </IconButton>
-          }
+          onClose={this.handleAboutSnackbar}
+          message={this.state.aboutSnackbarMessage}
         />
       </div>
     )
@@ -347,11 +335,5 @@ export default compose(
   graphql(S3_SIGN_BANNER_MUTATION, { name: 's3SignBanner' }),
   graphql(ADD_BANNER_MUTATION, { name: 'addBanner' }),
   graphql(ADD_BANNER_POSITION_MUTATION, { name: 'addBannerPosition' }),
-  graphql(ABOUT_TAB_MUTATION, { name: 'aboutTab' }),
-  graphql(USER_PLAYLIST_QUERY, { name: 'playlists' }),
-  graphql(CURRENT_USER_QUERY, {
-    options: props => ({
-      variables: { userId: props.match.params.userId || null }
-    })
-  })
+  graphql(ABOUT_TAB_MUTATION, { name: 'aboutTab' })
 )(Channel)

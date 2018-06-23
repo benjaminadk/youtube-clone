@@ -6,14 +6,6 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
-const styles = {
-  MODAL: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-}
-
 export default ({
   open,
   handleModalClose,
@@ -23,14 +15,17 @@ export default ({
 }) => (
   <Dialog open={open} onClose={handleModalClose} fullWidth>
     <DialogTitle>Upload Channel Banner</DialogTitle>
-    <DialogContent style={styles.MODAL}>
-      <LinearProgress value={progress} mode="determinate" color="primary" />
+    <DialogContent>
+      <LinearProgress
+        value={progress}
+        variant="determinate"
+        color="secondary"
+        style={{ height: '3vh' }}
+      />
     </DialogContent>
     <DialogActions>
-      <Button variant="raised" color="secondary" onClick={cancelUpload}>
-        Cancel
-      </Button>
-      <Button variant="raised" color="primary" onClick={uploadBanner}>
+      <Button onClick={cancelUpload}>Cancel</Button>
+      <Button variant="raised" color="secondary" onClick={uploadBanner}>
         Upload
       </Button>
     </DialogActions>

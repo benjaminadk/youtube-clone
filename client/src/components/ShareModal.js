@@ -95,7 +95,6 @@ const ShareModal = ({
   classes
 }) => (
   <Dialog open={open} onClose={handleShareModalClose} fullWidth>
-    {/*<DialogTitle>Share</DialogTitle>*/}
     <DialogContent>
       <div className={classes.buttons}>
         <div className={classes.embed} onClick={handleEmbedModalOpen}>
@@ -151,18 +150,6 @@ const ShareModal = ({
           }
         />
       </FormControl>
-      {/*
-      <TextField
-        id="link-text"
-        value={
-          checked
-            ? `${linkToShare}?time=${reverseFormat(currentTimeString)}`
-            : linkToShare
-        }
-        onChange={onChange}
-        fullWidth
-        disabled
-      />*/}
       <div>
         <Typography variant="body2">Specific Time</Typography>
         <Checkbox checked={checked} onChange={handleCheckbox} />
@@ -173,17 +160,7 @@ const ShareModal = ({
           className={classes.input2}
         />
       </div>
-
-      {/*<Divider className={classes.divider} />*/}
     </DialogContent>
-    {/*<DialogActions>
-      <Button variant="raised" color="primary" onClick={handleEmbedModalOpen}>
-        Embed
-      </Button>
-      <Button variant="raised" color="primary" onClick={onCopy}>
-        Copy
-    </Button>
-    </DialogActions>*/}
   </Dialog>
 )
 

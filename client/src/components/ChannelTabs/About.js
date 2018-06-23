@@ -1,29 +1,37 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { formatDate } from '../../utils'
+import { formatDate } from '../../utils/formatDate'
 
-const styles = {
-  GRID: {
+const styles = theme => ({
+  grid: {
     display: 'grid',
     gridTemplateColumns: '60% 30%',
-    gridColumnGap: '10%'
+    gridColumnGap: '10%',
+    paddingLeft: '1vw',
+    paddingRight: '1vw'
   },
-  HEADER: {
+  header: {
     marginBottom: '2vh',
     marginTop: '2vh'
   },
-  DIVIDER: {
+  divider: {
     marginTop: '2vh'
   },
-  CONTENT: {
+  content: {
     marginLeft: '5vh'
+  },
+  link: {
+    marginLeft: '5vh',
+    fontFamily: 'Roboto',
+    color: theme.palette.secondary.main
   }
-}
+})
 
-export default ({
+const About = ({
   about,
   email,
   country,
@@ -31,56 +39,60 @@ export default ({
   openAboutModal,
   totalViews,
   createdOn,
-  isOwner
+  classes
 }) => (
-  <div style={styles.GRID}>
+  <div className={classes.grid}>
     <div>
-      <Typography variant="title" style={styles.HEADER}>
+      <Typography variant="title" className={classes.header}>
         Description
       </Typography>
-      {about && <Typography style={styles.CONTENT}>{about}</Typography>}
-      <Divider style={styles.DIVIDER} />
-      <Typography variant="title" style={styles.HEADER}>
+      {about && <Typography className={classes.content}>{about}</Typography>}
+      <Divider className={classes.divider} />
+      <Typography variant="title" className={classes.header}>
         Details
       </Typography>
-      <Typography varaint="caption" style={styles.CONTENT}>
+      <Typography varaint="caption" className={classes.content}>
         For business inquiries:{' '}
-        {email && <a href={`mailto:${email}`}>{email}</a>}
+        {email && (
+          <a href={`mailto:${email}`} className={classes.link}>
+            {email}
+          </a>
+        )}
       </Typography>
-      <Typography variant="caption" style={styles.CONTENT}>
+      <Typography variant="caption" className={classes.content}>
         Country: {country && country}
       </Typography>
-      <Divider style={styles.DIVIDER} />
-      <Typography variant="title" style={styles.HEADER}>
+      <Divider className={classes.divider} />
+      <Typography variant="title" className={classes.header}>
         Links
       </Typography>
       {links.map((l, i) => (
-        <a key={`link-${i}`} href={l} target="_blank" style={styles.CONTENT}>
+        <a key={`link-${i}`} href={l} target="_blank" className={classes.link}>
           {l}
         </a>
       ))}
-      <Divider style={styles.DIVIDER} />
-      {isOwner && (
-        <div>
-          <IconButton onClick={openAboutModal}>
-            <SettingsIcon />
-          </IconButton>
-        </div>
-      )}
+      <Divider className={classes.divider} />
+      <div>
+        <IconButton onClick={openAboutModal}>
+          <SettingsIcon />
+        </IconButton>
+      </div>
     </div>
     <div>
-      <Typography variant="title" style={styles.HEADER}>
+      <Typography variant="title" className={classes.header}>
         Stats
       </Typography>
-      <Divider style={styles.DIVIDER} />
-      <Typography variant="title" style={styles.HEADER}>
+      <Divider className={classes.divider} />
+      <Typography variant="title" className={classes.header}>
         Joined {formatDate(createdOn)}
       </Typography>
-      <Divider style={styles.DIVIDER} />
-      <Typography variant="title" style={styles.HEADER}>
+      <Divider className={classes.divider} />
+      <Typography variant="title" className={classes.header}>
         Views {totalViews}
       </Typography>
-      <Divider style={styles.DIVIDER} />
+      <Divider className={classes.divider} />
     </div>
   </div>
 )
+
+export default withStyles(styles)(About)

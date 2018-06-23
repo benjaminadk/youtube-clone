@@ -38,6 +38,19 @@ export default createMuiTheme({
           color: '#DDDDDD'
         }
       }
+    },
+    MuiInputLabel: {
+      root: {
+        color: '#DDDDDD',
+        '&:focus': '#DDDDDD'
+      },
+      shrink: {
+        color: '#DDDDDD',
+        backgroundColor: 'DDDDDD'
+      },
+      animated: {
+        color: '#DDDDDD'
+      }
     }
   }
 })

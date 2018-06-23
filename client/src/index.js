@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './Root'
-import registerServiceWorker from './registerServiceWorker'
+import { unregister } from './registerServiceWorker'
 import { ApolloClient } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloLink, concat } from 'apollo-link'
@@ -10,10 +10,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './styles/theme'
 import 'typeface-roboto'
-import firebase from './fire'
-
-const messaging = firebase.messaging()
-messaging.onMessage(payload => console.log('MESSAGE RECEIVED ', payload))
 
 const uri =
   process.env.NODE_ENV === 'production'
@@ -48,4 +44,4 @@ ReactDOM.render(
   </ApolloProvider>,
   root
 )
-registerServiceWorker()
+unregister()

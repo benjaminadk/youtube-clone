@@ -263,6 +263,13 @@
   - credentials go into `dev.js` now
 - fixing small bugs
 
+#### Video 54 More Refactor
+
+- improving Video Component and all its sub components
+- authenticate mutation to avoid making a user log in over and over
+- Private Routes so unauthorized users cannot use the cool parts of the app
+- general styling, upgrading and bug fixing
+
 #### Resources
 
 ```

@@ -10,7 +10,14 @@ module.exports = {
     currentUser: async (root, { userId }, { models, user }) => {
       const id = userId || user.id
       return models.User.findById(id)
-        .populate({ path: 'videos', model: 'video' })
+        .populate([
+          { path: 'videos', model: 'video' },
+          {
+            path: 'playlists',
+            model: 'playlist',
+            populate: [{ path: 'videos', model: 'video' }]
+          }
+        ])
         .exec()
     },
 
@@ -28,7 +35,7 @@ module.exports = {
       } catch (error) {
         return {
           success: false,
-          message: `Error: ${error.message}`
+          message: `😡 Error: ${error.message}`
         }
       }
     },
@@ -61,17 +68,37 @@ module.exports = {
     },
 
     addBanner: async (root, { bannerUrl }, { models, user }) => {
-      const currentUser = await models.User.findById(user.id)
-      currentUser.bannerUrl = bannerUrl
-      await currentUser.save()
-      return currentUser
+      try {
+        const currentUser = await models.User.findById(user.id)
+        currentUser.bannerUrl = bannerUrl
+        await currentUser.save()
+        return {
+          success: true,
+          message: 'New Banner Image saved successfully.'
+        }
+      } catch (error) {
+        return {
+          success: false,
+          message: 'Error saving Banner Image.'
+        }
+      }
     },
 
     addBannerPosition: async (root, { bannerPosition }, { models, user }) => {
-      const currentUser = await models.User.findById(user.id)
-      currentUser.bannerPosition = bannerPosition
-      await currentUser.save()
-      return currentUser
+      try {
+        const currentUser = await models.User.findById(user.id)
+        currentUser.bannerPosition = bannerPosition
+        await currentUser.save()
+        return {
+          success: true,
+          message: '🤖 Banner position set.'
+        }
+      } catch (error) {
+        return {
+          success: false,
+          message: '😡 Error setting banner position.'
+        }
+      }
     },
 
     aboutTab: async (
@@ -79,12 +106,22 @@ module.exports = {
       { input: { about, country, links } },
       { models, user }
     ) => {
-      const currentUser = await models.User.findById(user.id)
-      currentUser.about = about
-      currentUser.country = country
-      currentUser.links = links.split(',').map(l => l.trim())
-      await currentUser.save()
-      return currentUser
+      try {
+        const currentUser = await models.User.findById(user.id)
+        currentUser.about = about
+        currentUser.country = country
+        currentUser.links = links.split(',').map(l => l.trim())
+        await currentUser.save()
+        return {
+          success: true,
+          message: '🤖 About updated successfully.'
+        }
+      } catch (error) {
+        return {
+          success: false,
+          message: '😡 Error updating About page.'
+        }
+      }
     }
   }
 }
