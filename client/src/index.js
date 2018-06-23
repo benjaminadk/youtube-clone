@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './Root'
-import registerServiceWorker from './registerServiceWorker'
+import { unregister } from './registerServiceWorker'
 import { ApolloClient } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloLink, concat } from 'apollo-link'
@@ -44,4 +44,4 @@ ReactDOM.render(
   </ApolloProvider>,
   root
 )
-registerServiceWorker()
+unregister()

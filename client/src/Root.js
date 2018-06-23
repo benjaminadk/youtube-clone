@@ -3,16 +3,16 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import { graphql, compose } from 'react-apollo'
 import classNames from 'classnames'
-import { /*PropsRoute,*/ PrivateRoute, Auth } from './utils/routing'
+import { PropsRoute, PrivateRoute, Auth } from './utils/routing'
 import RootAppBar from './components/RootAppBar'
 import Home from './containers/Home'
 import Upload from './containers/Upload'
 import UserLanding from './containers/UserLanding'
 import Video from './containers/Video'
 import Channel from './containers/Channel'
-import SearchResults from './containers/SearchResults'
 import Loading from './components/Loading'
 import Toast from './components/Toast'
+import { CURRENT_USER_QUERY } from './queries/currentUser'
 import { VIDEO_LIST_QUERY } from './queries/videoList'
 import { AUTHENTICATE_MUTATION } from './mutations/authenticate'
 import firebase from 'firebase/app'
@@ -68,7 +68,7 @@ const styles = theme => ({
   }
 })
 
-class PersistentDrawer extends Component {
+class Root extends Component {
   async componentDidMount() {
     this.messageListener = firebase.messaging().onMessage(payload => {
       console.log('MESSAGE RECEIVED ', payload)
@@ -95,7 +95,8 @@ class PersistentDrawer extends Component {
     searchText: '',
     filteredVideos: [],
     authSnackbar: false,
-    authSnackbarMessage: ''
+    authSnackbarMessage: '',
+    user: null
   }
 
   handleDrawerOpen = () => this.setState({ open: true })
@@ -118,12 +119,14 @@ class PersistentDrawer extends Component {
     )
     this.setState({ filteredVideos })
   }
+
   render() {
     const {
       classes,
-      data: { loading }
+      data: { loading, getVideoList: videos },
+      currentUser: { loading: loading2, currentUser: user }
     } = this.props
-    if (loading) return <Loading />
+    if (loading || loading2) return <Loading />
     return [
       <BrowserRouter key="main-app">
         <div className={classes.root}>
@@ -138,6 +141,7 @@ class PersistentDrawer extends Component {
               handleMenuClose={this.handleMenuClose}
               handleDrawerOpen={this.handleDrawerOpen}
               handleDrawerClose={this.handleDrawerClose}
+              filteredVideos={this.state.filteredVideos}
             />
             <main
               className={classNames(classes.content, classes[`content-left`], {
@@ -148,13 +152,19 @@ class PersistentDrawer extends Component {
               <Switch>
                 <Route exact path="/" component={Home} />
                 <PrivateRoute path="/upload" component={Upload} />
-                <PrivateRoute path="/channel/:userId?" component={Channel} />
+                <PropsRoute
+                  path="/channel/:userId?"
+                  component={Auth.isAuthenticated ? Channel : Home}
+                  user={user}
+                />
                 <Route path="/user/:userId" component={UserLanding} />
-                <PrivateRoute path="/video/:videoId" component={Video} />
-                <PrivateRoute
-                  path="/search"
-                  component={SearchResults}
-                  videos={this.state.filteredVideos}
+                <PropsRoute
+                  path="/video/:videoId"
+                  component={Auth.isAuthenticated ? Video : Home}
+                  videos={
+                    this.state.searchText ? this.state.filteredVideos : videos
+                  }
+                  user={user}
                 />
               </Switch>
             </main>
@@ -174,5 +184,9 @@ class PersistentDrawer extends Component {
 export default compose(
   withStyles(styles),
   graphql(VIDEO_LIST_QUERY),
+  graphql(CURRENT_USER_QUERY, {
+    options: props => ({ variables: { userId: null } }),
+    name: 'currentUser'
+  }),
   graphql(AUTHENTICATE_MUTATION, { name: 'authenticate' })
-)(PersistentDrawer)
+)(Root)

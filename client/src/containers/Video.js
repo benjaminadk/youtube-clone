@@ -68,9 +68,7 @@ class Video extends Component {
 
     // set current time of video by parsing url params
     if (
-      (prevProps.videoList.loading ||
-        prevProps.playlists.loading ||
-        prevProps.data.loading) &&
+      (prevProps.playlists.loading || prevProps.data.loading) &&
       this.videoElement &&
       this.props.location.search !== ''
     ) {
@@ -78,8 +76,8 @@ class Video extends Component {
     }
     // creating check boxes relies on playlists and videos being loaded
     if (
-      (prevProps.videoList.loading || prevProps.playlists.loading) &&
-      this.props.videoList.getVideoList &&
+      prevProps.playlists.loading &&
+      this.props.videos &&
       this.props.playlists.getUserPlaylists
     ) {
       this.createChecks()
@@ -87,7 +85,7 @@ class Video extends Component {
   }
 
   createChecks = async () => {
-    const videos = this.props.videoList.getVideoList
+    const { videos } = this.props
     const playlists = this.props.playlists.getUserPlaylists
     const vIds = []
     videos.forEach(v => vIds.push(v.id))
@@ -123,14 +121,16 @@ class Video extends Component {
   }
 
   handleThumbs = async control => {
-    //likes and dislikes need to be from user not owner
-    const likesArray = this.props.data.getVideoById.owner.likes
-    const dislikesArray = this.props.data.getVideoById.owner.dislikes
     const { videoId } = this.props.match.params
+    const usersVideos = this.props.user.videos
+    const videoIds = usersVideos.map(u => u.id)
+    if (videoIds.indexOf(videoId) !== -1) {
+      return
+    }
+    const likesArray = this.props.user.likes
+    const dislikesArray = this.props.user.dislikes
     const likedId = likesArray.find(l => l === videoId)
     const dislikedId = dislikesArray.find(d => d === videoId)
-    console.log('likes', likesArray)
-    console.log(videoId)
     if (!dislikedId && !likedId) {
       if (control === 'like') {
         let remove = false
@@ -328,13 +328,10 @@ class Video extends Component {
   render() {
     const {
       data: { loading, getVideoById },
-      videoList: { getVideoList },
-      playlists: { getUserPlaylists },
+      playlists: { loading: loading2, getUserPlaylists },
       classes
     } = this.props
-    const loading2 = this.props.videoList.loading
-    const loading3 = this.props.playlists.loading
-    if (loading || loading2 || loading3) return <Loading />
+    if (loading || loading2) return <Loading />
     const {
       title,
       description,
@@ -384,7 +381,7 @@ class Video extends Component {
           playIcon={this.state.playIcon}
         />
         <VideoList
-          videoList={getVideoList}
+          videoList={this.props.videos}
           handleMenuAnchor={this.handleMenuAnchor}
           anchorEl={this.state.anchorEl}
           handleMenuClose={this.handleMenuClose}
@@ -448,7 +445,6 @@ export default compose(
   graphql(SET_DURATION_MUTATION, { name: 'setDuration' }),
   graphql(CREATE_PLAYLIST_MUTATION, { name: 'createPlaylist' }),
   graphql(ADD_TO_PLAYLIST_MUTATION, { name: 'addToPlaylist' }),
-  graphql(VIDEO_LIST_QUERY, { name: 'videoList' }),
   graphql(USER_PLAYLIST_QUERY, { name: 'playlists' }),
   graphql(VIDEO_BY_ID_QUERY, {
     options: props => ({ variables: { videoId: props.match.params.videoId } })

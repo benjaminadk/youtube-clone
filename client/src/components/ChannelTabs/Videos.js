@@ -1,4 +1,5 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
@@ -10,32 +11,35 @@ import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import { timeDifferenceForDate } from '../../utils'
 
-const styles = {
-  TOP_ROW: {
+const styles = theme => ({
+  topRow: {
     display: 'flex',
     justifyContent: 'space-between',
     margin: '3vh 10vh'
   },
-  GRID: {
+  grid: {
     display: 'grid',
     gridTemplateColumns: '20% 50% 30%'
   },
-  POSTER: {
+  poster: {
     margin: '1.5vh',
     height: '18vh',
     width: '35vh'
   },
-  VIDEO_INFO: {
+  videoInfo: {
     marginTop: '3vh'
+  },
+  menuItem: {
+    color: theme.palette.text.primary
   }
-}
+})
 
 const renderDescription = description => {
   if (description.length < 200) return description
   return description.slice(0, 195) + '...'
 }
 
-export default ({
+const Videos = ({
   videos,
   sortMenu,
   handleOpenSortMenu,
@@ -43,12 +47,17 @@ export default ({
   handleSortBy,
   sortBy,
   handleVideoList,
-  videoList
+  videoList,
+  classes
 }) => (
   <div>
-    <div style={styles.TOP_ROW}>
+    <div className={classes.topRow}>
       <FormControl>
-        <Select value={videoList} onChange={handleVideoList}>
+        <Select
+          value={videoList}
+          onChange={handleVideoList}
+          className={classes.menuItem}
+        >
           <MenuItem value="upload">Uploads</MenuItem>
           <MenuItem value="liked">Liked Videos</MenuItem>
           <MenuItem value="all">All Videos</MenuItem>
@@ -77,15 +86,15 @@ export default ({
       videos.map((v, i) => {
         return (
           <div key={`video-${i}`}>
-            <div style={styles.GRID}>
+            <div className={classes.grid}>
               <Link to={`/video/${v.id}`}>
                 <img
                   src={v.poster || 'http://via.placeholder.com/200x125'}
                   alt="poster"
-                  style={styles.POSTER}
+                  className={classes.poster}
                 />
               </Link>
-              <div style={styles.VIDEO_INFO}>
+              <div className={classes.videoInfo}>
                 <Typography variant="title">{v.title}</Typography>
                 <Typography variant="body2">
                   {v.views} views &bull; {timeDifferenceForDate(v.createdOn)}
@@ -102,3 +111,5 @@ export default ({
       })}
   </div>
 )
+
+export default withStyles(styles)(Videos)

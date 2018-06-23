@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import { compose } from 'react-apollo'
 import classNames from 'classnames'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
@@ -131,6 +132,11 @@ const styles = theme => ({
 })
 
 class RouteAppBar extends Component {
+  handleSearch = () => {
+    const { filteredVideos } = this.props
+    this.props.history.push(`/video/${filteredVideos[0].id}`)
+  }
+
   render() {
     const {
       classes,
@@ -216,11 +222,12 @@ class RouteAppBar extends Component {
                   onKeyUp={handleKeyUp}
                 />
               </FormControl>
-              <Link to="/search">
-                <Button className={classes.searchButton}>
-                  <SearchIcon />
-                </Button>
-              </Link>
+              <Button
+                className={classes.searchButton}
+                onClick={this.handleSearch}
+              >
+                <SearchIcon />
+              </Button>
             </div>
             <div className={classes.toolbarRight}>
               <Link to="/upload" className={classes.linkIcon}>
@@ -282,4 +289,7 @@ class RouteAppBar extends Component {
   }
 }
 
-export default withStyles(styles)(RouteAppBar)
+export default compose(
+  withRouter,
+  withStyles(styles)
+)(RouteAppBar)
