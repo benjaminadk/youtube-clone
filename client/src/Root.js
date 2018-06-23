@@ -70,9 +70,10 @@ const styles = theme => ({
 
 class PersistentDrawer extends Component {
   async componentDidMount() {
-    this.messageListener = firebase
-      .messaging()
-      .onMessage(payload => console.log('MESSAGE RECEIVED ', payload))
+    this.messageListener = firebase.messaging().onMessage(payload => {
+      console.log('MESSAGE RECEIVED ', payload)
+      console.log('message received')
+    })
     const token = localStorage.getItem('TOKEN')
     if (token) {
       let response = await this.props.authenticate({
