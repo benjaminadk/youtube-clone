@@ -17,9 +17,13 @@ const uri =
   process.env.NODE_ENV === 'production'
     ? 'https://fake-youtube.herokuapp.com/graphql'
     : 'http://localhost:3001/graphql'
+const ws =
+  process.env.NODE_ENV === 'production'
+    ? 'wss://fake-youtube.herokuapp.com/subscriptions'
+    : `ws://localhost:3001/subscriptions`
 const httpLink = new HttpLink({ uri })
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:3001/subscriptions`,
+  uri: ws,
   options: {
     reconnect: true
   }

@@ -57,7 +57,11 @@ class Video extends Component {
     setTimeout(this.handleSetDuration, 3000)
     this.handleAddView()
     this.setState({
-      linkToShare: `http://localhost${this.props.location.pathname}`
+      linkToShare: `${
+        process.env.NODE_ENV === 'production'
+          ? 'https://fake-youtube.herokuapp.com/'
+          : 'http://localhost:3000/'
+      }${this.props.location.pathname}`
     })
     // initialize subscription
     this.likeAddedSubscription()
@@ -92,7 +96,9 @@ class Video extends Component {
     this.props.data.subscribeToMore({
       document: LIKE_ADDED_SUB,
       variables: { videoId: this.props.match.params.videoId },
-      //updateQuery
+      update: (prev, { subscriptionData }) => {
+        console.log(subscriptionData)
+      },
       onError: err => console.error(err)
     })
   }

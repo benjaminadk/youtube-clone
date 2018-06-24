@@ -61,11 +61,16 @@ server.use(
   }))
 )
 
+const subscriptionsEndpoint =
+  process.env.NODE_ENV === 'production'
+    ? `wss://fake-youtube.herokuapp.com/subscriptions`
+    : `ws://localhost:${PORT}/subscriptions`
+
 server.use(
   '/graphiql',
   graphiqlExpress({
     endpointURL: '/graphql',
-    subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
+    subscriptionsEndpoint
   })
 )
 
@@ -78,7 +83,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const ws = createServer(server)
 ws.listen(PORT, () => {
-  console.log(`APOLLO SERVER UP AT http://localhost:${PORT}`)
+  console.log(`APOLLO SERVER UP`)
   new SubscriptionServer(
     {
       execute,
